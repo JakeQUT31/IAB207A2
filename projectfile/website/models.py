@@ -11,7 +11,6 @@ class Event(db.Model):
 
 
 class Comment(db.Model):
-    pass
 
 
 class Order(db.Model):
