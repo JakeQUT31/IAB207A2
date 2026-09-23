@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+    <head>
+        <meta charset = "UTF-8">
+        <meta name = "viewport" content = "width=device-width, initial-scale=1">
+        <title> SportTix - Community Sports</title>
+        <meta name = "description" content = " Find, participate, and host community sports across Brisbane.">
+
+        <link rel = "preconnect" href = "https://fonts.googleapis.com">
+        <link rel = "preconnect" href = "https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;700;800&family=Public+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+        <link href ="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel = "stylesheet">
+        <link rel = "stylesheet" href = "static/style/style.css">
+    </head>
+
+    <body>
+        <a class = "skipLink" href = "#main">Skip to events</a>
+        <!--NAV -->
+         <nav class = "navbar navbar-expand-lg sticky-top">
+            <div class = "container">
+                <a class = "navbar-brand" href = "index.html">
+                    <span class = "brandMark" aria-hidden = "true"><i></i><i></i><i></i></span>
+                    SportTix
+                </a>
+                <button class = "navbar-toggler border-0 p-1" type = "button" data-bs-toggle = "collapse" data-bs-target = "#mainNav" aria-controls = "mainNav" aria-expanded = "false" aria-label = "Show navigation">
+                    <span class = "navbar-toggler-icon"></span>
+                </button>
+                <div class = "collapse navbar-collapse" id = "mainNav">
+                    <ul class = "navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+                        <li class = "nav-item"><a class = "nav-link active" aria-current = "page" href = "index.html">Browse</a></li>
+                        <li class = "nav-item"><a class = "nav-link" href = "create_event.html">Host a Game</a></li>
+                        <li class = "nav-item"><a class = "nav-link" href = "bookings.html">My Bookings</a></li>
+                        <li class="nav-item ms-lg-4 mt-2 mt-lg-0"><a class="btn buttonBlack btn-sm" href="#">Log in</a></li>
+                    </ul>
+                </div>
+            </div>
+         </nav>
+
+         
+    <!-- HERO -->
+    <header class = "hero py-5">
+        <div class = "container position-relative" style = "z-index:1;">
+            <div class = "row g-5 align-items-end py-lg-3">
+                <div class = "col-lg-7">
+                    <p class = "eyebrow mb-3"> Brisbane · Community &amp; social sport</p>
+                    <h1 class = "heroTitle mb-4">Built for the field<br>
+                    not the grandstand.</h1>
+                    <div class = "borderAccent mb-4"></div>
+                    <p class = "firstPara mb-4">
+                        Every listing shows how many player spots and spectator seats are still open,
+                        so you can actually get in the game. Browse, participate, and host
+                        community sports across Brisbane.
+                    </p>
+                    <div class = "d-flex flex-wrap gap-2">
+                        <a href = "#events" class = "btn buttonPink">Find a Game</a>
+                        <a href = "create_event.html" class = "btn buttonOutlineBlack">Host a Game</a>
+                    </div>
+                </div>
+                
+
+                <div class = "col-lg-5">
+                    <div class = "heroSlab">
+                        <div class = "d-flex justify-content-between align-items-start gap-3 mb-3">
+                            <div>
+                                <p class = "eyebrow mb-2"> Next Kick-Off</p>
+                                <h2 class = "h4 mb-1" style = "letter-spacing:-.03rem;"> Thursday Night Five-a-Side</h2>
+                                <p class = "data mb-0" style = "color: rgba(244,241,234,.7);">THU 10 SEP · 18:30&ndash;20:00 · Kedron Park</p>
+                            </div>
+                            <span class = "status open" style = "background:transparent;">Open</span>
+                        </div>
+
+                        <div class = "row g-4 borderTop pt-4 mb-4">
+                            <div class = "col-6">
+                                <div class = "countBlock">
+                                    <span class = "eyebrow">Player Spots</span>
+                                    <span class = "numbers numbers-big">08<span class = "of">/10</span></span>
+                                    <div class = "slots onDark slotsTall" style = "--n:10; --fill:80%;" role = "img" aria-label = "8 of 10 player spots taken"></div>
+                                </div>
+                            </div>
+                            <div class = "col-6">
+                                <div class = "countBlock">
+                                    <span class = "eyebrow">Spectator Seats</span>
+                                    <span class = "numbers numbers-big">12<span class = "of">/30</span></span>
+                                    <div class = "slots onDark slotsSpectator slotsTall" style = "--n:30; --fill:40%;" role = "img" aria-label = "12 of 30 spectator seats taken"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href = "event.html" class = "btn buttonPink w-100">Book a spot</a>
+                    </div>   
+                </div>
+            </div>
+        </div>
+    </header>
+    <main id = "main">
+        <section id = "events" class = "py-5">
+            <div class = "container">
+
+                <div class = "headSection">
+                    <div>
+                        <p class = "eyebrow mb-2">Upcoming</p>
+                        <h2 class = "pageTitle mb-0">Games near you</h2>
+                    </div>
+                    <div class = "d-flex align-items-baseline gap-4">
+                        <p class = "data text-muted-soft mb-0 d-none d-md-block">9 fixtures · next 3 weeks</p>
+                        <button class = "btn buttonOutlineBlack btn-sm d-lg-none" type = "button" data-bs-toggle = "offcanvas" data-bs-target = "#filterPanel" aria-controls = "filterPanel">Filters</button>
+
+                    </div>
+                </div>
+
+                <!-- FILTER BUTTONS-->
+                 <fieldset>
+                    <legend class = "visually-hidden">Filter events by Sport</legend>
+                    <input type = "radio" class = "filterInput" name = "sport" id = "all" checked>
+                    <input type = "radio" class = "filterInput" name = "sport" id = "football">
+                    <input type = "radio" class = "filterInput" name = "sport" id = "cricket">
+                    <input type = "radio" class = "filterInput" name = "sport" id = "afl">
+                    <input type = "radio" class = "filterInput" name = "sport" id = "netball">
+                    <input type = "radio" class = "filterInput" name = "sport" id = "tennis">
+                    <input type = "radio" class = "filterInput" name = "sport" id = "basketball">
+                    <input type = "radio" class = "filterInput" name = "sport" id = "touch">
+
+                    <div class = "filterScope">
+                        <div class = "row g-4 g-xl-5">
+                            <div class = "col-lg-3">
+                                <div class = "offcanvas-lg offcanvas-start" tabindex = "-1" id = "filterPanel" aria-labelledby = "filterPanelLabel">
+                                    <div class = "offcanvas-header border-bottom d-lg-none">
+                                        <h3 class = "offcanvas-title h5" id = "filterPanelLabel">Filters</h3>
+                                        <button type = "button" class = "btn-close" data-bs-dismiss = "offcanvas" data-bs-target = "#filterPanel" aria-label = "close filters"></button>
+                                    </div>
+                                    <div class = "offcanvas-body d-block stickySide">
+                                        <p class = "eyebrow borderBottom pb-2 mb-2" style = "border-bottom-width:2px;border-bottom-color:var(--black);">Sport</p>
+                                        <div class = "filterRail mb-4">
+                                            <label for = "all">All Sports</label>
+                                            <label for = "football">Football</label>
+                                            <label for = "cricket">Cricket</label>
+                                            <label for = "afl">AFL</label>
+                                            <label for = "netball">Netball</label>
+                                            <label for = "tennis">Tennis</label>
+                                            <label for = "basketball">Basketball</label>
+                                            <label for = "touch">Touch Football</label>
+                                        </div>
+                                        <p class = "eyebrow borderBottom pb-2 mb-3" style = "border-bottom-width:2px;border-bottom-color:var(--black);">Refine</p>
+                                        <div class = "mb-3">
+                                            <label for = "skillFilter" class = "form-label">Skill level</label>
+                                            <select class = "form-select form-select-sm" id = "skillFilter">
+                                                <option selected>Any Level</option>
+                                                <option>Amateur</option>
+                                                <option>Social</option>
+                                                <option>Semi-Pro</option>
+
+                                            </select>
+                                        </div>
+                                        <div class = "mb-3">
+                                            <label for = "surfaceFilter" class = "form-label">Surface</label>
+                                            <select class = "form-select form-select-sm" id = "surfaceFilter">
+                                                <option selected>Any Surface</option>
+                                                <option>Grass</option>
+                                                <option>Turf</option>
+                                                <option>Artificial Grass</option>
+                                                <option>Indoor Court</option>
+                                                <option>Artificial Turf</option>
+                                            </select>
+                                        </div>
+                                        <div class = "form-check">
+                                            <input class = "form-check-input" type = "checkbox" id = "sportsFilter" checked>
+                                            <label class = "form-check-label" for = "sportsFilter">Only games with spots left</label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <!--EVENTS-->
+                        <div class = "col-lg-9">
+                            <div class = "row g-4">
+                                <!--1st event-->
+                                <div class = "ev catFootball col-12 col-md-6 col-xxl-4">
+                                    <article class = "eventCard">
+                                        <div class = "card-img-wrap">
+                                            <img src = "static/img/football.jpeg" alt = "football pitch">
+                                            <span class = "status open">Open</span>
+                                            <span class = "sportTag">Football</span>                                            
+                                        </div>
+                                        <div class = "eventBody">
+                                            <p class = "data text-muted-soft mb-1">THU 10 SEP · 18:30&ndash;20:00</p>
+                                            <h3 class = "h5 eventTitle mb-2"><a href = "event.html">Thursday Night Five-a-Side</a></h3>
+                                            <p class = "small text-muted-soft mb-4">Kedron Park, Kedron · Social · Artificial Grass</p>
+                                            <div class = "row g-3 mt-auto borderTop pt-3">
+                                                <div class = "col-6">
+                                                    <div class = "countBlock">
+                                                    <span class = "eyebrow">Players</span>
+                                                    <span class = "numbers numbers-med">08<span class = "of">/10</span></span>
+                                                    <div class = "slots" style = "--n:10; --fill:80%;" role = "img" aria-label = "8 of 10 player spots taken"></div>
+
+                                                    </div>
+                                                </div>
+                                                <div class = "col-6">
+                                                    <div class = "countBlock">
+                                                    <span class = "eyebrow">Spectators</span>
+                                                    <span class = "numbers numbers-med">12<span class = "of">/30</span></span>
+                                                    <div class = "slots slotsSpectator" style = "--n:30; --fill:40%;" role = "img" aria-label = "12 of 30 spectator spots taken"></div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </article>
+                                </div>
+                                <!--2nd event-->
+                                <div class = "ev catCricket col-12 col-md-6 col-xxl-4">
+                                    <article class = "eventCard">
+                                        <div class = "card-img-wrap">
+                                            <img src = "static/img/cricket.jpeg" alt = "cricket ground">
+                                            <span class = "status open">Open</span>
+                                            <span class = "sportTag">Cricket</span>                                            
+                                        </div>
+                                        <div class = "eventBody">
+                                            <p class = "data text-muted-soft mb-1">SUN 13 SEP · 09:00&ndash;13:00</p>
+                                            <h3 class = "h5 eventTitle mb-2"><a href = "event.html">Sunday Amateur T20 Match</a></h3>
+                                            <p class = "small text-muted-soft mb-4">Marchant Park, Field 2, Chermside · Amateur · Turf</p>
+                                            <div class = "row g-3 mt-auto borderTop pt-3">
+                                                <div class = "col-6">
+                                                    <div class = "countBlock">
+                                                    <span class = "eyebrow">Players</span>
+                                                    <span class = "numbers numbers-med">20<span class = "of">/22</span></span>
+                                                    <div class = "slots" style = "--n:22; --fill:90.91%;" role = "img" aria-label = "20 of 22 player spots taken"></div>
+
+                                                    </div>
+                                                </div>
+                                                <div class = "col-6">
+                                                    <div class = "countBlock">
+                                                    <span class = "eyebrow">Spectators</span>
+                                                    <span class = "numbers numbers-med">25<span class = "of">/60</span></span>
+                                                    <div class = "slots slotsSpectator" style = "--n:30; --fill:41.67%;" role = "img" aria-label = "25 of 60 spectator spots taken"></div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </article>
+                                </div>
+                                <!--3rd Event-->
+                                <div class = "ev catNetball col-12 col-md-6 col-xxl-4">
+                                    <article class = "eventCard isOff">
+                                        <div class = "card-img-wrap">
+                                            <img src = "static/img/netball.jpg" alt = "netball court">
+                                            <span class = "status sold-out">Sold Out</span>
+                                            <span class = "sportTag">Netball</span>                                            
+                                        </div>
+                                        <div class = "eventBody">
+                                            <p class = "data text-muted-soft mb-1">WED 09 SEP · 19:00&ndash;20:00</p>
+                                            <h3 class = "h5 eventTitle mb-2"><a href = "event.html">Wednesday Night Mixed Netball</a></h3>
+                                            <p class = "small text-muted-soft mb-4">Auchenflower Indoor Centre · Social · Indoor Court</p>
+                                            <div class = "row g-3 mt-auto borderTop pt-3">
+                                                <div class = "col-6">
+                                                    <div class = "countBlock">
+                                                    <span class = "eyebrow">Players</span>
+                                                    <span class = "numbers numbers-med">24<span class = "of">/24</span></span>
+                                                    <div class = "slots slotsFull" style = "--n:24; --fill:100%;" role = "img" aria-label = "24 of 24 player spots taken"></div>
+
+                                                    </div>
+                                                </div>
+                                                <div class = "col-6">
+                                                    <div class = "countBlock">
+                                                    <span class = "eyebrow">Spectators</span>
+                                                    <span class = "numbers numbers-med">20<span class = "of">/20</span></span>
+                                                    <div class = "slots slotsFull" style = "--n:20; --fill:100%;" role = "img" aria-label = "20 of 20 spectator spots taken"></div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </article>
+                                </div>
+                                <!--4th Event-->
+                                <div class = "ev catAfl col-12 col-md-6 col-xxl-4">
+                                    <article class = "eventCard">
+                                        <div class = "card-img-wrap">
+                                            <img src = "static/img/afl.jpg" alt = "AFL Field">
+                                            <span class = "status sold-out">Sold Out</span>
+                                            <span class = "sportTag">AFL</span>                                            
+                                        </div>
+                                        <div class = "eventBody">
+                                            <p class = "data text-muted-soft mb-1">SAT 12 SEP · 14:00&ndash;16:30</p>
+                                            <h3 class = "h5 eventTitle mb-2"><a href = "event.html">Saturday Scratch Match</a></h3>
+                                            <p class = "small text-muted-soft mb-4">South Pine Sports Complex · Semi-pro · Grass</p>
+                                            <div class = "row g-3 mt-auto borderTop pt-3">
+                                                <div class = "col-6">
+                                                    <div class = "countBlock">
+                                                    <span class = "eyebrow">Players</span>
+                                                    <span class = "numbers numbers-med">46<span class = "of">/46</span></span>
+                                                    <div class = "slots slotsFull" style = "--n:23; --fill:100%;" role = "img" aria-label = "46 of 46 player spots taken"></div>
+
+                                                    </div>
+                                                </div>
+                                                <div class = "col-6">
+                                                    <div class = "countBlock">
+                                                    <span class = "eyebrow">Spectators</span>
+                                                    <span class = "numbers numbers-med">20<span class = "of">/80</span></span>
+                                                    <div class = "slots slotsSpectator" style = "--n:20; --fill:25%;" role = "img" aria-label = "20 of 80 spectator spots taken"></div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </article>
+                                </div>
+                                <!--5th event-->
+                                <div class = "ev catTennis col-12 col-md-6 col-xxl-4">
+                                    <article class = "eventCard">
+                                        <div class = "card-img-wrap">
+                                            <img src = "static/img/tennis.jpeg" alt = "tennis court">
+                                            <span class = "status open">Open</span>
+                                            <span class = "sportTag">Tennis</span>                                            
+                                        </div>
+                                        <div class = "eventBody">
+                                            <p class = "data text-muted-soft mb-1">TUE 15 SEP · 18:00&ndash;20:00</p>
+                                            <h3 class = "h5 eventTitle mb-2"><a href = "event.html">Tuesday Night Doubles Ladder</a></h3>
+                                            <p class = "small text-muted-soft mb-4">Sandgate Tennis Courts, Deagon · Social · Artificial Turf</p>
+                                            <div class = "row g-3 mt-auto borderTop pt-3">
+                                                <div class = "col-6">
+                                                    <div class = "countBlock">
+                                                    <span class = "eyebrow">Players</span>
+                                                    <span class = "numbers numbers-med">06<span class = "of">/08</span></span>
+                                                    <div class = "slots" style = "--n:8; --fill:75%;" role = "img" aria-label = "6 of 8 player spots taken"></div>
+
+                                                    </div>
+                                                </div>
+                                                <div class = "col-6">
+                                                    <div class = "countBlock">
+                                                    <span class = "eyebrow">Spectators</span>
+                                                    <span class = "numbers numbers-med">10<span class = "of">/14</span></span>
+                                                    <div class = "slots slotsSpectator" style = "--n:14; --fill:71.43%;" role = "img" aria-label = "10 of 14 spectator spots taken"></div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </article>
+                                </div>
+                                <!--6th Event-->
+                                <div class = "ev catBasketball col-12 col-md-6 col-xxl-4">
+                                    <article class = "eventCard isOff">
+                                        <div class = "card-img-wrap">
+                                            <img src = "static/img/basketball.jpeg" alt = "basketball court">
+                                            <span class = "status cancelled">Cancelled</span>
+                                            <span class = "sportTag">Basketball</span>                                            
+                                        </div>
+                                        <div class = "eventBody">
+                                            <p class = "data text-muted-soft mb-1">FRI 18 SEP · 18:30&ndash;20:30</p>
+                                            <h3 class = "h5 eventTitle mb-2"><a href = "event.html">Friday Hoops Run</a></h3>
+                                            <p class = "small text-muted-soft mb-4">South Pine Sports Complex · Social · Indoor Court</p>
+                                            <p class = "small noteOff mb-0 mt-auto">
+                                                <span class = "fw-bold">Called off by the host:</span> the hall lost its floodlighting and cannot be used this week.
+                                            </p>
+
+                                        </div>
+                                    </article>
+                                </div>
+                                <!--7th Event-->
+                                <div class = "ev catCricket col-12 col-md-6 col-xxl-4">
+                                    <article class = "eventCard">
+                                        <div class = "card-img-wrap">
+                                            <img src = "static/img/cricket.jpeg" alt = "cricket nets">
+                                            <span class = "status open">Open</span>
+                                            <span class = "sportTag">Cricket</span>                                            
+                                        </div>
+                                        <div class = "eventBody">
+                                            <p class = "data text-muted-soft mb-1">SAT 19 SEP · 15:00&ndash;17:45</p>
+                                            <h3 class = "h5 eventTitle mb-2"><a href = "event.html">Cricket Nets Session</a></h3>
+                                            <p class = "small text-muted-soft mb-4">Sandgate Redcliffe District Cricket Club · Amateur · Artificial Turf</p>
+                                            <div class = "row g-3 mt-auto borderTop pt-3">
+                                                <div class = "col-6">
+                                                    <div class = "countBlock">
+                                                    <span class = "eyebrow">Players</span>
+                                                    <span class = "numbers numbers-med">17<span class = "of">/20</span></span>
+                                                    <div class = "slots" style = "--n:20; --fill:85%;" role = "img" aria-label = "17 of 20 player spots taken"></div>
+
+                                                    </div>
+                                                </div>
+                                                <div class = "col-6">
+                                                    <div class = "countBlock">
+                                                    <span class = "eyebrow">Spectators</span>
+                                                    <span class = "numbers numbers-med">00<span class = "of">/10</span></span>
+                                                    <div class = "slots slotsSpectator" style = "--n:10; --fill:0%;" role = "img" aria-label = "0 of 10 spectator spots taken"></div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </article>
+                                </div>
+            
+                                <!--8th Event-->
+                                <div class = "ev catBasketball col-12 col-md-6 col-xxl-4">
+                                    <article class = "eventCard">
+                                        <div class = "card-img-wrap">
+                                            <img src = "static/img/basketball.jpeg" alt = "basketball court">
+                                            <span class = "status open">Open</span>
+                                            <span class = "sportTag">Basketball</span>                                            
+                                        </div>
+                                        <div class = "eventBody">
+                                            <p class = "data text-muted-soft mb-1">FRI 25 SEP · 16:30&ndash;20:00</p>
+                                            <h3 class = "h5 eventTitle mb-2"><a href = "event.html">Friday Night Hoops</a></h3>
+                                            <p class = "small text-muted-soft mb-4">South Pine Sports Complex · Social · Indoor Court</p>
+                                            <p class = "small noteOff mb-4">
+                                                <span class = "fw-bold">Make up session for Friday 18/9</span>
+                                            </p>
+                                            <div class = "row g-3 mt-auto borderTop pt-3">
+                                                <div class = "col-6">
+                                                    <div class = "countBlock">
+                                                    <span class = "eyebrow">Players</span>
+                                                    <span class = "numbers numbers-med">24<span class = "of">/30</span></span>
+                                                    <div class = "slots" style = "--n:30; --fill:80%;" role = "img" aria-label = "24 of 30 player spots taken"></div>
+
+                                                    </div>
+                                                </div>
+                                                <div class = "col-6">
+                                                    <div class = "countBlock">
+                                                    <span class = "eyebrow">Spectators</span>
+                                                    <span class = "numbers numbers-med">20<span class = "of">/50</span></span>
+                                                    <div class = "slots slotsSpectator" style = "--n:25; --fill:40%;" role = "img" aria-label = "20 of 50 spectator spots taken"></div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </article>
+                                </div>
+                                <!--9th Event-->
+                                <div class = "ev catFootball col-12 col-md-6 col-xxl-4">
+                                    <article class = "eventCard isOff">
+                                        <div class = "card-img-wrap">
+                                            <img src = "static/img/football.jpeg" alt = "football field">
+                                            <span class = "status inactive">Inactive</span>
+                                            <span class = "sportTag">Football</span>                                            
+                                        </div>
+                                        <div class = "eventBody">
+                                            <p class = "data text-muted-soft mb-1">SUN 23 AUG · 15:30&ndash;17:00</p>
+                                            <h3 class = "h5 eventTitle mb-2"><a href = "event.html">Winter League - Round 12</a></h3>
+                                            <p class = "small text-muted-soft mb-4">Kinsellas Sports Complex, North Lakes · Social · Grass</p>
+                                            <p class = "small noteOff mb-0 mt-auto">
+                                                <span class = "fw-bold">This match has already been played</span>
+                                            </p>
+
+                                        </div>
+                                    </article>
+                                </div>
+                                
+                            </div>
+                            <!--message for event not listed-->
+                            <div class = "emptyState mt-4">
+                                <p class = "eyebrow mb-3">Nothing Scheduled</p>
+                                <h3 class = "h4 mb-2">No games in this category yet</h3>
+                                <p class = "text-muted-soft mb-4">Be the first to put one on the board - it takes 5 minutes.</p>
+                                <a href = "create_event.html" class = "btn buttonPink">Host a game</a>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                 </fieldset>
+            </div>
+        </section>
+    </main>
+    <!--this finna be the footer-->
+    <footer class = "footer pt-5 pb-4">
+        <div class = "container">
+            <div class = "row g-4 g-lg-5">
+                <div class = "col-lg-5">
+                    <p class = "d-inline-flex align-items-center gap-2 mb-3" style = "font-family:'Libre Franklin',sans-serif;font-weight:800;font-size:1.2rem;letter-spacing:-.04em;color:#fffdf8;">
+                        <span class = "brandMark" aria-hidden = "true"><i></i><i></i><i></i></span>SportTix
+                    </p>
+                    <p class = "small mb-0" style = "max-width:32rem;">
+                        SportTix acknowledges the Traditional Custodians of the lands on which we play 
+                        and SportTix pays respect to the Elders past, present and emerging.
+                    </p>
+                </div>
+                <div class = "col-6 col-lg-2">
+                    <h6 class = "mb-3">Play</h6>
+                    <ul class = "list-unstyled small mb-0 d-flex flex-column gap-2">
+                        <li><a href = "index.html">Browse Events</a></li>
+                        <li><a href = "bookings.html">My Bookings</a></li>
+                        <li><a href = "event.html">Events</a></li>
+                    </ul>
+                </div>
+                <div class = "col-6 col-lg-2">
+                    <h6 class = "mb-3">Host</h6>
+                    <ul class = "list-unstyled small mb-0 d-flex flex-column gap-2">
+                        <li><a href = "create_event.html">Host Events</a></li>
+                        <li><a href = "#">Venue Guide</a></li>
+                        <li><a href = "#">Host Support</a></li>
+                    </ul>
+                </div>
+                <div class = "col-lg-3">
+                    <h6 class = "mb-3">Contact</h6>
+                    <p class = "small mb-1">hello@sporttix.com.au</p>
+                    <p class = "small mb-0">Brisbane, QLD</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+</html>
