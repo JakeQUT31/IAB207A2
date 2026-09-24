@@ -23,6 +23,13 @@ def create_app():
     def load_user(user_id):
         return User.query.get(int(user_id))
     create_database(app)
+
+    from . import views
+    app.register_blueprint(views.main_bp)
+
+    from . import eventsRoutes
+    app.register_blueprint(eventsRoutes.event_bp)
+
     return app
 
 def create_database(app):
