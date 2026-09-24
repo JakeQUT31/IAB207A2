@@ -51,6 +51,7 @@ class Venue(db.Model):
     suburb = db.Column(db.String(100), nullable=False)
     capacity = db.Column(db.Integer, nullable=False)
     traditionalCustodians = db.Column(db.String(255), nullable=False)
+    parking = db.Column(db.Text, nullable=True)
 
     events = db.relationship("Event", back_populates = "venue")
     def getTraditionalCustodians(self):
@@ -87,6 +88,7 @@ class Event(db.Model):
  
     title = db.Column(db.String(150), nullable=False)
     description = db.Column(db.Text, nullable=True)
+    bring = db.Column(db.Text, nullable=True)
     imageURL = db.Column(db.String(150), nullable=True)
  
     eventDate = db.Column(db.Date, nullable=False)
@@ -96,6 +98,7 @@ class Event(db.Model):
  
     surfaceType = db.Column(db.String(30), nullable=False)
     skillLevel = db.Column(db.String(20), nullable=False)
+    format = db.Column(db.Text, nullable=True)
  
     participantCapacity = db.Column(db.Integer, nullable=False, default=0)
     spectatorCapacity = db.Column(db.Integer, nullable=False, default=0)

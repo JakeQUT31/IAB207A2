@@ -21,7 +21,7 @@
                     <div class = "col-lg-8">
                         <div class = "d-flex flex-wrap align-items-center gap-3 mb-3">
                             <span class = "status open">{{event.status}}</span>
-                            <span class = "eyebrow">Cricket · {{event.skillLevel}} · {{event.duration}}</span>
+                            <span class = "eyebrow">{{event.categoryName}} · {{event.skillLevel}} · {{event.duration}}</span>
                         </div>
                         <h1 class = "pageTitle mb-3">{{event.title}}</h1>
                         <p class = "data text-muted-soft mb-0">{{event.eventDate}} · {{event.startTime}}&ndash;{{event.endTime}} · {{venue.venueName}}, {{venue.suburb}}</p>
@@ -46,7 +46,7 @@
 
                 <div class = "row g-4 g-lg-5">
                     <div class = "col-lg-7 col-xl-8">
-                        <img src = "static/img/cricket.jpeg" class = "img-fluid mb-5 w-100" alt = "Cricket Oval">
+                        <img src = "{{event.imageURL}}" class = "img-fluid mb-5 w-100" alt = "Cricket Oval">
 
                         <h2 class = "h4 mb-3">About this Match</h2>
                         <p>
@@ -57,7 +57,7 @@
                             <div class = "col-6 col-md-3"><dt>Surface</dt><dd>{{event.surfaceType}}</dd></div>
                             <div class = "col-6 col-md-3"><dt>Skill Level</dt><dd>{{event.skillLevel}}</dd></div>
                             <div class = "col-6 col-md-3"><dt>Duration</dt><dd>{{event.duration}}</dd></div>
-                            <div class = "col-6 col-md-3"><dt>Format</dt><dd>T20, 11 a Side</dd></div>
+                            <div class = "col-6 col-md-3"><dt>Format</dt><dd>{{event.format}}</dd></div>
                         </dl>
 
                         <h2 class = "h4 mb-3">Venue</h2>
@@ -81,11 +81,7 @@
                                 </h3>
                                 <div id = "infoOne-cricket" class = "accordion-collapse collapse" data-bs-parent = "#eventInfo-cricket">
                                     <div class = "accordion-body">
-                                        Whites - if you have them,
-                                        spikes or normal runners,
-                                        a hat and sunscreen,
-                                        and lots and lots of water.
-                                        Stumps, balls, helmets and two spare club kits are provided.
+                                        {{event.bring}}
                                     </div>
                                 </div>
                             </div>
@@ -115,8 +111,7 @@
                                 </h3>
                                 <div id = "infoThree-cricket" class = "accordion-collapse collapse" data-bs-parent = "#eventInfo-cricket">
                                     <div class = "accordion-body">
-                                        Free parking provided at the field, and street parking available as well. 
-                                        There is also a bus stop 5 mins away or at Westfield Chermside.
+                                        {{venue.parking}}
                                     </div>
                                 </div>
                             </div>
