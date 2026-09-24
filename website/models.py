@@ -223,7 +223,7 @@ class Comment(db.Model):
     eventID = db.Column(db.Integer, db.ForeignKey("events.eventID"), nullable=False)
  
     content = db.Column(db.Text, nullable=False)
-    postedDateTime = db.Column(db.DateTime, default=datetime.utcnow)
+    postedDateTime = db.Column(db.DateTime, default=datetime.now)
  
     user = db.relationship("User", back_populates="comments")
     event = db.relationship("Event", back_populates="comments")

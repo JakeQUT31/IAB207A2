@@ -1,5 +1,6 @@
 import os
 from flask import Flask
+from flask_bootstrap import Bootstrap5
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 
@@ -9,6 +10,7 @@ DB_NAME = "sporttix.db"
 
 def create_app():
     app = Flask(__name__)
+    Bootstrap5(app)
     app.config['SECRET_KEY'] = 'thisisasecret'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     db.init_app(app)
