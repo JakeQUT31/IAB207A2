@@ -166,7 +166,7 @@ class Booking(db.Model):
     eventID = db.Column(db.Integer, db.ForeignKey("events.eventID"), nullable=False)
  
     orderReference = db.Column(db.String(150), unique=True, nullable=True)
-    bookingDateTime = db.Column(db.DateTime, default=datetime.utcnow)
+    bookingDateTime = db.Column(db.DateTime, default=datetime.now)
  
     user = db.relationship("User", back_populates="bookings")
     event = db.relationship("Event", back_populates="bookings")
