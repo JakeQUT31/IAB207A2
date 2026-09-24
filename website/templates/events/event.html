@@ -11,8 +11,8 @@
                 <nav aria-label = "Breadcrumb">
                     <ol class = "breadcrumb">
                         <li class = "breadcrumb-item"><a href = "index.html">Browse</a></li>
-                        <li class = "breadcrumb-item"><a href = "index.html#events">Cricket</a></li>
-                        <li class = "breadcrumb-item active" aria-current = "page">Sunday Amateur T20 Match</li>
+                        <li class = "breadcrumb-item"><a href = "index.html#events">{{category.categoryName}}</a></li>
+                        <li class = "breadcrumb-item active" aria-current = "page">{{event.title}}</li>
                     </ol>
                 </nav>
 
@@ -20,11 +20,11 @@
                 border-bottom-color: var(--black);">
                     <div class = "col-lg-8">
                         <div class = "d-flex flex-wrap align-items-center gap-3 mb-3">
-                            <span class = "status open">open</span>
-                            <span class = "eyebrow">Cricket · Amateur · 4 hrs</span>
+                            <span class = "status open">{{event.status}}</span>
+                            <span class = "eyebrow">Cricket · {{event.skillLevel}} · {{event.duration}}</span>
                         </div>
-                        <h1 class = "pageTitle mb-3">Sunday Amateur T20 Match</h1>
-                        <p class = "data text-muted-soft mb-0">SUN 13 SEP 2026 · 9:00&ndash;13:00 · Marchant Park, Field 2, Chermside</p>
+                        <h1 class = "pageTitle mb-3">{{event.title}}</h1>
+                        <p class = "data text-muted-soft mb-0">{{event.eventDate}} · {{event.startTime}}&ndash;{{event.endTime}} · {{venue.venueName}}, {{venue.suburb}}</p>
                     </div>
                     <div class = "col-lg-4">
                         <div class = "row g-3 align-items-end">
@@ -50,27 +50,22 @@
 
                         <h2 class = "h4 mb-3">About this Match</h2>
                         <p>
-                            A 20 over match between two sides at Marchant Park, Chermside. This match includes two club umpires and a proper scorer.
-                            This is a amatuer level game, however it will be a friendly vibe around; everyone gets a bat or a bowl.
-                        </p>
-                        <p class = "mb-4">
-                            Whites are preferred but not enforced. Bring your own equipment if you have them, there will be limited spare kits and helmets.
-                            Toss is at 8:30am sharp.
+                            {{event.description}}
                         </p>
 
                         <dl class = "row g- specGrid borderTop borderBottom py-4 mb-5">
-                            <div class = "col-6 col-md-3"><dt>Surface</dt><dd>Turf Wicket</dd></div>
-                            <div class = "col-6 col-md-3"><dt>Skill Level</dt><dd>Amateur</dd></div>
-                            <div class = "col-6 col-md-3"><dt>Duration</dt><dd>4 Hours</dd></div>
+                            <div class = "col-6 col-md-3"><dt>Surface</dt><dd>{{event.surfaceType}}</dd></div>
+                            <div class = "col-6 col-md-3"><dt>Skill Level</dt><dd>{{event.skillLevel}}</dd></div>
+                            <div class = "col-6 col-md-3"><dt>Duration</dt><dd>{{event.duration}}</dd></div>
                             <div class = "col-6 col-md-3"><dt>Format</dt><dd>T20, 11 a Side</dd></div>
                         </dl>
 
                         <h2 class = "h4 mb-3">Venue</h2>
                         <div class = "panel p-4 mb-5">
-                            <p class = "fw-bold mb-1">Marchant Park · Field 2</p>
-                            <p class = "mb-3 text-muted-soft">1105, Gympie Road, Chermside</p>
+                            <p class = "fw-bold mb-1">{{venue.venueName}}</p>
+                            <p class = "mb-3 text-muted-soft">{{venue.address}}, {{venue.suburb}}</p>
                             <p class = "small mb-0 borderTop pt-3">
-                                This match is played on the lands of the Traditional Custodians of the land of Chermside. 
+                                This match is played on the lands of the Traditional Custodians of the land of {{venue.suburb}}. 
                                 SportTix pays respect to the Elders past, present, and emerging.
                             </p>
                         </div>
@@ -184,7 +179,7 @@
                                 <div class = "col-6">
                                     <div class = "countBlock">
                                         <span class = "eyebrow">Player Spots</span>
-                                        <span class = "numbers numbers-med">20<span class = "of">/22</span></span>
+                                        <span class = "numbers numbers-med">20<span class = "of">/{{event.participantCapacity}}</span></span>
                                         <div class = "slots onDark" style = "--n:22; --fill:90.91%;"
                                         role = "img" aria-label = "20 of 22 player spots are taken">
                                         </div>
@@ -193,7 +188,7 @@
                                 <div class = "col-6">
                                     <div class = "countBlock">
                                         <span class = "eyebrow">Spectator Spots</span>
-                                        <span class = "numbers numbers-med">25<span class = "of">/60</span></span>
+                                        <span class = "numbers numbers-med">25<span class = "of">/{{event.spectatorCapacity}}</span></span>
                                         <div class = "slots onDark" style = "--n:22; --fill:41.67%;"
                                         role = "img" aria-label = "25 of 60 player spots are taken">
                                         </div>
@@ -209,8 +204,8 @@
                                 <div class = "mb-3">
                                     <label for = "ticketType-cricket" class = "form-label" style = "color:#F4F1EAB2;">Ticket Type</label>
                                     <select class = "form-select" id = "ticketType-cricket">
-                                        <option selected>Player - $20.00 each · 2 left</option>
-                                        <option>Spectator - $10.00 each · 35 left</option>
+                                        <option selected>Player - ${{event.participantPrice}} each · 2 left</option>
+                                        <option>Spectator - ${{event.spectatorPrice}} each · 35 left</option>
                                     </select>
                                 </div>
                                 <div class = "mb-4">
@@ -224,7 +219,7 @@
 
                                 <div class = "d-flex justify-content-between align-items-center mb-4 pt-3 borderTop">
                                     <span class = "eyebrow">Total</span>
-                                    <span class = "numbers numbers-med">$20.00</span>
+                                    <span class = "numbers numbers-med">${{event.participantPrice}}</span>
                                 </div>
 
                                 <button type = "button" class = "btn buttonPink w-100 mb-3" data-bs-toggle="modal" data-bs-target = "#bookingModal-cricket">
@@ -238,7 +233,7 @@
                         </div>
                         <div class = "panel p-4 mt-3">
                             <p class = "eyebrow mb-2">Hosted By</p>
-                            <p class = "fw-bold mb-1">Chermside Cricket Club</p>
+                            <p class = "fw-bold mb-1">{{user.firstName}}</p>
                         </div>
                     </div>
                 </div>
