@@ -8,7 +8,7 @@ db = SQLAlchemy()
 
 DB_NAME = "sporttix.db"
 
-def create_app():
+def create_app(test_config=None):
     app = Flask(__name__)
     Bootstrap5(app)
     app.config['SECRET_KEY'] = 'thisisasecret'
