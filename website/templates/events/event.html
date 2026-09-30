@@ -34,13 +34,13 @@
                     <div class="col-6">
                         <div class="countBlock">
                             <span class="eyebrow">Player Spots Left</span>
-                            <span class="numbers numbers-big" style="color: var(--pink);">02</span>
+                            <span class="numbers numbers-big" style="color: var(--pink);">{{playerAvailable}}</span>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="countBlock">
                             <span class="eyebrow">Spectator Seats Left</span>
-                            <span class="numbers numbers-big" style="color: var(--pink);">35</span>
+                            <span class="numbers numbers-big" style="color: var(--pink);">{{spectatorAvailable}}</span>
                         </div>
                     </div>
                 </div>
@@ -199,7 +199,7 @@
                             <div class="col-6">
                                 <div class="countBlock">
                                     <span class="eyebrow">Player Spots</span>
-                                    <span class="numbers numbers-med">20<span
+                                    <span class="numbers numbers-med">{{playerBooked}}<span
                                             class="of">/{{event.participantCapacity}}</span></span>
                                     <div class="slots onDark" style="--n:22; --fill:90.91%;" role="img"
                                         aria-label="20 of 22 player spots are taken">
@@ -209,7 +209,7 @@
                             <div class="col-6">
                                 <div class="countBlock">
                                     <span class="eyebrow">Spectator Spots</span>
-                                    <span class="numbers numbers-med">25<span
+                                    <span class="numbers numbers-med">{{spectatorBooked}}<span
                                             class="of">/{{event.spectatorCapacity}}</span></span>
                                     <div class="slots onDark" style="--n:22; --fill:41.67%;" role="img"
                                         aria-label="25 of 60 player spots are taken">
@@ -218,7 +218,7 @@
                             </div>
                         </div>
                         <p class="small mb-4" style="color:#F4F1EAD1;">
-                            Only <span class="fw-bold" style="color:#fffdf8;">2 Player Spots</span> left.
+                            Only <span class="fw-bold" style="color:#fffdf8;">{{playerAvailable}} Player Spots</span> left.
                             Once both rosters are filled, this match will be Sold Out and no further bookings can be
                             made.
                         </p>
@@ -228,8 +228,8 @@
                                 <label for="ticketType-cricket" class="form-label" style="color:#F4F1EAB2;">Ticket
                                     Type</label>
                                 <select class="form-select" id="ticketType-cricket">
-                                    <option selected>Player - ${{event.participantPrice}} each · 2 left</option>
-                                    <option>Spectator - ${{event.spectatorPrice}} each · 35 left</option>
+                                    <option selected>Player - ${{event.participantPrice}} each · {{playerAvailable}} left</option>
+                                    <option>Spectator - ${{event.spectatorPrice}} each · {{spectatorAvailable}} left</option>
                                 </select>
                             </div>
                             <div class="mb-4">

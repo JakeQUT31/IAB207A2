@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for
-from .models import Event, Comment, Venue, User, Category
+from .models import Event, Comment, Venue, User, Category, Booking
 from . import db
 from .forms import CommentForm
+from sqlalchemy import func
 
 event_bp = Blueprint('event', __name__, url_prefix='/events')
 
@@ -14,8 +15,12 @@ def show(id):
    user = db.session.scalar(db.select(User).where(User.userID==event.creatorID))
    category = db.session.scalar(db.select(Category).where(Category.categoryID==event.categoryID))
    comment = db.session.scalar(db.select(Comment).where(Comment.eventID==id))
+   spectatorBooked = db.session.scalar(db.select(func.count(Booking.bookingID)).select_from(Booking).where((Booking.eventID==id) & (Booking.orderReference == "Spectator")))
+   playerBooked = db.session.scalar(db.select(func.count(Booking.bookingID)).select_from(Booking).where((Booking.eventID==id) & (Booking.orderReference == "Player")))
+   spectatorAvailable = event.spectatorCapacity - spectatorBooked
+   playerAvailable = event.participantCapacity - playerBooked
    cform = CommentForm()  
-   return render_template('events/event.html', event=event, venue=venue, user=user, category=category, form=cform)
+   return render_template('events/event.html', event=event, venue=venue, user=user, category=category, comment=comment, spectatorBooked=spectatorBooked, playerBooked=playerBooked, spectatorAvailable=spectatorAvailable, playerAvailable=playerAvailable, form=cform)
 
 
 @event_bp.route('/<id>/comment', methods=['GET', 'POST'])  
