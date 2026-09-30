@@ -4,4 +4,4 @@ from wtforms.validators import InputRequired, Email, EqualTo
 
 class CommentForm(FlaskForm):
   text = TextAreaField('Comment', [InputRequired()])
-  submit = SubmitField('Create')
+  submit = SubmitField('Post Comment')
