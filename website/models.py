@@ -165,21 +165,21 @@ class Booking(db.Model):
     userID = db.Column(db.Integer, db.ForeignKey("users.userID"), nullable=False)
     eventID = db.Column(db.Integer, db.ForeignKey("events.eventID"), nullable=False)
  
-    orderReference = db.Column(db.String(150), unique=True, nullable=True)
+    orderReference = db.Column(db.String(150), nullable=True)
     bookingDateTime = db.Column(db.DateTime, default=datetime.now)
  
     user = db.relationship("User", back_populates="bookings")
     event = db.relationship("Event", back_populates="bookings")
-    tickets = db.relationship("Ticket", back_populates="booking", cascade="all, delete-orphan")
  
     def generateOrderID(self):
-        self.orderReference = f"SPTX-{self.bookingID:06d}"
-        return self.orderReference
+        return f"SPTX-{self.bookingID:06d}"
  
-    def calculateTotal(self):
-        return sum(ticket.price for ticket in self.tickets)
+    # --------Commenting out legacy code in case it needs to be used (will need to be modified to work)--------
+    # def calculateTotal(self):
+    #     return sum(ticket.price for ticket in self.tickets)
  
     def confirm(self):
+        # This will need updating to work as orderReference has changed purpose
         self.generateOrderID()
         self.event.updateStatus()
         return self.orderReference
@@ -188,31 +188,31 @@ class Booking(db.Model):
         return f"<Booking {self.bookingID} user={self.userID} event={self.eventID}>"
  
  
-class Ticket(db.Model):
-    __tablename__ = "tickets"
+# class Ticket(db.Model):
+#     __tablename__ = "tickets"
  
-    TYPE_PARTICIPANT = "Participant"
-    TYPE_SPECTATOR = "Spectator"
+#     TYPE_PARTICIPANT = "Participant"
+#     TYPE_SPECTATOR = "Spectator"
  
-    ticketID = db.Column(db.Integer, primary_key=True)
-    bookingID = db.Column(db.Integer, db.ForeignKey("bookings.bookingID"), nullable=False)
+#     ticketID = db.Column(db.Integer, primary_key=True)
+#     bookingID = db.Column(db.Integer, db.ForeignKey("bookings.bookingID"), nullable=False)
  
-    ticketType = db.Column(db.String(150), nullable=False)
-    price = db.Column(db.Numeric(8, 2), nullable=False)
+#     ticketType = db.Column(db.String(150), nullable=False)
+#     price = db.Column(db.Numeric(8, 2), nullable=False)
  
-    booking = db.relationship("Booking", back_populates="tickets")
+#     booking = db.relationship("Booking", back_populates="tickets")
  
-    @validates("ticketType")
-    def validate_ticket_type(self, key, value):
-        if value not in (self.TYPE_PARTICIPANT, self.TYPE_SPECTATOR):
-            raise ValueError(f"Invalid ticketType: {value}")
-        return value
+#     @validates("ticketType")
+#     def validate_ticket_type(self, key, value):
+#         if value not in (self.TYPE_PARTICIPANT, self.TYPE_SPECTATOR):
+#             raise ValueError(f"Invalid ticketType: {value}")
+#         return value
  
-    def getPrice(self):
-        return self.price
+#     def getPrice(self):
+#         return self.price
  
-    def __repr__(self):
-        return f"<Ticket {self.ticketID} {self.ticketType} ${self.price}>"
+#     def __repr__(self):
+#         return f"<Ticket {self.ticketID} {self.ticketType} ${self.price}>"
  
  
 class Comment(db.Model):
