@@ -114,28 +114,28 @@ class Event(db.Model):
     bookings = db.relationship("Booking", back_populates="event", cascade="all, delete-orphan")
     comments = db.relationship("Comment", back_populates="event", cascade="all, delete-orphan")
  
-    def getBookedCount(self, ticket_type):
-        total = 0
-        for booking in self.bookings:
-            for ticket in booking.tickets:
-                if ticket.ticketType == ticket_type:
-                    total += 1
-        return total
+    # def getBookedCount(self, ticket_type):
+    #     total = 0
+    #     for booking in self.bookings:
+    #         for ticket in booking.tickets:
+    #             if ticket.ticketType == ticket_type:
+    #                 total += 1
+    #     return total
 
-    @property
-    def participantsBooked(self):
-        return self.getBookedCount(Ticket.TYPE_PARTICIPANT)
+    # @property
+    # def participantsBooked(self):
+    #     return self.getBookedCount(Ticket.TYPE_PARTICIPANT)
  
-    @property
-    def spectatorsBooked(self):
-        return self.getBookedCount(Ticket.TYPE_SPECTATOR)
+    # @property
+    # def spectatorsBooked(self):
+    #     return self.getBookedCount(Ticket.TYPE_SPECTATOR)
  
-    def remainingSlots(self, ticket_type):
-        cap = self.participantCapacity if ticket_type == Ticket.TYPE_PARTICIPANT else self.spectatorCapacity
-        return max(cap - self.getBookedCount(ticket_type), 0)
+    # def remainingSlots(self, ticket_type):
+    #     cap = self.participantCapacity if ticket_type == Ticket.TYPE_PARTICIPANT else self.spectatorCapacity
+    #     return max(cap - self.getBookedCount(ticket_type), 0)
  
-    def isSoldOut(self):
-        return self.remainingSlots(Ticket.TYPE_PARTICIPANT) == 0 and self.remainingSlots(Ticket.TYPE_SPECTATOR) == 0
+    # def isSoldOut(self):
+    #     return self.remainingSlots(Ticket.TYPE_PARTICIPANT) == 0 and self.remainingSlots(Ticket.TYPE_SPECTATOR) == 0
  
     def updateStatus(self):
         if self.status == self.STATUS_CANCELLED:
