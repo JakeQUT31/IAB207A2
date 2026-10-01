@@ -1,6 +1,7 @@
 from datetime import datetime, date
 from flask_login import UserMixin
 from sqlalchemy.orm import validates
+from sqlalchemy import func
 from . import db
 
 class User(db.Model, UserMixin):
@@ -122,17 +123,14 @@ class Event(db.Model):
     #                 total += 1
     #     return total
 
-    # @property
-    # def participantsBooked(self):
-    #     return self.getBookedCount(Ticket.TYPE_PARTICIPANT)
+    @staticmethod
+    def participantsBooked(id):
+        return db.session.scalar(db.select(func.count(Booking.bookingID)).select_from(Booking).where((Booking.eventID==id) & (Booking.orderReference == "Player")))
+
  
-    # @property
-    # def spectatorsBooked(self):
-    #     return self.getBookedCount(Ticket.TYPE_SPECTATOR)
- 
-    # def remainingSlots(self, ticket_type):
-    #     cap = self.participantCapacity if ticket_type == Ticket.TYPE_PARTICIPANT else self.spectatorCapacity
-    #     return max(cap - self.getBookedCount(ticket_type), 0)
+    @staticmethod
+    def spectatorsBooked(id):
+        return db.session.scalar(db.select(func.count(Booking.bookingID)).select_from(Booking).where((Booking.eventID==id) & (Booking.orderReference == "Spectator")))
  
     # def isSoldOut(self):
     #     return self.remainingSlots(Ticket.TYPE_PARTICIPANT) == 0 and self.remainingSlots(Ticket.TYPE_SPECTATOR) == 0
@@ -178,11 +176,11 @@ class Booking(db.Model):
     # def calculateTotal(self):
     #     return sum(ticket.price for ticket in self.tickets)
  
-    def confirm(self):
-        # This will need updating to work as orderReference has changed purpose
-        self.generateOrderID()
-        self.event.updateStatus()
-        return self.orderReference
+    # def confirm(self):
+    #     # This will need updating to work as orderReference has changed purpose
+    #     self.generateOrderID()
+    #     self.event.updateStatus()
+    #     return self.orderReference
  
     def __repr__(self):
         return f"<Booking {self.bookingID} user={self.userID} event={self.eventID}>"

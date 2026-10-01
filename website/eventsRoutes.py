@@ -15,8 +15,8 @@ def show(id):
    user = db.session.scalar(db.select(User).where(User.userID==event.creatorID))
    category = db.session.scalar(db.select(Category).where(Category.categoryID==event.categoryID))
    comment = db.session.scalar(db.select(Comment).where(Comment.eventID==id))
-   spectatorBooked = db.session.scalar(db.select(func.count(Booking.bookingID)).select_from(Booking).where((Booking.eventID==id) & (Booking.orderReference == "Spectator")))
-   playerBooked = db.session.scalar(db.select(func.count(Booking.bookingID)).select_from(Booking).where((Booking.eventID==id) & (Booking.orderReference == "Player")))
+   spectatorBooked = Event.spectatorsBooked(id)
+   playerBooked = Event.participantsBooked(id)
    spectatorAvailable = event.spectatorCapacity - spectatorBooked
    playerAvailable = event.participantCapacity - playerBooked
    cform = CommentForm()  
