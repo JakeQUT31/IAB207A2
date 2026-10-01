@@ -5,9 +5,9 @@ name: Python application
 
 on:
   push:
-    branches: [ "EventDetailsView" ]
+    branches: [ "dev" ]
   pull_request:
-    branches: [ "EventDetailsView" ]
+    branches: [ "dev" ]
 
 permissions:
   contents: read
