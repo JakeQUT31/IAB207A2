@@ -12,8 +12,8 @@
 
         <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html">Browse</a></li>
-                <li class="breadcrumb-item"><a href="index.html#events">{{category.categoryName}}</a></li>
+                <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">Browse</a></li>
+                <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}#events">{{category.categoryName}}</a></li>
                 <li class="breadcrumb-item active" aria-current="page">{{event.title}}</li>
             </ol>
         </nav>
@@ -23,7 +23,7 @@
             <div class="col-lg-8">
                 <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
                     <span class="status open">{{event.status}}</span>
-                    <span class="eyebrow">{{event.categoryName}} · {{event.skillLevel}} · {{event.duration}}</span>
+                    <span class="eyebrow">{{category.categoryName}} · {{event.skillLevel}} · {{event.duration}} min</span>
                 </div>
                 <h1 class="pageTitle mb-3">{{event.title}}</h1>
                 <p class="data text-muted-soft mb-0">{{event.eventDate}} · {{event.startTime}}&ndash;{{event.endTime}} ·
@@ -67,10 +67,10 @@
                     </div>
                     <div class="col-6 col-md-3">
                         <dt>Duration</dt>
-                        <dd>{{event.duration}}</dd>
+                        <dd>{{event.duration}} min</dd>
                     </div>
                     <div class="col-6 col-md-3">
-                        <dt>Format</dt>
+                        <dt>Tournament / League</dt>
                         <dd>{{event.format}}</dd>
                     </div>
                 </dl>
@@ -80,8 +80,13 @@
                     <p class="fw-bold mb-1">{{venue.venueName}}</p>
                     <p class="mb-3 text-muted-soft">{{venue.address}}, {{venue.suburb}}</p>
                     <p class="small mb-0 borderTop pt-3">
-                        This match is played on the lands of the Traditional Custodians of the land of {{venue.suburb}}.
-                        SportTix pays respect to the Elders past, present, and emerging.
+                        {% if event.acknowledgementType == 'None' %}
+                            No Acknowledgement of Country has been selected for this event.
+                        {% elif event.acknowledgementType == 'Enhanced' %}
+                            This match is played on the lands of {{ venue.traditionalCustodians }}. SportTix pays respect to the Elders past, present, and emerging.
+                        {% else %}
+                            SportTix acknowledges the Traditional Custodians of the lands on which we play and pays respect to the Elders past, present, and emerging.
+                        {% endif %}
                     </p>
                 </div>
 
