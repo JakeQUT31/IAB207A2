@@ -10,13 +10,13 @@
         <link rel = "preconnect" href = "https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;700;800&family=Public+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
         <link href ="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel = "stylesheet">
-        <link rel = "stylesheet" href = "..\static\style\style.css">
+        <link rel = "stylesheet" href = "{{ url_for('static', filename='style/style.css') }}">
     </head>
     <body>
         <a class = "skipLink" href = "#main">Skip to the form</a>
         <nav class = "navbar navbar-expand-lg sticky-top">
             <div class = "container">
-                <a class = "navbar-brand" href = "index.html">
+                <a class = "navbar-brand" href = "{{ url_for('main.index') }}">
                     <span class = "brandMark" aria-hidden = "true"><i></i><i></i><i></i></span>
                     SportTix
                 </a>
@@ -25,8 +25,8 @@
                 </button>
                 <div class = "collapse navbar-collapse" id = "mainNav">
                     <ul class = "navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
-                        <li class = "nav-item"><a class = "nav-link" href = "index.html">Browse</a></li>
-                        <li class = "nav-item"><a class = "nav-link active" aria-current = "page" href = "create_event.html">Host a Game</a></li>
+                        <li class = "nav-item"><a class = "nav-link" href = "{{ url_for('main.index') }}">Browse</a></li>
+                        <li class = "nav-item"><a class = "nav-link active" aria-current = "page" href = "{{ url_for('event.create') }}">Host a Game</a></li>
                         <li class = "nav-item"><a class = "nav-link" href = "bookings.html">My Bookings</a></li>
                         <li class="nav-item ms-lg-4 mt-2 mt-lg-0"><a class="btn buttonBlack btn-sm" href="#">Log in</a></li>
                     </ul>
@@ -38,7 +38,7 @@
 
                 <nav aria-label = "Breadcrumb">
                     <ol class = "breadcrumb">
-                        <li class = "breadcrumb-item"><a href = "index.html">Browse</a></li>
+                        <li class = "breadcrumb-item"><a href = "{{ url_for('main.index') }}">Browse</a></li>
                         <li class = "breadcrumb-item active" aria-current = "page">Host an Event</li>
                     </ol>
                 </nav>
@@ -59,7 +59,13 @@
 
                 <div class = "row g-4 g-lg-5">
                     <div class = "col-lg-7">
-                        <form action ="event.html" method = "get">
+                        {% if errors %}
+                            <div class="alert alert-danger" role="alert">
+                                <p class="fw-bold mb-1">Please correct the following:</p>
+                                <ul class="mb-0">{% for error in errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                            </div>
+                        {% endif %}
+                        <form action="{{ url_for('event.create') }}" method="post">
                             <section class = "formSection">
                                 <div class = "stepHead">
                                     <span class = "stepNum">01</span>
@@ -71,7 +77,7 @@
                                 <div class = "row g-3">
                                     <div class = "col-md-8">
                                         <label for = "matchTitle" class = "form-label">Match Title</label>
-                                        <input type = "text" class = "form-control" id = "matchTitle" required
+                                        <input type = "text" class = "form-control" id = "matchTitle" name="title" value="{{ form_data.get('title', '') }}" required
                                         placeholder = "e.g. Tuesday Night Netball">
                                         <div class = "invalid-feedback">
                                             Give the match a title players will recognise.
@@ -80,38 +86,34 @@
                                     <!--SPORT-->
                                     <div class = "col-md-4">
                                         <label for = "sportType" class = "form-label">Type of Sport</label>
-                                        <select class = "form-select" id = "sportType" required>
+                                        <select class = "form-select" id = "sportType" name="sport" required>
                                             <option value = "" selected disabled>Choose a Sport</option>
-                                            <option>AFL</option>
-                                            <option>Basketball</option>
-                                            <option>Cricket</option>
-                                            <option>Football</option>
-                                            <option>Netball</option>
-                                            <option>Tennis</option>
-                                            <option>Touch Football</option>
+                                            {% for sport in sports %}
+                                                <option value="{{ sport }}" {% if form_data.get('sport') == sport %}selected{% endif %}>{{ sport }}</option>
+                                            {% endfor %}
                                         </select>
                                         <div class = "invalid-feedback">Pick a sport that matches your category.</div>
                                     </div>
                                     <!--SKILL LEVEL-->
                                     <div class = "col-md-6">
                                         <label for = "skillLevel" class = "form-label">Skill Level</label>
-                                        <select class = "form-select" id = "skillLevel" required>
+                                        <select class = "form-select" id = "skillLevel" name="skillLevel" required>
                                             <option value = "" selected disabled>Choose a Skill Level</option>
-                                            <option>Amateur</option>
-                                            <option>Social</option>
-                                            <option>Semi-Pro</option>
+                                            <option {% if form_data.get('skillLevel') == 'Amateur' %}selected{% endif %}>Amateur</option>
+                                            <option {% if form_data.get('skillLevel') == 'Social' %}selected{% endif %}>Social</option>
+                                            <option {% if form_data.get('skillLevel') == 'Semi-Pro' %}selected{% endif %}>Semi-Pro</option>
                                         </select>
                                         <div class = "invalid-feedback">Choose a level so players can play within their own skill level</div>
                                     </div>
                                     <!--SURFACE TYPE-->
                                     <div class = "col-md-6">
                                         <label for = "surfaceType" class = "form-label">Surface Type</label>
-                                        <select class = "form-select" id = "surfaceType" required>
+                                        <select class = "form-select" id = "surfaceType" name="surfaceType" required>
                                             <option value = "" selected disabled>Choose a Surface Type</option>
-                                            <option>Grass</option>
-                                            <option>Turf</option>
-                                            <option>Artificial Grass</option>
-                                            <option>Indoor Court</option>
+                                            <option {% if form_data.get('surfaceType') == 'Grass' %}selected{% endif %}>Grass</option>
+                                            <option {% if form_data.get('surfaceType') == 'Turf' %}selected{% endif %}>Turf</option>
+                                            <option {% if form_data.get('surfaceType') == 'Artificial Grass' %}selected{% endif %}>Artificial Grass</option>
+                                            <option {% if form_data.get('surfaceType') == 'Indoor Court' %}selected{% endif %}>Indoor Court</option>
                                         </select>
                                         <div class = "invalid-feedback">Choose the type of surface the playing field is.</div>
                                     </div>
@@ -120,14 +122,14 @@
                                         <label for = "tournamentName" class = "form-label">
                                             Tournament or League Name <span class = "text-muted-soft">(optional)</span>
                                         </label>
-                                        <input type = "text" class = "form-control" id = "tournamentName" placeholder = "e.g. Brisbane City Tournament">
+                                            <input type = "text" class = "form-control" id = "tournamentName" name="tournamentName" value="{{ form_data.get('tournamentName', '') }}" placeholder = "e.g. Brisbane City Tournament">
                                         </div>
                                     <!--Description-->
                                     <div class = "col-12">
                                         <label for = "description" class = "form-label">
                                             Description <span class = "text-muted-soft">(optional)</span>
                                         </label>
-                                        <textarea class = "form-control" id = "description" rows = "4" placeholder = "Use this space to describe the format, rules, what to bring etc."></textarea>
+                                            <textarea class = "form-control" id = "description" name="description" rows = "4" placeholder = "Use this space to describe the format, rules, what to bring etc.">{{ form_data.get('description', '') }}</textarea>
                                     </div>
                                 </div>
                             </section>
@@ -141,7 +143,7 @@
                                 <div class = "row g-3">
                                     <div class = "col-md-4">
                                         <label for = "eventDate" class = "form-label">Date</label>
-                                        <input type = "date" class = "form-control" id = "eventDate" required>
+                                        <input type = "date" class = "form-control" id = "eventDate" name="eventDate" value="{{ form_data.get('eventDate', '') }}" required>
                                         <div class = "invalid-feedback">
                                             What date is the match?
                                         </div>
@@ -149,39 +151,43 @@
 
                                     <div class = "col-6 col-md-4">
                                         <label for = "startTime" class = "form-label">Start Time</label>
-                                        <input type = "time" class = "form-control" id = "startTime" required>
+                                        <input type = "time" class = "form-control" id = "startTime" name="startTime" value="{{ form_data.get('startTime', '') }}" required>
                                         <div class = "invalid-feedback">Set a Starting Time</div>
                                     </div>
                                     <div class = "col-6 col-md-4">
                                         <label for = "endTime" class = "form-label">End Time</label>
-                                        <input type = "time" class = "form-control" id = "endTime" required>
+                                        <input type = "time" class = "form-control" id = "endTime" name="endTime" value="{{ form_data.get('endTime', '') }}" required>
                                         <div class = "invalid-feedback">Set an Ending Time, must be after the starting time.</div>
                                     </div>
 
                                     <div class = "col-md-6">
                                         <label for = "venueName" class = "form-label">Venue</label>
-                                        <input type = "text" class = "form-control" id = "venueName" required placeholder = "Southpine Sports Complex, Field 2">
+                                        <input type = "text" class = "form-control" id = "venueName" name="venueName" value="{{ form_data.get('venueName', '') }}" required placeholder = "Southpine Sports Complex, Field 2">
                                         <div class = "invalid-feedback">Name of the ground, court or field the event is held at.</div>
                                     </div>
 
                                     <div class = "col-md-6">
                                         <label for = "venueAddress" class = "form-label">Street Address</label>
-                                        <input type = "text" class = "form-control" id = "venueAddress" required placeholder = "Enter address here.">
+                                        <input type = "text" class = "form-control" id = "venueAddress" name="venueAddress" value="{{ form_data.get('venueAddress', '') }}" required placeholder = "Enter address here.">
                                         <div class = "invalid-feedback">Add the street address.</div>
                                     </div>
 
                                     <div class = "col-md-6">
                                         <label for = "venueSuburb" class = "form-label">Suburb</label>
-                                        <input type = "text" class = "form-control" id = "venueSuburb" required placeholder = "Enter suburb here.">
+                                        <input type = "text" class = "form-control" id = "venueSuburb" name="venueSuburb" value="{{ form_data.get('venueSuburb', '') }}" required placeholder = "Enter suburb here.">
                                         <div class = "invalid-feedback">Add the suburb name.</div>
                                     </div>
 
                                     <div class = "col-md-3">
                                         <label for = "duration" class = "form-label required">Duration</label>
                                         <div class = "input-group">
-                                            <input type = "number" class = "form-control" id = "duration" min = "15" step = "5" placeholder = "90" required>
+                                            <input type = "number" class = "form-control" id = "duration" name="duration" value="{{ form_data.get('duration', '') }}" min = "15" step = "5" placeholder = "90" required>
                                             <span class = "input-group-text">min</span>
                                         </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="traditionalCustodians" class="form-label">Traditional Custodians <span class="text-muted-soft">(optional)</span></label>
+                                        <input type="text" class="form-control" id="traditionalCustodians" name="traditionalCustodians" value="{{ form_data.get('traditionalCustodians', '') }}" placeholder="Custodian names, if known">
                                     </div>
                                 </div>
                             </section>
@@ -200,26 +206,26 @@
                                 <div class = "row g-3">
                                     <div class="col-md-3 col-6">
                                         <label for="playerCapacity" class="form-label">Player spots</label>
-                                        <input type="number" class="form-control" id="playerCapacity" min="2" placeholder="10">
+                                        <input type="number" class="form-control" id="playerCapacity" name="playerCapacity" value="{{ form_data.get('playerCapacity', '') }}" min="0" placeholder="10">
                                         <div class="form-text">Optional if this is a spectator-only event.</div>
                                     </div>
                                     <div class="col-md-3 col-6">
                                         <label for="playerPrice" class="form-label">Player price</label>
                                         <div class="input-group">
                                         <span class="input-group-text">$</span>
-                                        <input type="number" class="form-control" id="playerPrice" min="0" step="0.50" placeholder="14.00">
+                                        <input type="number" class="form-control" id="playerPrice" name="playerPrice" value="{{ form_data.get('playerPrice', '') }}" min="0" step="0.50" placeholder="14.00">
                                         </div>
                                     </div>
                                     <div class="col-md-3 col-6">
                                         <label for="seatCapacity" class="form-label">Spectator seats</label>
-                                        <input type="number" class="form-control" id="seatCapacity" min="0" required placeholder="30">
+                                        <input type="number" class="form-control" id="seatCapacity" name="spectatorCapacity" value="{{ form_data.get('spectatorCapacity', '') }}" min="0" required placeholder="30">
                                         <div class="invalid-feedback">Enter a number, or 0 if spectators cannot attend.</div>
                                     </div>
                                     <div class="col-md-3 col-6">
                                         <label for="seatPrice" class="form-label">Spectator price</label>
                                         <div class="input-group">
                                             <span class="input-group-text">$</span>
-                                            <input type="number" class="form-control" id="seatPrice" min="0" step="0.50" placeholder="6.00">
+                                            <input type="number" class="form-control" id="seatPrice" name="seatPrice" value="{{ form_data.get('seatPrice', '') }}" min="0" step="0.50" placeholder="6.00">
                                         </div>
                                     </div>
                                     <div class="col-12">
@@ -244,9 +250,9 @@
                                 </div>
 
                                 <!--Radio Buttons-->
-                                <input type = "radio" class = "filterInput" name = "Ack" id = "None" value = "None">
-                                <input type = "radio" class = "filterInput" name = "Ack" id = "Generic" value = "Generic" checked>
-                                <input type = "radio" class = "filterInput" name = "Ack" id = "Enhanced" value = "Enhanced">
+                                <input type = "radio" class = "filterInput" name = "acknowledgementType" id = "None" value = "None" {% if form_data.get('acknowledgementType', 'Generic') == 'None' %}checked{% endif %}>
+                                <input type = "radio" class = "filterInput" name = "acknowledgementType" id = "Generic" value = "Generic" {% if form_data.get('acknowledgementType', 'Generic') == 'Generic' %}checked{% endif %}>
+                                <input type = "radio" class = "filterInput" name = "acknowledgementType" id = "Enhanced" value = "Enhanced" {% if form_data.get('acknowledgementType') == 'Enhanced' %}checked{% endif %}>
 
                                 <div class = "ackScope">
                                     <div class = "row g-3 mb-3">
@@ -274,7 +280,7 @@
                             </section>
 
                             <div class = "d-flex flex-wrap gap-3 justify-content-end align-items-center borderTop pt-4 pb-2">
-                                <a href = "index.html" class = "btn buttonQuiet">Discard</a>
+                                <a href = "{{ url_for('main.index') }}" class = "btn buttonQuiet">Discard</a>
                                 <button type = "submit" class = "btn buttonPink">Publish Event</button>
                             </div>
                         </form>
@@ -299,7 +305,7 @@
                 <div class = "col-6 col-lg-2">
                     <h6 class = "mb-3">Play</h6>
                     <ul class = "list-unstyled small mb-0 d-flex flex-column gap-2">
-                        <li><a href = "index.html">Browse Events</a></li>
+                        <li><a href = "{{ url_for('main.index') }}">Browse Events</a></li>
                         <li><a href = "bookings.html">My Bookings</a></li>
                         <li><a href = "event.html">Events</a></li>
                     </ul>
@@ -307,7 +313,7 @@
                 <div class = "col-6 col-lg-2">
                     <h6 class = "mb-3">Host</h6>
                     <ul class = "list-unstyled small mb-0 d-flex flex-column gap-2">
-                        <li><a href = "create_event.html">Host Events</a></li>
+                        <li><a href = "{{ url_for('event.create') }}">Host Events</a></li>
                         <li><a href = "#">Venue Guide</a></li>
                         <li><a href = "#">Host Support</a></li>
                     </ul>
