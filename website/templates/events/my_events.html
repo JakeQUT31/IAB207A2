@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+<main id="main" class="py-4 py-lg-5">
+    <div class="container">
+        <nav aria-label="Breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">Browse</a></li>
+                <li class="breadcrumb-item active" aria-current="page">My Events</li>
+            </ol>
+        </nav>
+
+        <div class="row g-4 align-items-end borderBottom pb-4 mb-5" style="border-bottom-width:2px;border-bottom-color:var(--black);">
+            <div class="col-lg-8">
+                <p class="eyebrow mb-3">Organiser</p>
+                <h1 class="pageTitle mb-0">My Events</h1>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a href="{{ url_for('event.create') }}" class="btn buttonPink">Host a Game</a>
+            </div>
+        </div>
+
+        {% if events %}
+            <div class="row g-4">
+                {% for event in events %}
+                    <div class="col-12 col-md-6 col-xl-4">
+                        <article class="eventCard h-100">
+                            <div class="eventBody">
+                                <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+                                    <span class="sportTag position-static">{{ event.category.categoryName }}</span>
+                                    <span class="status {{ event.status|lower|replace(' ', '-') }}">{{ event.status }}</span>
+                                </div>
+                                <p class="data text-muted-soft mb-1">{{ event.eventDate.strftime('%a %d %b %Y')|upper }} · {{ event.startTime.strftime('%H:%M') }}–{{ event.endTime.strftime('%H:%M') }}</p>
+                                <h2 class="h4 eventTitle mb-2"><a href="{{ url_for('event.show', id=event.eventID) }}">{{ event.title }}</a></h2>
+                                <p class="small text-muted-soft mb-4">{{ event.venue.venueName }}, {{ event.venue.suburb }} · {{ event.skillLevel }} · {{ event.surfaceType }}</p>
+                                <div class="mt-auto borderTop pt-3">
+                                    <span class="small text-muted-soft">Players: {{ event.participantCapacity }} · Spectator seats: {{ event.spectatorCapacity }}</span>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="emptyState" style="display:block;">
+                <p class="eyebrow mb-3">No Events Yet</p>
+                <h2 class="h4 mb-2">You haven’t hosted an event</h2>
+                <p class="text-muted-soft mb-4">Your events will appear here after you publish them.</p>
+                <a href="{{ url_for('event.create') }}" class="btn buttonPink">Host your first game</a>
+            </div>
+        {% endif %}
+    </div>
+</main>
+{% endblock %}
