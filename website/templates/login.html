@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block header %}
+
+{% endblock %}
+
+{% block content %}
+<main id="main" class="py-4 py-lg-5">
+    <div class="container">
+
+        <nav aria-label="Breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">Browse</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Log in</li>
+            </ol>
+        </nav>
+
+        <div class="row g-4 align-items-end borderBottom pb-4 mb-5" style="border-bottom-width:2px;border-bottom-color:var(--black);">
+            <div class="col-lg-7">
+                <p class="eyebrow mb-3">Account</p>
+                <h1 class="pageTitle mb-0">Log in</h1>
+            </div>
+            <div class="col-lg-5">
+                <p class="mb-0 text-muted-soft" style="max-width:32rem;">
+                    Log in to book player or spectator spots, host your own games and see your booking history.
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-lg-5">
+
+                {% if error %}
+                    <div class="alert alert-danger" role="alert">{{ error }}</div>
+                {% endif %}
+
+                <form method="post" novalidate>
+                    {{ form.hidden_tag() }}
+
+                    <section class="formSection">
+                        <div class="mb-3">
+                            {{ form.email.label(class="form-label") }}
+                            {{ form.email(class="form-control" + (" is-invalid" if form.email.errors else ""), type="email", autocomplete="email", placeholder="you@example.com") }}
+                            {% for err in form.email.errors %}<div class="invalid-feedback d-block">{{ err }}</div>{% endfor %}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form.password.label(class="form-label") }}
+                            {{ form.password(class="form-control" + (" is-invalid" if form.password.errors else ""), autocomplete="current-password") }}
+                            {% for err in form.password.errors %}<div class="invalid-feedback d-block">{{ err }}</div>{% endfor %}
+                        </div>
+
+                        <div class="form-check mb-4">
+                            {{ form.remember(class="form-check-input") }}
+                            {{ form.remember.label(class="form-check-label") }}
+                        </div>
+
+                        {{ form.submit(class="btn buttonBlack w-100") }}
+                    </section>
+                </form>
+
+                <p class="text-muted-soft">New to SportTix? <a href="{{ url_for('auth.register') }}">Create an account</a></p>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

@@ -32,6 +32,9 @@ def create_app(test_config=None):
     from . import eventsRoutes
     app.register_blueprint(eventsRoutes.event_bp)
 
+    from . import auth
+    app.register_blueprint(auth.auth_bp)
+
     return app
 
 def create_database(app):

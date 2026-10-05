@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% macro field(f, type=None, autocomplete=None, placeholder=None) %}
+    {{ f.label(class="form-label") }}
+    {% if f.type == 'SelectField' %}
+        {{ f(class="form-select" + (" is-invalid" if f.errors else "")) }}
+    {% else %}
+        {{ f(class="form-control" + (" is-invalid" if f.errors else ""), type=type or ('password' if f.type == 'PasswordField' else 'text'), autocomplete=autocomplete, placeholder=placeholder) }}
+    {% endif %}
+    {% for err in f.errors %}<div class="invalid-feedback d-block">{{ err }}</div>{% endfor %}
+{% endmacro %}
+
+{% block header %}
+
+{% endblock %}
+
+{% block content %}
+<main id="main" class="py-4 py-lg-5">
+    <div class="container">
+
+        <nav aria-label="Breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">Browse</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Create account</li>
+            </ol>
+        </nav>
+
+        <div class="row g-4 align-items-end borderBottom pb-4 mb-5" style="border-bottom-width:2px;border-bottom-color:var(--black);">
+            <div class="col-lg-7">
+                <p class="eyebrow mb-3">Account</p>
+                <h1 class="pageTitle mb-0">Create an account</h1>
+            </div>
+            <div class="col-lg-5">
+                <p class="mb-0 text-muted-soft" style="max-width:32rem;">
+                    Sign up to book player or spectator spots, host your own games and keep track of your bookings.
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-7">
+                <form method="post" novalidate>
+                    {{ form.hidden_tag() }}
+
+                    <section class="formSection">
+                        <div class="stepHead">
+                            <span class="stepNum">01</span>
+                            <h2 class="h5 mb-0">About you</h2>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">{{ field(form.firstName, autocomplete="given-name") }}</div>
+                            <div class="col-md-6">{{ field(form.lastName, autocomplete="family-name") }}</div>
+                            <div class="col-md-6">{{ field(form.email, type="email", autocomplete="email", placeholder="you@example.com") }}</div>
+                            <div class="col-md-6">{{ field(form.phone, type="tel", autocomplete="tel", placeholder="0412 345 678") }}</div>
+                        </div>
+                    </section>
+
+                    <section class="formSection">
+                        <div class="stepHead">
+                            <span class="stepNum">02</span>
+                            <h2 class="h5 mb-0">Preferences</h2>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">{{ field(form.preferredContact) }}</div>
+                            <div class="col-md-6">{{ field(form.preferredLocation) }}</div>
+                        </div>
+                    </section>
+
+                    <section class="formSection">
+                        <div class="stepHead">
+                            <span class="stepNum">03</span>
+                            <h2 class="h5 mb-0">Password</h2>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                {{ field(form.password, autocomplete="new-password") }}
+                                <div class="form-text">At least 8 characters.</div>
+                            </div>
+                            <div class="col-md-6">{{ field(form.confirm, autocomplete="new-password") }}</div>
+                        </div>
+                    </section>
+
+                    {{ form.submit(class="btn buttonBlack w-100 mb-3") }}
+                </form>
+
+                <p class="text-muted-soft">Already have an account? <a href="{{ url_for('auth.login') }}">Log in</a></p>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}
