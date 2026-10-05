@@ -2,11 +2,12 @@ from datetime import datetime
 from decimal import Decimal, InvalidOperation
 
 from flask import Blueprint, abort, render_template, request, redirect, url_for
-from flask_login import current_user
+from flask_login import current_user, login_required
 from .models import Event, Comment, Venue, User, Category
 from . import db
 from .forms import CommentForm
 from sqlalchemy import func
+from sqlalchemy.orm import joinedload
 
 event_bp = Blueprint('event', __name__, url_prefix='/events')
 
@@ -14,12 +15,10 @@ SPORTS = ('AFL', 'Basketball', 'Cricket', 'Football', 'Netball', 'Tennis', 'Touc
 
 
 @event_bp.route('/create', methods=['GET', 'POST'])
+@login_required
 def create():
    errors = []
    if request.method == 'POST':
-      if not current_user.is_authenticated:
-         abort(401)
-
       required_fields = {
          'title': 'Match title',
          'sport': 'Type of sport',
@@ -135,14 +134,26 @@ def create():
    return render_template('create_event.html', sports=SPORTS, errors=errors, form_data=request.form)
 
 
-@event_bp.route('/<id>')
+@event_bp.route('/mine')
+@login_required
+def my_events():
+   events = db.session.scalars(
+      db.select(Event)
+      .where(Event.creatorID == current_user.userID)
+      .options(joinedload(Event.category), joinedload(Event.venue))
+      .order_by(Event.eventDate, Event.startTime)
+   ).all()
+   return render_template('events/my_events.html', events=events)
+
+
+@event_bp.route('/<int:id>')
 def show(id):
-   print("The id is: " + str(id))
    event = db.session.scalar(db.select(Event).where(Event.eventID==id))
-   print("The event.eventID is: " + str(event.eventID))
+   if event is None:
+      abort(404)
+   category = db.session.scalar(db.select(Category).where(Category.categoryID==event.categoryID))
    venue = db.session.scalar(db.select(Venue).where(Venue.venueID==event.venueID))
    user = db.session.scalar(db.select(User).where(User.userID==event.creatorID))
-   category = db.session.scalar(db.select(Category).where(Category.categoryID==event.categoryID))
    comment = db.session.scalar(db.select(Comment).where(Comment.eventID==id))
    spectatorBooked = Event.spectatorsBooked(id)
    playerBooked = Event.participantsBooked(id)
@@ -152,11 +163,12 @@ def show(id):
    return render_template('events/event.html', event=event, venue=venue, user=user, category=category, comment=comment, spectatorBooked=spectatorBooked, playerBooked=playerBooked, spectatorAvailable=spectatorAvailable, playerAvailable=playerAvailable, form=cform)
 
 
-@event_bp.route('/<id>/comment', methods=['GET', 'POST'])  
+@event_bp.route('/<int:id>/comment', methods=['GET', 'POST'])
 def comment(id):  
-   print("Comment route ID: " + str(id))
    form = CommentForm()
    event = db.session.scalar(db.select(Event).where(Event.eventID==id))
+   if event is None:
+      abort(404)
    user = db.session.scalar(db.select(User).where(User.userID==1))
    if form.validate_on_submit():
      comment = Comment(content=form.text.data, user=user, event=event)
@@ -167,5 +179,4 @@ def comment(id):
       print('Your comment failed', 'error')
    
    # using redirect sends a GET request to destination.show
-   print("Redirect ID: " + str(id))
    return redirect(url_for('event.show', id=id))
