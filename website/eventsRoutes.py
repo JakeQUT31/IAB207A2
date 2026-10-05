@@ -169,12 +169,14 @@ def comment(id):
    event = db.session.scalar(db.select(Event).where(Event.eventID==id))
    if event is None:
       abort(404)
-   user = db.session.scalar(db.select(User).where(User.userID==1))
+   user = db.session.scalar(db.select(User).where(User.userID==current_user.userID))
    if form.validate_on_submit():
-     comment = Comment(content=form.text.data, user=user, event=event)
-     db.session.add(comment) 
-     db.session.commit()
-     print('Your comment has been added', 'success')
+      print("Test 1: " + str(current_user))
+      print("Test 2: " + str(current_user.userID))
+      comment = Comment(content=form.text.data, user=current_user, event=event)
+      db.session.add(comment) 
+      db.session.commit()
+      print('Your comment has been added', 'success')
    else:
       print('Your comment failed', 'error')
    
