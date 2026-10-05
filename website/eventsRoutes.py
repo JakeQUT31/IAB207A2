@@ -159,8 +159,14 @@ def show(id):
    playerBooked = Event.participantsBooked(id)
    spectatorAvailable = event.spectatorCapacity - spectatorBooked
    playerAvailable = event.participantCapacity - playerBooked
+
+   if current_user.is_authenticated:
+      loggedUser = db.session.scalar(db.select(User).where(User.userID==current_user.userID))
+   else:
+      loggedUser = db.session.scalar(db.select(User).where(User.userID==1))
+
    cform = CommentForm()  
-   return render_template('events/event.html', event=event, venue=venue, user=user, category=category, comment=comment, spectatorBooked=spectatorBooked, playerBooked=playerBooked, spectatorAvailable=spectatorAvailable, playerAvailable=playerAvailable, form=cform)
+   return render_template('events/event.html', event=event, venue=venue, user=user, category=category, comment=comment, spectatorBooked=spectatorBooked, playerBooked=playerBooked, spectatorAvailable=spectatorAvailable, playerAvailable=playerAvailable, loggedUser=loggedUser, form=cform)
 
 
 @event_bp.route('/<int:id>/comment', methods=['GET', 'POST'])
