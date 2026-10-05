@@ -138,10 +138,22 @@
                         <!--EVENTS-->
                         <div class = "col-lg-9">
                             <div class = "row g-4">
-                                {% for event in events %}
 
-<div class="ev col-12 col-md-6 col-xxl-4">
-    <article class="eventCard {% if event.status in ['Sold Out', 'Cancelled', 'Inactive'] %}isOff{% endif %}">
+                                {% for event in events %}
+                                {% set sport = event.category.categoryName|trim|lower %}
+                                
+                                <div class="ev
+    {% if sport == 'football' %}catFootball
+    {% elif sport == 'cricket' %}catCricket
+    {% elif sport == 'afl' %}catAfl
+    {% elif sport == 'netball' %}catNetball
+    {% elif sport == 'tennis' %}catTennis
+    {% elif sport == 'basketball' %}catBasketball
+    {% elif sport == 'touch football' %}catTouch
+    {% endif %}
+    col-12 col-md-6 col-xxl-4">
+                                
+                                <article class="eventCard {% if event.status in ['Sold Out', 'Cancelled', 'Inactive'] %}isOff{% endif %}">
 
         <!-- Event image -->
         <div class="card-img-wrap">
