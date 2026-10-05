@@ -27,8 +27,15 @@
                     <ul class = "navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
                         <li class = "nav-item"><a class = "nav-link" href = "{{ url_for('main.index') }}">Browse</a></li>
                         <li class = "nav-item"><a class = "nav-link active" aria-current = "page" href = "{{ url_for('event.create') }}">Host a Game</a></li>
+                        {% if current_user.is_authenticated %}
+                            <li class = "nav-item"><a class = "nav-link" href = "{{ url_for('event.my_events') }}">My Events</a></li>
+                        {% endif %}
                         <li class = "nav-item"><a class = "nav-link" href = "bookings.html">My Bookings</a></li>
-                        <li class="nav-item ms-lg-4 mt-2 mt-lg-0"><a class="btn buttonBlack btn-sm" href="#">Log in</a></li>
+                        {% if current_user.is_authenticated %}
+                            <li class="nav-item ms-lg-4 mt-2 mt-lg-0"><a class="btn buttonBlack btn-sm" href="{{ url_for('auth.logout') }}">Log out</a></li>
+                        {% else %}
+                            <li class="nav-item ms-lg-4 mt-2 mt-lg-0"><a class="btn buttonBlack btn-sm" href="{{ url_for('auth.login') }}">Log in</a></li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
