@@ -159,8 +159,14 @@ def show(id):
    playerBooked = Event.participantsBooked(id)
    spectatorAvailable = event.spectatorCapacity - spectatorBooked
    playerAvailable = event.participantCapacity - playerBooked
+
+   if current_user.is_authenticated:
+      loggedUser = db.session.scalar(db.select(User).where(User.userID==current_user.userID))
+   else:
+      loggedUser = db.session.scalar(db.select(User).where(User.userID==1))
+
    cform = CommentForm()  
-   return render_template('events/event.html', event=event, venue=venue, user=user, category=category, comment=comment, spectatorBooked=spectatorBooked, playerBooked=playerBooked, spectatorAvailable=spectatorAvailable, playerAvailable=playerAvailable, form=cform)
+   return render_template('events/event.html', event=event, venue=venue, user=user, category=category, comment=comment, spectatorBooked=spectatorBooked, playerBooked=playerBooked, spectatorAvailable=spectatorAvailable, playerAvailable=playerAvailable, loggedUser=loggedUser, form=cform)
 
 
 @event_bp.route('/<int:id>/comment', methods=['GET', 'POST'])
@@ -169,12 +175,14 @@ def comment(id):
    event = db.session.scalar(db.select(Event).where(Event.eventID==id))
    if event is None:
       abort(404)
-   user = db.session.scalar(db.select(User).where(User.userID==1))
+   user = db.session.scalar(db.select(User).where(User.userID==current_user.userID))
    if form.validate_on_submit():
-     comment = Comment(content=form.text.data, user=user, event=event)
-     db.session.add(comment) 
-     db.session.commit()
-     print('Your comment has been added', 'success')
+      print("Test 1: " + str(current_user))
+      print("Test 2: " + str(current_user.userID))
+      comment = Comment(content=form.text.data, user=current_user, event=event)
+      db.session.add(comment) 
+      db.session.commit()
+      print('Your comment has been added', 'success')
    else:
       print('Your comment failed', 'error')
    
