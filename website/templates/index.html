@@ -243,12 +243,12 @@
                         %}
 
                         <div
-                            class="slots"
-                            style="{{ '--n:' ~ event.participantCapacity ~ '; --fill:' ~ playerFill ~ '%;' }}"
-                            role="img"
-                            aria-label="{{ event.playerBooked }} of {{ event.participantCapacity }} player spots taken">
-                        </div>
-
+                        class="slots"
+                        data-n="{{ event.participantCapacity }}"
+                        data-fill="{{ playerFill }}"
+                        role="img"
+                        aria-label="{{ event.playerBooked }} of {{ event.participantCapacity }} player spots taken">
+                    </div>
                     </div>
                 </div>
 
@@ -271,11 +271,12 @@
                         %}
 
                         <div
-                            class="slots slotsSpectator"
-                            style="{{ '--n:' ~ event.spectatorCapacity ~ '; --fill:' ~ spectatorFill ~ '%;' }}"
-                            role="img"
-                            aria-label="{{ event.spectatorBooked }} of {{ event.spectatorCapacity }} spectator spots taken">
-                        </div>
+                        class="slots slotsSpectator"
+                        data-n="{{ event.spectatorCapacity }}"
+                        data-fill="{{ spectatorFill }}"
+                        role="img"
+                        aria-label="{{ event.spectatorBooked }} of {{ event.spectatorCapacity }} spectator spots taken">
+                    </div>
 
                     </div>
                 </div>
@@ -324,4 +325,12 @@
             </div>
         </section>
     </main>
+
+<script>
+    document.querySelectorAll('.slots[data-n][data-fill]').forEach(function(slot) {
+        slot.style.setProperty('--n', slot.dataset.n);
+        slot.style.setProperty('--fill', slot.dataset.fill + '%');
+    });
+</script>
+
 {% endblock %}
