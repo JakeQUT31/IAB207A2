@@ -52,6 +52,7 @@
                 </div>
             </div>
         </div>
+        
 {% endblock %}
 
 {% block content %}
@@ -72,6 +73,30 @@
 
                     </div>
                 </div>
+
+                <form method="GET" action="{{ url_for('main.index') }}" class="mb-4">
+                    <div class="input-group">
+                        <input
+                        type="search"
+                        name="q"
+                        class="form-control"
+                        placeholder="Search event titles..."
+                        value="{{ search }}"
+                        >
+                        <button class="btn buttonPink" type="submit">
+                            Search
+        
+                        </button>
+
+        
+                        {% if search %}
+        
+                        <a href="{{ url_for('main.index') }}" class="btn buttonOutlineBlack">
+                                Clear
+                            </a>
+                            {% endif %}
+                        </div>
+                    </form>
 
                 <!-- FILTER BUTTONS-->
                  <fieldset>
