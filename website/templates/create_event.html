@@ -73,6 +73,7 @@
                             </div>
                         {% endif %}
                         <form action="{{ url_for('event.create') }}" method="post">
+                            {{ form.hidden_tag() }}
                             <section class = "formSection">
                                 <div class = "stepHead">
                                     <span class = "stepNum">01</span>
@@ -94,7 +95,7 @@
                                     <div class = "col-md-4">
                                         <label for = "sportType" class = "form-label">Type of Sport</label>
                                         <select class = "form-select" id = "sportType" name="sport" required>
-                                            <option value = "" selected disabled>Choose a Sport</option>
+                                            <option value = "" {% if not form_data.get('sport') %}selected{% endif %} disabled>Choose a Sport</option>
                                             {% for sport in sports %}
                                                 <option value="{{ sport }}" {% if form_data.get('sport') == sport %}selected{% endif %}>{{ sport }}</option>
                                             {% endfor %}
@@ -105,10 +106,10 @@
                                     <div class = "col-md-6">
                                         <label for = "skillLevel" class = "form-label">Skill Level</label>
                                         <select class = "form-select" id = "skillLevel" name="skillLevel" required>
-                                            <option value = "" selected disabled>Choose a Skill Level</option>
-                                            <option {% if form_data.get('skillLevel') == 'Amateur' %}selected{% endif %}>Amateur</option>
-                                            <option {% if form_data.get('skillLevel') == 'Social' %}selected{% endif %}>Social</option>
-                                            <option {% if form_data.get('skillLevel') == 'Semi-Pro' %}selected{% endif %}>Semi-Pro</option>
+                                            <option value = "" {% if not form_data.get('skillLevel') %}selected{% endif %} disabled>Choose a Skill Level</option>
+                                            <option value="Amateur" {% if form_data.get('skillLevel') == 'Amateur' %}selected{% endif %}>Amateur</option>
+                                            <option value="Social" {% if form_data.get('skillLevel') == 'Social' %}selected{% endif %}>Social</option>
+                                            <option value="Semi-Pro" {% if form_data.get('skillLevel') == 'Semi-Pro' %}selected{% endif %}>Semi-Pro</option>
                                         </select>
                                         <div class = "invalid-feedback">Choose a level so players can play within their own skill level</div>
                                     </div>
@@ -116,11 +117,11 @@
                                     <div class = "col-md-6">
                                         <label for = "surfaceType" class = "form-label">Surface Type</label>
                                         <select class = "form-select" id = "surfaceType" name="surfaceType" required>
-                                            <option value = "" selected disabled>Choose a Surface Type</option>
-                                            <option {% if form_data.get('surfaceType') == 'Grass' %}selected{% endif %}>Grass</option>
-                                            <option {% if form_data.get('surfaceType') == 'Turf' %}selected{% endif %}>Turf</option>
-                                            <option {% if form_data.get('surfaceType') == 'Artificial Grass' %}selected{% endif %}>Artificial Grass</option>
-                                            <option {% if form_data.get('surfaceType') == 'Indoor Court' %}selected{% endif %}>Indoor Court</option>
+                                            <option value = "" {% if not form_data.get('surfaceType') %}selected{% endif %} disabled>Choose a Surface Type</option>
+                                            <option value="Grass" {% if form_data.get('surfaceType') == 'Grass' %}selected{% endif %}>Grass</option>
+                                            <option value="Turf" {% if form_data.get('surfaceType') == 'Turf' %}selected{% endif %}>Turf</option>
+                                            <option value="Artificial Grass" {% if form_data.get('surfaceType') == 'Artificial Grass' %}selected{% endif %}>Artificial Grass</option>
+                                            <option value="Indoor Court" {% if form_data.get('surfaceType') == 'Indoor Court' %}selected{% endif %}>Indoor Court</option>
                                         </select>
                                         <div class = "invalid-feedback">Choose the type of surface the playing field is.</div>
                                     </div>
