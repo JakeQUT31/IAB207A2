@@ -1,147 +1,156 @@
 {% extends 'base.html' %}
 
 {% block header %}
-        <div class = "container position-relative" style = "z-index:1;">
-            <div class = "row g-5 align-items-end py-lg-3">
-                <div class = "col-lg-7">
-                    <p class = "eyebrow mb-3"> Brisbane · Community &amp; social sport</p>
-                    <h1 class = "heroTitle mb-4">Built for the field<br>
-                    not the grandstand.</h1>
-                    <div class = "borderAccent mb-4"></div>
-                    <p class = "firstPara mb-4">
-                        Every listing shows how many player spots and spectator seats are still open,
-                        so you can actually get in the game. Browse, participate, and host
-                        community sports across Brisbane.
-                    </p>
-                    <div class = "d-flex flex-wrap gap-2">
-                        <a href = "#events" class = "btn buttonPink">Find a Game</a>
-                        <a href = "{{ url_for('event.create') }}" class = "btn buttonOutlineBlack">Host a Game</a>
-                    </div>
-                </div>
-                
-
-                <div class = "col-lg-5">
-                    <div class = "heroSlab">
-                        <div class = "d-flex justify-content-between align-items-start gap-3 mb-3">
-                            <div>
-                                <p class = "eyebrow mb-2"> Next Kick-Off</p>
-                                <h2 class = "h4 mb-1" style = "letter-spacing:-.03rem;"> Thursday Night Five-a-Side</h2>
-                                <p class = "data mb-0" style = "color: rgba(244,241,234,.7);">THU 10 SEP · 18:30&ndash;20:00 · Kedron Park</p>
-                            </div>
-                            <span class = "status open" style = "background:transparent;">Open</span>
-                        </div>
-
-                        <div class = "row g-4 borderTop pt-4 mb-4">
-                            <div class = "col-6">
-                                <div class = "countBlock">
-                                    <span class = "eyebrow">Player Spots</span>
-                                    <span class = "numbers numbers-big">08<span class = "of">/10</span></span>
-                                    <div class = "slots onDark slotsTall" style = "--n:10; --fill:80%;" role = "img" aria-label = "8 of 10 player spots taken"></div>
-                                </div>
-                            </div>
-                            <div class = "col-6">
-                                <div class = "countBlock">
-                                    <span class = "eyebrow">Spectator Seats</span>
-                                    <span class = "numbers numbers-big">12<span class = "of">/30</span></span>
-                                    <div class = "slots onDark slotsSpectator slotsTall" style = "--n:30; --fill:40%;" role = "img" aria-label = "12 of 30 spectator seats taken"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <a href = "events/1" class = "btn buttonPink w-100">Book a spot</a>
-                    </div>   
-                </div>
+<div class="container position-relative" style="z-index:1;">
+    <div class="row g-5 align-items-end py-lg-3">
+        <div class="col-lg-7">
+            <p class="eyebrow mb-3"> Brisbane · Community &amp; social sport</p>
+            <h1 class="heroTitle mb-4">Built for the field<br>
+                not the grandstand.</h1>
+            <div class="borderAccent mb-4"></div>
+            <p class="firstPara mb-4">
+                Every listing shows how many player spots and spectator seats are still open,
+                so you can actually get in the game. Browse, participate, and host
+                community sports across Brisbane.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+                <a href="#events" class="btn buttonPink">Find a Game</a>
+                <a href="{{ url_for('event.create') }}" class="btn buttonOutlineBlack">Host a Game</a>
             </div>
         </div>
+
+
+        <div class="col-lg-5">
+            <div class="heroSlab">
+                <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+                    <div>
+                        <p class="eyebrow mb-2"> Next Kick-Off</p>
+                        <h2 class="h4 mb-1" style="letter-spacing:-.03rem;"> Thursday Night Five-a-Side</h2>
+                        <p class="data mb-0" style="color: rgba(244,241,234,.7);">THU 10 SEP · 18:30&ndash;20:00 ·
+                            Kedron Park</p>
+                    </div>
+                    <span class="status open" style="background:transparent;">Open</span>
+                </div>
+
+                <div class="row g-4 borderTop pt-4 mb-4">
+                    <div class="col-6">
+                        <div class="countBlock">
+                            <span class="eyebrow">Player Spots</span>
+                            <span class="numbers numbers-big">08<span class="of">/10</span></span>
+                            <div class="slots onDark slotsTall" style="--n:10; --fill:80%;" role="img"
+                                aria-label="8 of 10 player spots taken"></div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="countBlock">
+                            <span class="eyebrow">Spectator Seats</span>
+                            <span class="numbers numbers-big">12<span class="of">/30</span></span>
+                            <div class="slots onDark slotsSpectator slotsTall" style="--n:30; --fill:40%;" role="img"
+                                aria-label="12 of 30 spectator seats taken"></div>
+                        </div>
+                    </div>
+                </div>
+                <a href="events/1" class="btn buttonPink w-100">Book a spot</a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block content %}
-    <main id = "main">
-        <section id = "events" class = "py-5">
-            <div class = "container">
+<main id="main">
+    <section id="events" class="py-5">
+        <div class="container">
 
-                <div class = "headSection">
-                    <div>
-                        <p class = "eyebrow mb-2">Upcoming</p>
-                        <h2 class = "pageTitle mb-0">Games near you</h2>
-                    </div>
-                    <div class = "d-flex align-items-baseline gap-4">
-                        <p class = "data text-muted-soft mb-0 d-none d-md-block">
-                            {{ events|length }} fixtures
-                        </p>
-                        <button class = "btn buttonOutlineBlack btn-sm d-lg-none" type = "button" data-bs-toggle = "offcanvas" data-bs-target = "#filterPanel" aria-controls = "filterPanel">Filters</button>
-
-                    </div>
+            <div class="headSection">
+                <div>
+                    <p class="eyebrow mb-2">Upcoming</p>
+                    <h2 class="pageTitle mb-0">Games near you</h2>
                 </div>
+                <div class="d-flex align-items-baseline gap-4">
+                    <p class="data text-muted-soft mb-0 d-none d-md-block">
+                        {{ events|length }} fixtures
+                    </p>
+                    <button class="btn buttonOutlineBlack btn-sm d-lg-none" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#filterPanel" aria-controls="filterPanel">Filters</button>
 
-                <!-- FILTER BUTTONS-->
-                 <fieldset>
-                    <legend class = "visually-hidden">Filter events by Sport</legend>
-                    <input type = "radio" class = "filterInput" name = "sport" id = "all" checked>
-                    <input type = "radio" class = "filterInput" name = "sport" id = "football">
-                    <input type = "radio" class = "filterInput" name = "sport" id = "cricket">
-                    <input type = "radio" class = "filterInput" name = "sport" id = "afl">
-                    <input type = "radio" class = "filterInput" name = "sport" id = "netball">
-                    <input type = "radio" class = "filterInput" name = "sport" id = "tennis">
-                    <input type = "radio" class = "filterInput" name = "sport" id = "basketball">
-                    <input type = "radio" class = "filterInput" name = "sport" id = "touch">
+                </div>
+            </div>
 
-                    <div class = "filterScope">
-                        <div class = "row g-4 g-xl-5">
-                            <div class = "col-lg-3">
-                                <div class = "offcanvas-lg offcanvas-start" tabindex = "-1" id = "filterPanel" aria-labelledby = "filterPanelLabel">
-                                    <div class = "offcanvas-header border-bottom d-lg-none">
-                                        <h3 class = "offcanvas-title h5" id = "filterPanelLabel">Filters</h3>
-                                        <button type = "button" class = "btn-close" data-bs-dismiss = "offcanvas" data-bs-target = "#filterPanel" aria-label = "close filters"></button>
+            <!-- FILTER BUTTONS-->
+            <fieldset>
+                <legend class="visually-hidden">Filter events by Sport</legend>
+                <input type="radio" class="filterInput" name="sport" id="all" checked>
+                <input type="radio" class="filterInput" name="sport" id="football">
+                <input type="radio" class="filterInput" name="sport" id="cricket">
+                <input type="radio" class="filterInput" name="sport" id="afl">
+                <input type="radio" class="filterInput" name="sport" id="netball">
+                <input type="radio" class="filterInput" name="sport" id="tennis">
+                <input type="radio" class="filterInput" name="sport" id="basketball">
+                <input type="radio" class="filterInput" name="sport" id="touch">
+
+                <div class="filterScope">
+                    <div class="row g-4 g-xl-5">
+                        <div class="col-lg-3">
+                            <div class="offcanvas-lg offcanvas-start" tabindex="-1" id="filterPanel"
+                                aria-labelledby="filterPanelLabel">
+                                <div class="offcanvas-header border-bottom d-lg-none">
+                                    <h3 class="offcanvas-title h5" id="filterPanelLabel">Filters</h3>
+                                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                                        data-bs-target="#filterPanel" aria-label="close filters"></button>
+                                </div>
+                                <div class="offcanvas-body d-block stickySide">
+                                    <p class="eyebrow borderBottom pb-2 mb-2"
+                                        style="border-bottom-width:2px;border-bottom-color:var(--black);">Sport</p>
+                                    <div class="filterRail mb-4">
+                                        <label for="all">All Sports</label>
+                                        <label for="football">Football</label>
+                                        <label for="cricket">Cricket</label>
+                                        <label for="afl">AFL</label>
+                                        <label for="netball">Netball</label>
+                                        <label for="tennis">Tennis</label>
+                                        <label for="basketball">Basketball</label>
+                                        <label for="touch">Touch Football</label>
                                     </div>
-                                    <div class = "offcanvas-body d-block stickySide">
-                                        <p class = "eyebrow borderBottom pb-2 mb-2" style = "border-bottom-width:2px;border-bottom-color:var(--black);">Sport</p>
-                                        <div class = "filterRail mb-4">
-                                            <label for = "all">All Sports</label>
-                                            <label for = "football">Football</label>
-                                            <label for = "cricket">Cricket</label>
-                                            <label for = "afl">AFL</label>
-                                            <label for = "netball">Netball</label>
-                                            <label for = "tennis">Tennis</label>
-                                            <label for = "basketball">Basketball</label>
-                                            <label for = "touch">Touch Football</label>
-                                        </div>
-                                        <p class = "eyebrow borderBottom pb-2 mb-3" style = "border-bottom-width:2px;border-bottom-color:var(--black);">Refine</p>
-                                        <div class = "mb-3">
-                                            <label for = "skillFilter" class = "form-label">Skill level</label>
-                                            <select class = "form-select form-select-sm" id = "skillFilter">
-                                                <option selected>Any Level</option>
-                                                <option>Amateur</option>
-                                                <option>Social</option>
-                                                <option>Semi-Pro</option>
+                                    <p class="eyebrow borderBottom pb-2 mb-3"
+                                        style="border-bottom-width:2px;border-bottom-color:var(--black);">Refine</p>
+                                    <div class="mb-3">
+                                        <label for="skillFilter" class="form-label">Skill level</label>
+                                        <select class="form-select form-select-sm" id="skillFilter">
+                                            <option selected>Any Level</option>
+                                            <option>Amateur</option>
+                                            <option>Social</option>
+                                            <option>Semi-Pro</option>
 
-                                            </select>
-                                        </div>
-                                        <div class = "mb-3">
-                                            <label for = "surfaceFilter" class = "form-label">Surface</label>
-                                            <select class = "form-select form-select-sm" id = "surfaceFilter">
-                                                <option selected>Any Surface</option>
-                                                <option>Grass</option>
-                                                <option>Turf</option>
-                                                <option>Artificial Grass</option>
-                                                <option>Indoor Court</option>
-                                                <option>Artificial Turf</option>
-                                            </select>
-                                        </div>
-                                        <div class = "form-check">
-                                            <input class = "form-check-input" type = "checkbox" id = "sportsFilter" checked>
-                                            <label class = "form-check-label" for = "sportsFilter">Only games with spots left</label>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="surfaceFilter" class="form-label">Surface</label>
+                                        <select class="form-select form-select-sm" id="surfaceFilter">
+                                            <option selected>Any Surface</option>
+                                            <option>Grass</option>
+                                            <option>Turf</option>
+                                            <option>Artificial Grass</option>
+                                            <option>Indoor Court</option>
+                                            <option>Artificial Turf</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="sportsFilter" checked>
+                                        <label class="form-check-label" for="sportsFilter">Only games with spots
+                                            left</label>
 
-                                        </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
                         <!--EVENTS-->
-                        <div class = "col-lg-9">
-                            <div class = "row g-4">
+                        <div class="col-lg-9">
+                            <div class="row g-4">
 
                                 {% for event in events %}
                                 {% set sport = event.category.categoryName|trim|lower %}
-                                
+
                                 <div class="ev
     {% if sport == 'football' %}catFootball
     {% elif sport == 'cricket' %}catCricket
@@ -152,182 +161,182 @@
     {% elif sport == 'touch football' %}catTouch
     {% endif %}
     col-12 col-md-6 col-xxl-4">
-                                
-                                <article class="eventCard {% if event.status in ['Sold Out', 'Cancelled', 'Inactive'] %}isOff{% endif %}">
 
-        <!-- Event image -->
-        <div class="card-img-wrap">
+                                    <article
+                                        class="eventCard {% if event.status in ['Sold Out', 'Cancelled', 'Inactive'] %}isOff{% endif %}">
 
-            {% if event.imageURL %}
-                <img src="{{ event.imageURL }}" alt="{{ event.title }}">
+                                        <!-- Event image -->
+                                        <div class="card-img-wrap">
 
-            {% elif event.category.categoryName == 'Football' %}
-                <img src="{{ url_for('static', filename='img/football.jpeg') }}" alt="Football">
+                                            {% if event.imageURL %}
+                                            <img src="{{ event.imageURL }}" alt="{{ event.title }}">
 
-            {% elif event.category.categoryName == 'Cricket' %}
-                <img src="{{ url_for('static', filename='img/cricket.jpeg') }}" alt="Cricket">
+                                            {% elif event.category.categoryName == 'Football' %}
+                                            <img src="{{ url_for('static', filename='img/football.jpeg') }}"
+                                                alt="Football">
 
-            {% elif event.category.categoryName == 'Netball' %}
-                <img src="{{ url_for('static', filename='img/netball.jpg') }}" alt="Netball">
+                                            {% elif event.category.categoryName == 'Cricket' %}
+                                            <img src="{{ url_for('static', filename='img/cricket.jpeg') }}"
+                                                alt="Cricket">
 
-            {% elif event.category.categoryName == 'AFL' %}
-                <img src="{{ url_for('static', filename='img/afl.jpg') }}" alt="AFL">
+                                            {% elif event.category.categoryName == 'Netball' %}
+                                            <img src="{{ url_for('static', filename='img/netball.jpg') }}"
+                                                alt="Netball">
 
-            {% elif event.category.categoryName == 'Tennis' %}
-                <img src="{{ url_for('static', filename='img/tennis.jpeg') }}" alt="Tennis">
+                                            {% elif event.category.categoryName == 'AFL' %}
+                                            <img src="{{ url_for('static', filename='img/afl.jpg') }}" alt="AFL">
 
-            {% elif event.category.categoryName == 'Basketball' %}
-                <img src="{{ url_for('static', filename='img/basketball.jpeg') }}" alt="Basketball">
+                                            {% elif event.category.categoryName == 'Tennis' %}
+                                            <img src="{{ url_for('static', filename='img/tennis.jpeg') }}" alt="Tennis">
 
-            {% else %}
-                <img src="{{ url_for('static', filename='img/football.jpeg') }}"
-                     alt="{{ event.category.categoryName }}">
-            {% endif %}
+                                            {% elif event.category.categoryName == 'Basketball' %}
+                                            <img src="{{ url_for('static', filename='img/basketball.jpeg') }}"
+                                                alt="Basketball">
 
-            <!-- Event status -->
-            <span class="status {{ event.status|lower|replace(' ', '-') }}">
-                {{ event.status }}
-            </span>
+                                            {% else %}
+                                            <img src="{{ url_for('static', filename='img/football.jpeg') }}"
+                                                alt="{{ event.category.categoryName }}">
+                                            {% endif %}
 
-            <!-- Sport category -->
-            <span class="sportTag">
-                {{ event.category.categoryName }}
-            </span>
+                                            <!-- Event status -->
+                                            <span class="status {{ event.status|lower|replace(' ', '-') }}">
+                                                {{ event.status }}
+                                            </span>
 
-        </div>
+                                            <!-- Sport category -->
+                                            <span class="sportTag">
+                                                {{ event.category.categoryName }}
+                                            </span>
 
-
-        <!-- Event information -->
-        <div class="eventBody">
-
-            <p class="data text-muted-soft mb-1">
-                {{ event.eventDate.strftime('%a %d %b')|upper }}
-                ·
-                {{ event.startTime.strftime('%H:%M') }}
-                &ndash;
-                {{ event.endTime.strftime('%H:%M') }}
-            </p>
-
-            <h3 class="h5 eventTitle mb-2">
-                <a href="{{ url_for('event.show', id=event.eventID) }}">
-                    {{ event.title }}
-                </a>
-            </h3>
-
-            <p class="small text-muted-soft mb-4">
-                {{ event.venue.venueName }},
-                {{ event.venue.suburb }}
-                · {{ event.skillLevel }}
-                · {{ event.surfaceType }}
-            </p>
+                                        </div>
 
 
-            <!-- Player and spectator numbers -->
-            <div class="row g-3 mt-auto borderTop pt-3">
+                                        <!-- Event information -->
+                                        <div class="eventBody">
 
-                <div class="col-6">
-                    <div class="countBlock">
+                                            <p class="data text-muted-soft mb-1">
+                                                {{ event.eventDate.strftime('%a %d %b')|upper }}
+                                                ·
+                                                {{ event.startTime.strftime('%H:%M') }}
+                                                &ndash;
+                                                {{ event.endTime.strftime('%H:%M') }}
+                                            </p>
 
-                        <span class="eyebrow">Players</span>
+                                            <h3 class="h5 eventTitle mb-2">
+                                                <a href="{{ url_for('event.show', id=event.eventID) }}">
+                                                    {{ event.title }}
+                                                </a>
+                                            </h3>
 
-                        <span class="numbers numbers-med">
-                            {{ event.playerBooked }}
-                            <span class="of">
-                                /{{ event.participantCapacity }}
-                            </span>
-                        </span>
-
-                        {% set playerFill =
-                            (event.playerBooked / event.participantCapacity * 100)
-                            if event.participantCapacity else 0
-                        %}
-
-                        <div
-                        class="slots"
-                        data-n="{{ event.participantCapacity }}"
-                        data-fill="{{ playerFill }}"
-                        role="img"
-                        aria-label="{{ event.playerBooked }} of {{ event.participantCapacity }} player spots taken">
-                    </div>
-                    </div>
-                </div>
+                                            <p class="small text-muted-soft mb-4">
+                                                {{ event.venue.venueName }},
+                                                {{ event.venue.suburb }}
+                                                · {{ event.skillLevel }}
+                                                · {{ event.surfaceType }}
+                                            </p>
 
 
-                <div class="col-6">
-                    <div class="countBlock">
+                                            <!-- Player and spectator numbers -->
+                                            <div class="row g-3 mt-auto borderTop pt-3">
 
-                        <span class="eyebrow">Spectators</span>
+                                                <div class="col-6">
+                                                    <div class="countBlock">
 
-                        <span class="numbers numbers-med">
-                            {{ event.spectatorBooked }}
-                            <span class="of">
-                                /{{ event.spectatorCapacity }}
-                            </span>
-                        </span>
+                                                        <span class="eyebrow">Players</span>
 
-                        {% set spectatorFill =
-                            (event.spectatorBooked / event.spectatorCapacity * 100)
-                            if event.spectatorCapacity else 0
-                        %}
+                                                        <span class="numbers numbers-med">
+                                                            {{ event.playerBooked }}
+                                                            <span class="of">
+                                                                /{{ event.participantCapacity }}
+                                                            </span>
+                                                        </span>
 
-                        <div
-                        class="slots slotsSpectator"
-                        data-n="{{ event.spectatorCapacity }}"
-                        data-fill="{{ spectatorFill }}"
-                        role="img"
-                        aria-label="{{ event.spectatorBooked }} of {{ event.spectatorCapacity }} spectator spots taken">
-                    </div>
+                                                        {% set playerFill =
+                                                        (event.playerBooked / event.participantCapacity * 100)
+                                                        if event.participantCapacity else 0
+                                                        %}
 
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-
-    </article>
-</div>
+                                                        <div class="slots" data-n="{{ event.participantCapacity }}"
+                                                            data-fill="{{ playerFill }}" role="img"
+                                                            aria-label="{{ event.playerBooked }} of {{ event.participantCapacity }} player spots taken">
+                                                        </div>
+                                                    </div>
+                                                </div>
 
 
-{% else %}
+                                                <div class="col-6">
+                                                    <div class="countBlock">
 
-<!-- No database events -->
-<div class="col-12">
-    <div class="emptyState mt-4">
+                                                        <span class="eyebrow">Spectators</span>
 
-        <p class="eyebrow mb-3">
-            Nothing Scheduled
-        </p>
+                                                        <span class="numbers numbers-med">
+                                                            {{ event.spectatorBooked }}
+                                                            <span class="of">
+                                                                /{{ event.spectatorCapacity }}
+                                                            </span>
+                                                        </span>
 
-        <h3 class="h4 mb-2">
-            No games are currently available
-        </h3>
+                                                        {% set spectatorFill =
+                                                        (event.spectatorBooked / event.spectatorCapacity * 100)
+                                                        if event.spectatorCapacity else 0
+                                                        %}
 
-        <p class="text-muted-soft mb-4">
-            Be the first to put one on the board.
-        </p>
+                                                        <div class="slots slotsSpectator"
+                                                            data-n="{{ event.spectatorCapacity }}"
+                                                            data-fill="{{ spectatorFill }}" role="img"
+                                                            aria-label="{{ event.spectatorBooked }} of {{ event.spectatorCapacity }} spectator spots taken">
+                                                        </div>
 
-        <a href="{{ url_for('event.create') }}" class="btn buttonPink">
-            Host a game
-        </a>
+                                                    </div>
+                                                </div>
 
-    </div>
-</div>
+                                            </div>
 
-{% endfor %}
-                                
+                                        </div>
+
+                                    </article>
+                                </div>
+
+
+                                {% else %}
+
+                                <!-- No database events -->
+                                <div class="col-12">
+                                    <div class="emptyState mt-4">
+
+                                        <p class="eyebrow mb-3">
+                                            Nothing Scheduled
+                                        </p>
+
+                                        <h3 class="h4 mb-2">
+                                            No games are currently available
+                                        </h3>
+
+                                        <p class="text-muted-soft mb-4">
+                                            Be the first to put one on the board.
+                                        </p>
+
+                                        <a href="{{ url_for('event.create') }}" class="btn buttonPink">
+                                            Host a game
+                                        </a>
+
+                                    </div>
+                                </div>
+
+                                {% endfor %}
+
                             </div>
-                           
-                        </div>
+
                         </div>
                     </div>
-                 </fieldset>
-            </div>
-        </section>
-    </main>
+                </div>
+            </fieldset>
+        </div>
+    </section>
+</main>
 
 <script>
-    document.querySelectorAll('.slots[data-n][data-fill]').forEach(function(slot) {
+    document.querySelectorAll('.slots[data-n][data-fill]').forEach(function (slot) {
         slot.style.setProperty('--n', slot.dataset.n);
         slot.style.setProperty('--fill', slot.dataset.fill + '%');
     });
