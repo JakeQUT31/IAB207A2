@@ -145,9 +145,10 @@ def my_events():
    ).all()
    return render_template('events/my_events.html', events=events)
 
-
+# Generates a page with detailed information regading a specific event
 @event_bp.route('/<int:id>')
 def show(id):
+   # This code collects the various details about the event from the sql database
    event = db.session.scalar(db.select(Event).where(Event.eventID==id))
    if event is None:
       abort(404)

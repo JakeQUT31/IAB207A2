@@ -1,359 +1,318 @@
 <!DOCTYPE html>
-<html lang="en-AU">
+<html lang = "en-AU">
+    <head>
+        <meta charset = "UTF-8">
+        <meta name = "viewport" content = "width=device-width, initial-scale=1">
+        <title>Match Details - SportTix</title>
+        <meta name = "description" content = "SportTix is a platform for players and spectators to book tickets to amateur sports events. Browse and book tickets to your favourite sports events, or host your own game and sell tickets to players and spectators.">
+        <link rel = "preconnect" href = "https://fonts.googleapis.com">
+        <link rel = "preconnect" href = "https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;700;800&family=Public+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+        <link href ="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel = "stylesheet">
+        <link rel = "stylesheet" href = "static/style/style.css">
+    </head>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Match Details - SportTix</title>
-    <meta name="description"
-        content="SportTix is a platform for players and spectators to book tickets to amateur sports events. Browse and book tickets to your favourite sports events, or host your own game and sell tickets to players and spectators.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;600;700;800&family=Public+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap"
-        rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="static/style/style.css">
-</head>
+    <body>
+        <a class = "skipLink" href = "#main">Skip to event details</a>
 
-<body>
-    <a class="skipLink" href="#main">Skip to event details</a>
-
-    <nav class="navbar navbar-expand-lg sticky-top">
-        <div class="container">
-            <a class="navbar-brand" href="index.html">
-                <span class="brandMark" aria-hidden="true"><i></i><i></i><i></i></span>
-                SportTix
-            </a>
-            <button class="navbar-toggler border-0 p-1" type="button" data-bs-toggle="collapse"
-                data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Show navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="mainNav">
-                <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
-                    <li class="nav-item"><a class="nav-link" href="index.html">Browse</a></li>
-                    <li class="nav-item"><a class="nav-link" href="create_event.html">Host a Game</a></li>
-                    <li class="nav-item"><a class="nav-link" href="bookings.html">My Bookings</a></li>
-                    <li class="nav-item ms-lg-4 mt-2 mt-lg-0"><a class="btn buttonBlack btn-sm" href="#">Log in</a></li>
-                </ul>
+        <nav class = "navbar navbar-expand-lg sticky-top">
+            <div class = "container">
+                <a class = "navbar-brand" href = "index.html">
+                    <span class = "brandMark" aria-hidden = "true"><i></i><i></i><i></i></span>
+                    SportTix
+                </a>
+                <button class = "navbar-toggler border-0 p-1" type = "button" data-bs-toggle = "collapse" data-bs-target = "#mainNav" aria-controls = "mainNav" aria-expanded = "false" aria-label = "Show navigation">
+                    <span class = "navbar-toggler-icon"></span>
+                </button>
+                <div class = "collapse navbar-collapse" id = "mainNav">
+                    <ul class = "navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+                        <li class = "nav-item"><a class = "nav-link" href = "index.html">Browse</a></li>
+                        <li class = "nav-item"><a class = "nav-link" href = "create_event.html">Host a Game</a></li>
+                        <li class = "nav-item"><a class = "nav-link" href = "bookings.html">My Bookings</a></li>
+                        <li class="nav-item ms-lg-4 mt-2 mt-lg-0"><a class="btn buttonBlack btn-sm" href="#">Log in</a></li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
+         </nav>
+         
+         <main id = "main" class = "py-4 py-lg-5">
+            <div class = "container">
+                
+                <nav aria-label = "Breadcrumb">
+                    <ol class = "breadcrumb">
+                        <li class = "breadcrumb-item"><a href = "index.html">Browse</a></li>
+                        <li class = "breadcrumb-item"><a href = "index.html#events">Cricket</a></li>
+                        <li class = "breadcrumb-item active" aria-current = "page">Sunday Amateur T20 Match</li>
+                    </ol>
+                </nav>
 
-    <main id="main" class="py-4 py-lg-5">
-        <div class="container">
-
-            <nav aria-label="Breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="index.html">Browse</a></li>
-                    <li class="breadcrumb-item"><a href="index.html#events">Cricket</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Sunday Amateur T20 Match</li>
-                </ol>
-            </nav>
-
-            <div class="row g-4 align-items-end borderBottom pb-4 mb-5" style="border-bottom-width: 2px;
+                <div class = "row g-4 align-items-end borderBottom pb-4 mb-5" style = "border-bottom-width: 2px;
                 border-bottom-color: var(--black);">
-                <div class="col-lg-8">
-                    <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
-                        <span class="status open">open</span>
-                        <span class="eyebrow">Cricket · Amateur · 4 hrs</span>
+                    <div class = "col-lg-8">
+                        <div class = "d-flex flex-wrap align-items-center gap-3 mb-3">
+                            <span class = "status open">open</span>
+                            <span class = "eyebrow">Cricket · Amateur · 4 hrs</span>
+                        </div>
+                        <h1 class = "pageTitle mb-3">Sunday Amateur T20 Match</h1>
+                        <p class = "data text-muted-soft mb-0">SUN 13 SEP 2026 · 9:00&ndash;13:00 · Marchant Park, Field 2, Chermside</p>
                     </div>
-                    <h1 class="pageTitle mb-3">Sunday Amateur T20 Match</h1>
-                    <p class="data text-muted-soft mb-0">SUN 13 SEP 2026 · 9:00&ndash;13:00 · Marchant Park, Field 2,
-                        Chermside</p>
-                </div>
-                <div class="col-lg-4">
-                    <div class="row g-3 align-items-end">
-                        <div class="col-6">
-                            <div class="countBlock">
-                                <span class="eyebrow">Player Spots Left</span>
-                                <span class="numbers numbers-big" style="color: var(--pink);">02</span>
+                    <div class = "col-lg-4">
+                        <div class = "row g-3 align-items-end">
+                            <div class = "col-6">
+                                <div class = "countBlock">
+                                    <span class = "eyebrow">Player Spots Left</span>
+                                    <span class = "numbers numbers-big" style = "color: var(--pink);">02</span>
+                                </div>
+                            </div>
+                            <div class = "col-6">
+                                <div class = "countBlock">
+                                    <span class = "eyebrow">Spectator Seats Left</span>
+                                    <span class = "numbers numbers-big" style = "color: var(--pink);">35</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-6">
-                            <div class="countBlock">
-                                <span class="eyebrow">Spectator Seats Left</span>
-                                <span class="numbers numbers-big" style="color: var(--pink);">35</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="row g-4 g-lg-5">
-                <div class="col-lg-7 col-xl-8">
-                    <img src="static/img/cricket.jpeg" class="img-fluid mb-5 w-100" alt="Cricket Oval">
+                <div class = "row g-4 g-lg-5">
+                    <div class = "col-lg-7 col-xl-8">
+                        <img src = "static/img/cricket.jpeg" class = "img-fluid mb-5 w-100" alt = "Cricket Oval">
 
-                    <h2 class="h4 mb-3">About this Match</h2>
-                    <p>
-                        A 20 over match between two sides at Marchant Park, Chermside. This match includes two club
-                        umpires and a proper scorer.
-                        This is a amatuer level game, however it will be a friendly vibe around; everyone gets a bat or
-                        a bowl.
-                    </p>
-                    <p class="mb-4">
-                        Whites are preferred but not enforced. Bring your own equipment if you have them, there will be
-                        limited spare kits and helmets.
-                        Toss is at 8:30am sharp.
-                    </p>
-
-                    <dl class="row g- specGrid borderTop borderBottom py-4 mb-5">
-                        <div class="col-6 col-md-3">
-                            <dt>Surface</dt>
-                            <dd>Turf Wicket</dd>
-                        </div>
-                        <div class="col-6 col-md-3">
-                            <dt>Skill Level</dt>
-                            <dd>Amateur</dd>
-                        </div>
-                        <div class="col-6 col-md-3">
-                            <dt>Duration</dt>
-                            <dd>4 Hours</dd>
-                        </div>
-                        <div class="col-6 col-md-3">
-                            <dt>Format</dt>
-                            <dd>T20, 11 a Side</dd>
-                        </div>
-                    </dl>
-
-                    <h2 class="h4 mb-3">Venue</h2>
-                    <div class="panel p-4 mb-5">
-                        <p class="fw-bold mb-1">Marchant Park · Field 2</p>
-                        <p class="mb-3 text-muted-soft">1105, Gympie Road, Chermside</p>
-                        <p class="small mb-0 borderTop pt-3">
-                            This match is played on the lands of the Traditional Custodians of the land of Chermside.
-                            SportTix pays respect to the Elders past, present, and emerging.
+                        <h2 class = "h4 mb-3">About this Match</h2>
+                        <p>
+                            A 20 over match between two sides at Marchant Park, Chermside. This match includes two club umpires and a proper scorer.
+                            This is a amatuer level game, however it will be a friendly vibe around; everyone gets a bat or a bowl.
                         </p>
-                    </div>
+                        <p class = "mb-4">
+                            Whites are preferred but not enforced. Bring your own equipment if you have them, there will be limited spare kits and helmets.
+                            Toss is at 8:30am sharp.
+                        </p>
 
-                    <h2 class="h4 mb-3">Additional Information before you show up</h2>
-                    <div class="accordion mb-5" id="eventInfo-cricket">
-                        <div class="accordion-item">
-                            <h3 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#infoOne-cricket" aria-expanded="false"
-                                    aria-controls="infoOne-cricket">
+                        <dl class = "row g- specGrid borderTop borderBottom py-4 mb-5">
+                            <div class = "col-6 col-md-3"><dt>Surface</dt><dd>Turf Wicket</dd></div>
+                            <div class = "col-6 col-md-3"><dt>Skill Level</dt><dd>Amateur</dd></div>
+                            <div class = "col-6 col-md-3"><dt>Duration</dt><dd>4 Hours</dd></div>
+                            <div class = "col-6 col-md-3"><dt>Format</dt><dd>T20, 11 a Side</dd></div>
+                        </dl>
+
+                        <h2 class = "h4 mb-3">Venue</h2>
+                        <div class = "panel p-4 mb-5">
+                            <p class = "fw-bold mb-1">Marchant Park · Field 2</p>
+                            <p class = "mb-3 text-muted-soft">1105, Gympie Road, Chermside</p>
+                            <p class = "small mb-0 borderTop pt-3">
+                                This match is played on the lands of the Traditional Custodians of the land of Chermside. 
+                                SportTix pays respect to the Elders past, present, and emerging.
+                            </p>
+                        </div>
+                        
+                        <h2 class = "h4 mb-3">Additional Information before you show up</h2>
+                        <div class = "accordion mb-5" id = "eventInfo-cricket">
+                            <div class = "accordion-item">
+                                <h3 class = "accordion-header">
+                                    <button class = "accordion-button collapsed" type = "button" data-bs-toggle = "collapse"
+                                    data-bs-target = "#infoOne-cricket" aria-expanded="false" aria-controls = "infoOne-cricket">
                                     What to Bring
-                                </button>
-                            </h3>
-                            <div id="infoOne-cricket" class="accordion-collapse collapse"
-                                data-bs-parent="#eventInfo-cricket">
-                                <div class="accordion-body">
-                                    Whites - if you have them,
-                                    spikes or normal runners,
-                                    a hat and sunscreen,
-                                    and lots and lots of water.
-                                    Stumps, balls, helmets and two spare club kits are provided.
+                                    </button>
+                                </h3>
+                                <div id = "infoOne-cricket" class = "accordion-collapse collapse" data-bs-parent = "#eventInfo-cricket">
+                                    <div class = "accordion-body">
+                                        Whites - if you have them,
+                                        spikes or normal runners,
+                                        a hat and sunscreen,
+                                        and lots and lots of water.
+                                        Stumps, balls, helmets and two spare club kits are provided.
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h3 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#infoTwo-cricket" aria-expanded="false"
-                                    aria-controls="#infoTwo-cricket">
+                            <div class = "accordion-item">
+                                <h3 class = "accordion-header">
+                                    <button class = "accordion-button collapsed" type = "button" data-bs-toggle = "collapse"
+                                    data-bs-target = "#infoTwo-cricket" aria-expanded="false" aria-controls = "#infoTwo-cricket">
                                     If the match is called off
-                                </button>
-                            </h3>
-                            <div id="infoTwo-cricket" class="accordion-collapse collapse" data-bs-toggle="collapse"
-                                data-bs-parent="eventInfo-cricket">
-                                <div class="accordion-body">
-                                    Wet Weather calls are made by 7am on the morning of the match once the curator has
-                                    had a look at the pitch.
-                                    If the match is cancelled, the host will update the status and players and
-                                    spectators will be notified via
-                                    their preferred contact method.
+                                    </button>
+                                </h3>
+                                <div id = "infoTwo-cricket" class = "accordion-collapse collapse" data-bs-toggle = "collapse" data-bs-parent = "eventInfo-cricket">
+                                    <div class = "accordion-body">
+                                        Wet Weather calls are made by 7am on the morning of the match once the curator has had a look at the pitch.
+                                        If the match is cancelled, the host will update the status and players and spectators will be notified via
+                                        their preferred contact method.
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        
 
-
-                        <div class="accordion-item">
-                            <h3 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                    data-bs-target="#infoThree-cricket" aria-expanded="false"
-                                    aria-controls="#infoThree-cricket">
+                            <div class = "accordion-item">
+                                <h3 class = "accordion-header">
+                                    <button class = "accordion-button collapsed" type = "button" data-bs-toggle = "collapse"
+                                    data-bs-target = "#infoThree-cricket" aria-expanded="false" aria-controls = "#infoThree-cricket">
                                     Parking and Access
-                                </button>
-                            </h3>
-                            <div id="infoThree-cricket" class="accordion-collapse collapse"
-                                data-bs-parent="#eventInfo-cricket">
-                                <div class="accordion-body">
-                                    Free parking provided at the field, and street parking available as well.
-                                    There is also a bus stop 5 mins away or at Westfield Chermside.
+                                    </button>
+                                </h3>
+                                <div id = "infoThree-cricket" class = "accordion-collapse collapse" data-bs-parent = "#eventInfo-cricket">
+                                    <div class = "accordion-body">
+                                        Free parking provided at the field, and street parking available as well. 
+                                        There is also a bus stop 5 mins away or at Westfield Chermside.
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-
+                        </div>    
+                    
 
                     <!--COMMENTS-->
-                    <section aria-labelledby="commentsHeading-cricket">
-                        <div class="headSection">
-                            <h2 class="h4 mb-0" id="commentsHeading-cricket">Questions and Discussion</h2>
-                            <span class="data text-muted-soft">3 Comments</span>
+                    <section aria-labelledby = "commentsHeading-cricket">
+                        <div class = "headSection">
+                            <h2 class = "h4 mb-0" id = "commentsHeading-cricket">Questions and Discussion</h2>
+                            <span class = "data text-muted-soft">3 Comments</span>
                         </div>
 
-                        <div class="mb-4">
-                            <div class="comment">
-                                <p class="mb-1"><span class="author">Mark Malik</span>
-                                    <span class="data text-muted-soft ms-2">2 Sep 2026, 14:00</span>
-                                </p>
-                                <p class="mb-0">Is there any way we can have a net session before the toss?
+                        <div class = "mb-4">
+                            <div class = "comment">
+                                <p class = "mb-1"><span class = "author">Mark Malik</span>
+                                <span class = "data text-muted-soft ms-2">2 Sep 2026, 14:00</span></p>
+                                <p class = "mb-0">Is there any way we can have a net session before the toss?
                                     Happy to get there earlier and set everything up.</p>
                             </div>
-                            <div class="comment">
-                                <p class="mb-1"><span class="author">Eric Baldish</span>
-                                    <span class="data text-muted-soft ms-2">29 Aug 2026, 10:00</span>
-                                </p>
-                                <p class="mb-0">Is there a canteen or something where we can buy something
-                                    or do we need to bring our own food?</p>
+                            <div class = "comment">
+                                <p class = "mb-1"><span class = "author">Eric Baldish</span>
+                                <span class = "data text-muted-soft ms-2">29 Aug 2026, 10:00</span></p>
+                                <p class = "mb-0">Is there a canteen or something where we can buy something
+                                                 or do we need to bring our own food?</p>
                             </div>
-                            <div class="comment">
-                                <p class="mb-1"><span class="author">Steve Smith</span>
-                                    <span class="data text-muted-soft ms-2">27 Aug 2026, 20:00</span>
-                                </p>
-                                <p class="mb-0">Excited for this, Can't wait till the match! Who's ready?</p>
+                            <div class = "comment">
+                                <p class = "mb-1"><span class = "author">Steve Smith</span>
+                                <span class = "data text-muted-soft ms-2">27 Aug 2026, 20:00</span></p>
+                                <p class = "mb-0">Excited for this, Can't wait till the match! Who's ready?</p>
                             </div>
                         </div>
-
-                        <div class="panel p-4">
-                            <p class="eyebrow mb-3">
+                        
+                        <div class = "panel p-4">
+                            <p class = "eyebrow mb-3">
                                 Add a Comment
                             </p>
-                            <form action="event.html#cricket" method="get">
-                                <div class="mb-3">
-                                    <label for="commentBody-cricket" class="form-label">Your Comment</label>
-                                    <textarea class="form-control" id="commentBody-cricket" rows="3" required
-                                        placeholder="Ask a question, or share your opinion which may be useful to other players"></textarea>
-                                    <div class="invalid-feedback">Write something before posting.</div>
+                            <form action = "event.html#cricket" method = "get">
+                                <div class = "mb-3">
+                                    <label for = "commentBody-cricket" class = "form-label">Your Comment</label>
+                                    <textarea class = "form-control" id = "commentBody-cricket" rows = "3" required
+                                    placeholder = "Ask a question, or share your opinion which may be useful to other players"></textarea>
+                                    <div class = "invalid-feedback">Write something before posting.</div>
                                 </div>
-                                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
-                                    <p class="small text-muted-soft mb-0">Posting as <span class="fw-bold">Athauv
-                                            A.</span> - Your name and the time you post will appear with your comment.
-                                    </p>
-                                    <button type=submit class="btn buttonBlack">Post Comment</button>
+                                <div class = "d-flex flex-wrap align-items-center justify-content-between gap-3">
+                                    <p class = "small text-muted-soft mb-0">Posting as <span class = "fw-bold">Athauv A.</span> - Your name and the time you post will appear with your comment.</p>
+                                    <button type = submit class = "btn buttonBlack">Post Comment</button>
                                 </div>
                             </form>
                         </div>
                     </section>
                 </div>
 
-                <div class="col-lg-5 col-xl-4">
-                    <div class="stickySide">
-                        <div class="panel panelBlack p-4">
-                            <p class="eyebrow mb-4">Book a Spot</p>
+                <div class = "col-lg-5 col-xl-4">
+                    <div class = "stickySide">
+                        <div class = "panel panelBlack p-4">
+                            <p class = "eyebrow mb-4">Book a Spot</p>
 
-                            <div class="row g-4 mb-4 pb-4 borderBottom">
-                                <div class="col-6">
-                                    <div class="countBlock">
-                                        <span class="eyebrow">Player Spots</span>
-                                        <span class="numbers numbers-med">20<span class="of">/22</span></span>
-                                        <div class="slots onDark" style="--n:22; --fill:90.91%;" role="img"
-                                            aria-label="20 of 22 player spots are taken">
+                            <div class = "row g-4 mb-4 pb-4 borderBottom">
+                                <div class = "col-6">
+                                    <div class = "countBlock">
+                                        <span class = "eyebrow">Player Spots</span>
+                                        <span class = "numbers numbers-med">20<span class = "of">/22</span></span>
+                                        <div class = "slots onDark" style = "--n:22; --fill:90.91%;"
+                                        role = "img" aria-label = "20 of 22 player spots are taken">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-6">
-                                    <div class="countBlock">
-                                        <span class="eyebrow">Spectator Spots</span>
-                                        <span class="numbers numbers-med">25<span class="of">/60</span></span>
-                                        <div class="slots onDark" style="--n:22; --fill:41.67%;" role="img"
-                                            aria-label="25 of 60 player spots are taken">
+                                <div class = "col-6">
+                                    <div class = "countBlock">
+                                        <span class = "eyebrow">Spectator Spots</span>
+                                        <span class = "numbers numbers-med">25<span class = "of">/60</span></span>
+                                        <div class = "slots onDark" style = "--n:22; --fill:41.67%;"
+                                        role = "img" aria-label = "25 of 60 player spots are taken">
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <p class="small mb-4" style="color:#F4F1EAD1;">
-                                Only <span class="fw-bold" style="color:#fffdf8;">2 Player Spots</span> left.
-                                Once both rosters are filled, this match will be Sold Out and no further bookings can be
-                                made.
+                            <p class = "small mb-4" style = "color:#F4F1EAD1;">
+                                Only <span class = "fw-bold" style = "color:#fffdf8;">2 Player Spots</span> left.
+                                Once both rosters are filled, this match will be Sold Out and no further bookings can be made.
                             </p>
 
-                            <form action="event.html#cricket" method="get">
-                                <div class="mb-3">
-                                    <label for="ticketType-cricket" class="form-label" style="color:#F4F1EAB2;">Ticket
-                                        Type</label>
-                                    <select class="form-select" id="ticketType-cricket">
+                            <form action = "event.html#cricket" method = "get">
+                                <div class = "mb-3">
+                                    <label for = "ticketType-cricket" class = "form-label" style = "color:#F4F1EAB2;">Ticket Type</label>
+                                    <select class = "form-select" id = "ticketType-cricket">
                                         <option selected>Player - $20.00 each · 2 left</option>
                                         <option>Spectator - $10.00 each · 35 left</option>
                                     </select>
                                 </div>
-                                <div class="mb-4">
-                                    <label for="ticketQty-cricket" class="form-label" style="color:#F4F1EAB2;">Number of
-                                        Tickets</label>
-                                    <select class="form-select" id="ticketQty-cricket">
+                                <div class = "mb-4">
+                                    <label for = "ticketQty-cricket" class = "form-label" style = "color:#F4F1EAB2;">Number of Tickets</label>
+                                    <select class = "form-select" id = "ticketQty-cricket">
                                         <option selected>1 ticket</option>
                                         <option>2 tickets</option>
                                     </select>
-                                    <div class="form-text" style="color:#F4F1EA99;">You can only book as many tickets as
-                                        there are spots left.</div>
+                                    <div class = "form-text" style = "color:#F4F1EA99;">You can only book as many tickets as there are spots left.</div>
                                 </div>
 
-                                <div class="d-flex justify-content-between align-items-center mb-4 pt-3 borderTop">
-                                    <span class="eyebrow">Total</span>
-                                    <span class="numbers numbers-med">$20.00</span>
+                                <div class = "d-flex justify-content-between align-items-center mb-4 pt-3 borderTop">
+                                    <span class = "eyebrow">Total</span>
+                                    <span class = "numbers numbers-med">$20.00</span>
                                 </div>
 
-                                <button type="button" class="btn buttonPink w-100 mb-3" data-bs-toggle="modal"
-                                    data-bs-target="#bookingModal-cricket">
+                                <button type = "button" class = "btn buttonPink w-100 mb-3" data-bs-toggle="modal" data-bs-target = "#bookingModal-cricket">
                                     BOOK TICKETS
                                 </button>
                             </form>
 
-                            <p class="small mb-0" style="color:#F4F1EA99;">
+                            <p class = "small mb-0" style = "color:#F4F1EA99;">
                                 You need to be logged in to book. Cancellations are free up to 24 hours before the toss.
                             </p>
                         </div>
-                        <div class="panel p-4 mt-3">
-                            <p class="eyebrow mb-2">Hosted By</p>
-                            <p class="fw-bold mb-1">Chermside Cricket Club</p>
+                        <div class = "panel p-4 mt-3">
+                            <p class = "eyebrow mb-2">Hosted By</p>
+                            <p class = "fw-bold mb-1">Chermside Cricket Club</p>
                         </div>
                     </div>
                 </div>
             </div>
-
-    </main>
-
+            
+         </main>
+         
     <!--this finna be the footer-->
-    <footer class="footer pt-5 pb-4">
-        <div class="container">
-            <div class="row g-4 g-lg-5">
-                <div class="col-lg-5">
-                    <p class="d-inline-flex align-items-center gap-2 mb-3"
-                        style="font-family:'Libre Franklin',sans-serif;font-weight:800;font-size:1.2rem;letter-spacing:-.04em;color:#fffdf8;">
-                        <span class="brandMark" aria-hidden="true"><i></i><i></i><i></i></span>SportTix
+    <footer class = "footer pt-5 pb-4">
+        <div class = "container">
+            <div class = "row g-4 g-lg-5">
+                <div class = "col-lg-5">
+                    <p class = "d-inline-flex align-items-center gap-2 mb-3" style = "font-family:'Libre Franklin',sans-serif;font-weight:800;font-size:1.2rem;letter-spacing:-.04em;color:#fffdf8;">
+                        <span class = "brandMark" aria-hidden = "true"><i></i><i></i><i></i></span>SportTix
                     </p>
-                    <p class="small mb-0" style="max-width:32rem;">
-                        SportTix acknowledges the Traditional Custodians of the lands on which we play
+                    <p class = "small mb-0" style = "max-width:32rem;">
+                        SportTix acknowledges the Traditional Custodians of the lands on which we play 
                         and SportTix pays respect to the Elders past, present and emerging.
                     </p>
                 </div>
-                <div class="col-6 col-lg-2">
-                    <h6 class="mb-3">Play</h6>
-                    <ul class="list-unstyled small mb-0 d-flex flex-column gap-2">
-                        <li><a href="index.html">Browse Events</a></li>
-                        <li><a href="bookings.html">My Bookings</a></li>
-                        <li><a href="event.html">Events</a></li>
+                <div class = "col-6 col-lg-2">
+                    <h6 class = "mb-3">Play</h6>
+                    <ul class = "list-unstyled small mb-0 d-flex flex-column gap-2">
+                        <li><a href = "index.html">Browse Events</a></li>
+                        <li><a href = "bookings.html">My Bookings</a></li>
+                        <li><a href = "event.html">Events</a></li>
                     </ul>
                 </div>
-                <div class="col-6 col-lg-2">
-                    <h6 class="mb-3">Host</h6>
-                    <ul class="list-unstyled small mb-0 d-flex flex-column gap-2">
-                        <li><a href="create_event.html">Host Events</a></li>
-                        <li><a href="#">Venue Guide</a></li>
-                        <li><a href="#">Host Support</a></li>
+                <div class = "col-6 col-lg-2">
+                    <h6 class = "mb-3">Host</h6>
+                    <ul class = "list-unstyled small mb-0 d-flex flex-column gap-2">
+                        <li><a href = "create_event.html">Host Events</a></li>
+                        <li><a href = "#">Venue Guide</a></li>
+                        <li><a href = "#">Host Support</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-3">
-                    <h6 class="mb-3">Contact</h6>
-                    <p class="small mb-1">hello@sporttix.com.au</p>
-                    <p class="small mb-0">Brisbane, QLD</p>
+                <div class = "col-lg-3">
+                    <h6 class = "mb-3">Contact</h6>
+                    <p class = "small mb-1">hello@sporttix.com.au</p>
+                    <p class = "small mb-0">Brisbane, QLD</p>
                 </div>
             </div>
         </div>
     </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
 </html>
