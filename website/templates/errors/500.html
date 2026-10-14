@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+<main id="main" class="py-5">
+    <div class="container">
+        <section class="emptyState" style="display:block;">
+            <p class="eyebrow mb-3">500 · Server Error</p>
+            <h1 class="pageTitle mb-3">Something went wrong</h1>
+            <p class="text-muted-soft mb-4">The application hit an unexpected problem. Please try again in a moment.</p>
+            <a class="btn buttonPink" href="{{ url_for('main.index') }}">Return to events</a>
+        </section>
+    </div>
+</main>
+{% endblock %}
