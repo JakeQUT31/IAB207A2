@@ -1,6 +1,7 @@
 import os
-from flask import Flask
+from flask import Flask, render_template
 from flask_bootstrap import Bootstrap5
+from flask_wtf.csrf import CSRFProtect
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 
@@ -11,8 +12,14 @@ DB_NAME = "sporttix.db"
 def create_app(test_config=None):
     app = Flask(__name__)
     Bootstrap5(app)
-    app.config['SECRET_KEY'] = 'thisisasecret'
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+    app.config.from_mapping(
+        SECRET_KEY='thisisasecret',
+        SQLALCHEMY_DATABASE_URI=f'sqlite:///{DB_NAME}',
+        MAX_CONTENT_LENGTH=5 * 1024 * 1024,
+    )
+    if test_config:
+        app.config.update(test_config)
+    CSRFProtect(app)
     db.init_app(app)
 
     login_manager = LoginManager()
@@ -37,6 +44,15 @@ def create_app(test_config=None):
 
     from . import bookings
     app.register_blueprint(bookings.booking_bp)
+
+    @app.errorhandler(404)
+    def page_not_found(error):
+        return render_template('errors/404.html'), 404
+
+    @app.errorhandler(500)
+    def internal_server_error(error):
+        db.session.rollback()
+        return render_template('errors/500.html'), 500
 
     return app
 
