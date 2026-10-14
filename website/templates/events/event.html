@@ -175,21 +175,25 @@
                         </div>
                     </div>
 
-                    <div class="panel p-4">
-                        <p class="eyebrow mb-3">
-                            Add a Comment
-                        </p>
-                        {{ render_form(form,"/events/{0}/comment".format(event.eventID)) }}
-                        <form action="event.html#cricket" method="get">
-                            <div class="mb-3">
-                                <div class="invalid-feedback">Write something before posting.</div>
-                            </div>
-                            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
-                                <p class="small text-muted-soft mb-0">Posting as <span class="fw-bold">Athauv A.</span>
-                                    - Your name and the time you post will appear with your comment.</p>
-                            </div>
-                        </form>
-                    </div>
+                    {% if current_user.is_authenticated %}
+                        <div class="panel p-4">
+                            <p class="eyebrow mb-3">
+                                Add a Comment
+                            </p>
+                            {{ render_form(form,"/events/{0}/comment".format(event.eventID)) }}
+                            <form action="event.html#cricket" method="get">
+                                <div class="mb-3">
+                                    <div class="invalid-feedback">Write something before posting.</div>
+                                </div>
+                                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                                    <p class="small text-muted-soft mb-0">Posting as <span class="fw-bold">{{loggedUser.firstName}} {{loggedUser.lastName}}</span>
+                                        - Your name and the time you post will appear with your comment.</p>
+                                </div>
+                            </form>
+                        </div>
+                    {% else %}
+                        <p>Please log in to post comments</p>
+                    {% endif %}
                 </section>
             </div>
 
@@ -263,9 +267,9 @@
                             (function () {
                                 var type = document.getElementById('ticketType');
                                 var qty = document.getElementById('ticketQty');
-                                var total = document.getElementById('ticketTotal');
+                                var total = document.getElementById('totalPrice');
                                 function update() {
-                                    var opt = type.options[type.options[type.selectedIndex];
+                                    var opt = type.options[type.selectedIndex];
                                     qty.max = opt.dataset.left;
                                     if (+qty.value > +qty.max) qty.value = qty.max;
                                     total.textContent = '$' + (opt.dataset.price * qty.value || 0).toFixed(2);

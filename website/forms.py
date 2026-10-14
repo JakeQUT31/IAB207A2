@@ -1,6 +1,26 @@
 from flask_wtf import FlaskForm
-from wtforms.fields import TextAreaField, SubmitField, StringField, PasswordField, BooleanField, SelectField
-from wtforms.validators import InputRequired, EqualTo, Length, Regexp
+from wtforms.fields import (
+  DateField,
+  DecimalField,
+  IntegerField,
+  PasswordField,
+  RadioField,
+  SelectField,
+  StringField,
+  SubmitField,
+  TextAreaField,
+  TimeField,
+  BooleanField,
+)
+from wtforms.validators import (
+  DataRequired,
+  EqualTo,
+  InputRequired,
+  Length,
+  Optional,
+  Regexp,
+  ValidationError,
+)
 
 class CommentForm(FlaskForm):
   text = TextAreaField('Comment', [InputRequired()])
@@ -41,3 +61,72 @@ class RegisterForm(FlaskForm):
     EqualTo('password', message='Passwords do not match'),
   ])
   submit = SubmitField('Create account')
+
+class CreateEventForm(FlaskForm):
+  title = StringField('Match title', [DataRequired('Match title is required'), Length(max=150)])
+  sport = SelectField('Type of sport', choices=[
+    ('', 'Choose a Sport'),
+    ('AFL', 'AFL'),
+    ('Basketball', 'Basketball'),
+    ('Cricket', 'Cricket'),
+    ('Football', 'Football'),
+    ('Netball', 'Netball'),
+    ('Tennis', 'Tennis'),
+    ('Touch Football', 'Touch Football'),
+  ], validators=[InputRequired('Select a valid sport')])
+  skillLevel = SelectField('Skill level', choices=[
+    ('', 'Choose a Skill Level'),
+    ('Amateur', 'Amateur'),
+    ('Social', 'Social'),
+    ('Semi-Pro', 'Semi-Pro'),
+  ], validators=[InputRequired('Select a skill level')])
+  surfaceType = SelectField('Surface type', choices=[
+    ('', 'Choose a Surface Type'),
+    ('Grass', 'Grass'),
+    ('Turf', 'Turf'),
+    ('Artificial Grass', 'Artificial Grass'),
+    ('Indoor Court', 'Indoor Court'),
+  ], validators=[InputRequired('Select a surface type')])
+  tournamentName = StringField('Tournament or league name')
+  description = TextAreaField('Description')
+  eventDate = DateField('Date', format='%Y-%m-%d', validators=[InputRequired('Date is required')])
+  startTime = TimeField('Start time', format='%H:%M', validators=[InputRequired('Start time is required')])
+  endTime = TimeField('End time', format='%H:%M', validators=[InputRequired('End time is required')])
+  venueName = StringField('Venue', [DataRequired('Venue is required'), Length(max=100)])
+  venueAddress = StringField('Street address', [DataRequired('Street address is required'), Length(max=255)])
+  venueSuburb = StringField('Suburb', [DataRequired('Suburb is required'), Length(max=100)])
+  duration = IntegerField('Duration', [InputRequired('Duration is required')])
+  traditionalCustodians = StringField('Traditional Custodians', [Length(max=255)])
+  playerCapacity = IntegerField('Player spots', [Optional()])
+  playerPrice = DecimalField('Player price', places=2, validators=[Optional()])
+  spectatorCapacity = IntegerField('Spectator seats', [InputRequired('Seating capacity is required')])
+  seatPrice = DecimalField('Spectator price', places=2, validators=[Optional()])
+  acknowledgementType = RadioField('Acknowledgement of Country', choices=[
+    ('None', 'None'),
+    ('Generic', 'Generic'),
+    ('Enhanced', 'Enhanced'),
+  ], validators=[InputRequired('Select an Acknowledgement of Country option')])
+
+  def validate_endTime(self, field):
+    if self.startTime.data and field.data and field.data <= self.startTime.data:
+      raise ValidationError('End time must be after start time.')
+
+  def validate_duration(self, field):
+    if field.data is not None and field.data < 15:
+      raise ValidationError('Duration must be at least 15 minutes.')
+
+  def validate_playerCapacity(self, field):
+    if field.data is not None and field.data < 0:
+      raise ValidationError('Player capacity cannot be negative.')
+
+  def validate_spectatorCapacity(self, field):
+    if field.data is not None and field.data < 0:
+      raise ValidationError('Seating capacity cannot be negative.')
+
+  def validate_playerPrice(self, field):
+    if field.data is not None and field.data < 0:
+      raise ValidationError('Player price cannot be negative.')
+
+  def validate_seatPrice(self, field):
+    if field.data is not None and field.data < 0:
+      raise ValidationError('Spectator price cannot be negative.')
