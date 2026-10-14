@@ -16,8 +16,14 @@ def index():
         .order_by(Event.eventDate, Event.startTime)
     ).all()
 
+    status_changed = False
     for event in events:
+        old_status = event.status
+        event.updateStatus()
+        status_changed = status_changed or event.status != old_status
         event.playerBooked = Event.participantsBooked(event.eventID)
         event.spectatorBooked = Event.spectatorsBooked(event.eventID)
+    if status_changed:
+        db.session.commit()
 
     return render_template('index.html', events=events)
