@@ -35,6 +35,9 @@ def create_app(test_config=None):
     from . import auth
     app.register_blueprint(auth.auth_bp)
 
+    from . import bookings
+    app.register_blueprint(bookings.booking_bp)
+
     return app
 
 def create_database(app):

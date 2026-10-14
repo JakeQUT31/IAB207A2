@@ -22,7 +22,7 @@
                 border-bottom-color: var(--black);">
             <div class="col-lg-8">
                 <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
-                    <span class="status open">{{event.status}}</span>
+                    <span class="status {{ event.status|lower|replace(' ', '-') }}">{{event.status}}</span>
                     <span class="eyebrow">{{category.categoryName}} · {{event.skillLevel}} · {{event.duration}} min</span>
                 </div>
                 <h1 class="pageTitle mb-3">{{event.title}}</h1>
@@ -225,38 +225,64 @@
                             Once both rosters are filled, this match will be Sold Out and no further bookings can be
                             made.
                         </p>
-
-                        <form action="event.html#cricket" method="get">
-                            <div class="mb-3">
-                                <label for="ticketType-cricket" class="form-label" style="color:#F4F1EAB2;">Ticket
-                                    Type</label>
-                                <select class="form-select" id="ticketType-cricket">
-                                    <option selected>Player - ${{event.participantPrice}} each · {{playerAvailable}} left</option>
-                                    <option>Spectator - ${{event.spectatorPrice}} each · {{spectatorAvailable}} left</option>
+                        {% if event.status == 'Open' and (playerAvailable >0 or spectatorAvailable > 0) %}
+                        <form action = "{{url_for('booking.book', id=event.eventID)}}" method = "post">
+                            <div class = "mb-3">
+                                <label for = "ticketType" class  = "form-label" style = "color:#F4F1EAB2;">Ticket Type</label>
+                                <select class = "form-select" id = "ticketType" name = "ticketType">
+                                    {% if playerAvailable > 0 %}
+                                    <option value = "Player" data-price = "{{event.participantPrice}}" data-left = "{{playerAvailable}}">
+                                        Player - ${{event.participantPrice}} each · {{playerAvailable}} left</option>
+                                    {% endif %}
+                                    {% if spectatorAvailable > 0 %}
+                                    <option value = "Spectator" data-price = "{{event.spectatorPrice}}" data-left = "{{spectatorAvailable}}">
+                                        Spectator - ${{event.spectatorPrice}} each · {{spectatorAvailable}} left</option>
+                                    {% endif %}
                                 </select>
                             </div>
-                            <div class="mb-4">
-                                <label for="ticketQty-cricket" class="form-label" style="color:#F4F1EAB2;">Number of
-                                    Tickets</label>
-                                <select class="form-select" id="ticketQty-cricket">
-                                    <option selected>1 ticket</option>
-                                    <option>2 tickets</option>
-                                </select>
-                                <div class="form-text" style="color:#F4F1EA99;">You can only book as many tickets as
-                                    there are spots left.</div>
+                            <div class = "mb-4">
+                                <label for = "ticketQty" class = "form-label" style = "color: #F4F1EAB2;">Number of Tickets</label>
+                            <input type = "number" class = "form-control" id = "ticketQty" name = "quantity" min = "1" value = "1" required>
+                            <div class = "form-text" style = "color: #F4F1EA99;">You can only book as many tickets as there are spots left.</div>
                             </div>
-
-                            <div class="d-flex justify-content-between align-items-center mb-4 pt-3 borderTop">
-                                <span class="eyebrow">Total</span>
-                                <span class="numbers numbers-med">${{event.participantPrice}}</span>
+                            <div class = "d-flex justify-content-between align-items-center mb-4 pt-3 borderTop">
+                                <span class = "eyebrow">Total</span>
+                                <span class = "numbers numbers-med" id = "totalPrice">${{event.participantPrice}}</span>
                             </div>
-
-                            <button type="button" class="btn buttonPink w-100 mb-3" data-bs-toggle="modal"
-                                data-bs-target="#bookingModal-cricket">
+                            {% if current_user.is_authenticated %}
+                            <button type = "submit" class = "btn buttonPink w-100 mb-3">
                                 BOOK TICKETS
                             </button>
+                            {% else %}
+                            <a href = "{{url_for('auth.login', next = request.path)}}" class = "btn btn-secondary w-100 mb-3">
+                                LOGIN TO BOOK
+                            </a>
+                            {% endif %}
                         </form>
-
+                        <script>
+                            (function () {
+                                var type = document.getElementById('ticketType');
+                                var qty = document.getElementById('ticketQty');
+                                var total = document.getElementById('ticketTotal');
+                                function update() {
+                                    var opt = type.options[type.options[type.selectedIndex];
+                                    qty.max = opt.dataset.left;
+                                    if (+qty.value > +qty.max) qty.value = qty.max;
+                                    total.textContent = '$' + (opt.dataset.price * qty.value || 0).toFixed(2);
+                                }
+                                type.addEventListener('change', update);
+                                qty.addEventListener('input', update);
+                                update();
+                            })();
+                        </script>
+                        {% else %}
+                            <button type = "button" class = "btn btn-secondary w-100 mb-3" disabled>
+                                {{ 'SOLD OUT' if event.status in ['Open', 'Sold Out'] else event.status|upper }}
+                            </button>
+                            <p class = "small mb-0" style="color:#F4F1EA99;">
+                                Booking is closed for this event.
+                            </p>
+                        {% endif %}
                         <p class="small mb-0" style="color:#F4F1EA99;">
                             You need to be logged in to book. Cancellations are free up to 24 hours before the toss.
                         </p>
