@@ -1,4 +1,6 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField
+from flask import request
 from wtforms.fields import (
   DateField,
   DecimalField,
@@ -101,6 +103,7 @@ class CreateEventForm(FlaskForm):
   playerPrice = DecimalField('Player price', places=2, validators=[Optional()])
   spectatorCapacity = IntegerField('Spectator seats', [InputRequired('Seating capacity is required')])
   seatPrice = DecimalField('Spectator price', places=2, validators=[Optional()])
+  eventImage = FileField('Event image')
   acknowledgementType = RadioField('Acknowledgement of Country', choices=[
     ('None', 'None'),
     ('Generic', 'Generic'),
@@ -110,6 +113,41 @@ class CreateEventForm(FlaskForm):
   def validate_endTime(self, field):
     if self.startTime.data and field.data and field.data <= self.startTime.data:
       raise ValidationError('End time must be after start time.')
+
+  def validate_eventDate(self, field):
+    from datetime import date
+
+    if request.endpoint == 'event.create' and field.data is not None and field.data < date.today():
+      raise ValidationError('Event date cannot be in the past.')
+
+  def validate_eventImage(self, field):
+    image = field.data
+    if not image or not getattr(image, 'filename', ''):
+      return
+
+    extension = image.filename.rsplit('.', 1)[-1].lower() if '.' in image.filename else ''
+    if extension not in {'jpg', 'jpeg', 'png', 'gif', 'webp'}:
+      raise ValidationError('Upload a JPG, PNG, GIF, or WebP image.')
+
+    image.stream.seek(0, 2)
+    size = image.stream.tell()
+    image.stream.seek(0)
+    if size > 5 * 1024 * 1024:
+      raise ValidationError('Image must be 5 MB or smaller.')
+
+    header = image.stream.read(12)
+    image.stream.seek(0)
+    image_type = None
+    if header.startswith(b'\xff\xd8\xff'):
+      image_type = {'jpg', 'jpeg'}
+    elif header.startswith(b'\x89PNG\r\n\x1a\n'):
+      image_type = {'png'}
+    elif header.startswith((b'GIF87a', b'GIF89a')):
+      image_type = {'gif'}
+    elif header.startswith(b'RIFF') and header[8:12] == b'WEBP':
+      image_type = {'webp'}
+    if image_type is None or extension not in image_type:
+      raise ValidationError('The selected file is not a supported image.')
 
   def validate_duration(self, field):
     if field.data is not None and field.data < 15:
