@@ -28,6 +28,9 @@
                 <h1 class="pageTitle mb-3">{{event.title}}</h1>
                 <p class="data text-muted-soft mb-0">{{event.eventDate}} · {{event.startTime}}&ndash;{{event.endTime}} ·
                     {{venue.venueName}}, {{venue.suburb}}</p>
+                {% if current_user.is_authenticated and current_user.userID == event.creatorID and event.status != 'Cancelled' %}
+                    <a class="btn buttonPink mt-3 fw-bold" href="{{ url_for('event.edit', id=event.eventID) }}">Edit this event</a>
+                {% endif %}
             </div>
             <div class="col-lg-4">
                 <div class="row g-3 align-items-end">
@@ -49,7 +52,11 @@
 
         <div class="row g-4 g-lg-5">
             <div class="col-lg-7 col-xl-8">
-                <img src="{{event.imageURL}}" class="img-fluid mb-5 w-100" alt="Cricket Oval">
+                {% if event.imageURL %}
+                    <img src="{{ event.imageURL }}" class="img-fluid mb-5 w-100" alt="{{ event.title }}">
+                {% else %}
+                    <img src="{{ url_for('static', filename='img/football.jpeg') }}" class="img-fluid mb-5 w-100" alt="{{ category.categoryName }} event">
+                {% endif %}
 
                 <h2 class="h4 mb-3">About this Match</h2>
                 <p>
