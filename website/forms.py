@@ -24,6 +24,10 @@ from wtforms.validators import (
   ValidationError,
 )
 
+class CustodianForm(FlaskForm):
+  custodianSearch = StringField('Search for known Custodians by entering Suburb (e.g. Corinda)')
+  submit = SubmitField('Search Custodians')
+
 class CommentForm(FlaskForm):
   text = TextAreaField('Comment', [InputRequired()])
   submit = SubmitField('Post Comment')

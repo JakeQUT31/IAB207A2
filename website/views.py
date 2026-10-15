@@ -2,6 +2,7 @@ from flask import Blueprint, render_template
 from sqlalchemy.orm import joinedload
 from .models import Event
 from . import db
+from .forms import CustodianForm
 
 main_bp = Blueprint('main', __name__)
 
@@ -27,3 +28,9 @@ def index():
         db.session.commit()
 
     return render_template('index.html', events=events)
+
+
+@main_bp.route('/acknowledgement')
+def acknowledgement():
+    form = CustodianForm()
+    return render_template('acknowledgement.html', form=form)
