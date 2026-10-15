@@ -3,7 +3,7 @@
     <head>
         <meta charset = "UTF-8">
         <meta name = "viewport" content = "width=device-width, initial-scale=1">
-        <title> Host a Game - SportTix</title>
+        <title>{% if is_edit %}Edit Event{% else %}Host a Game{% endif %} - SportTix</title>
         <meta name = "description" content = "Post a community sports event.">
 
         <link rel = "preconnect" href = "https://fonts.googleapis.com">
@@ -52,8 +52,8 @@
 
                 <div class = "row g-4 align-items-end borderBottom pb-4 mb-5" style = "border-bottom-width:2px;border-bottom-color:var(--black);">
                     <div class = "col-lg-7">
-                        <p class = "eyebrow mb-3">New Event</p>
-                        <h1 class = "pageTitle mb-0">Host a Game</h1>
+                        <p class = "eyebrow mb-3">{% if is_edit %}Update Event{% else %}New Event{% endif %}</p>
+                        <h1 class = "pageTitle mb-0">{% if is_edit %}Edit Event{% else %}Host a Game{% endif %}</h1>
                     </div>
                     <div class = "col-lg-5">
                         <p class = "mb-0 text-muted-soft" style = "max-width:32rem;">
@@ -72,7 +72,7 @@
                                 <ul class="mb-0">{% for error in errors %}<li>{{ error }}</li>{% endfor %}</ul>
                             </div>
                         {% endif %}
-                        <form action="{{ url_for('event.create') }}" method="post">
+                        <form action="{% if is_edit %}{{ url_for('event.edit', id=event.eventID) }}{% else %}{{ url_for('event.create') }}{% endif %}" method="post" enctype="multipart/form-data">
                             {{ form.hidden_tag() }}
                             <section class = "formSection">
                                 <div class = "stepHead">
@@ -238,8 +238,9 @@
                                     </div>
                                     <div class="col-12">
                                         <label for="eventImage" class="form-label">Event image</label>
-                                        <input type="file" class="form-control" id="eventImage" accept="image/*">
-                                        <div class="form-text">Landscape works best. If you skip this, we use the standard plan for your sport.</div>
+                                        <input type="file" class="form-control" id="eventImage" name="eventImage" accept=".jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp">
+                                        <div class="form-text">Optional. JPG, PNG, GIF, or WebP; maximum 5 MB. Landscape works best.{% if is_edit and event.imageURL %} Leave blank to keep the current image.{% endif %}</div>
+                                        {% if is_edit and event.imageURL %}<img src="{{ event.imageURL }}" class="img-fluid mt-2" alt="Current event image" style="max-height:12rem">{% endif %}
                                     </div>
                                 </div>
                             </section>
@@ -289,7 +290,7 @@
 
                             <div class = "d-flex flex-wrap gap-3 justify-content-end align-items-center borderTop pt-4 pb-2">
                                 <a href = "{{ url_for('main.index') }}" class = "btn buttonQuiet">Discard</a>
-                                <button type = "submit" class = "btn buttonPink">Publish Event</button>
+                                <button type = "submit" class = "btn buttonPink">{% if is_edit %}Save Changes{% else %}Publish Event{% endif %}</button>
                             </div>
                         </form>
                     </div>

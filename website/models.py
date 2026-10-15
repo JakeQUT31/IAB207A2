@@ -126,12 +126,14 @@ class Event(db.Model):
     @staticmethod
     def participantsBooked(id):
         return db.session.scalar(
-            db.select(func.coalesce(func.sum(Booking.quantity),0))
-            .where((Booking.eventID == id) & (Booking.orderReference == "Player")))
+            db.select(func.coalesce(func.sum(Booking.quantity), 0))
+            .where((Booking.eventID == id) & (Booking.orderReference == "Player"))
+        )
 
     @staticmethod
     def spectatorsBooked(id):
         return db.session.scalar(
+<<<<<<< HEAD
             db.select(func.coalesce(func.sum(Booking.quantity),0))
             .where((Booking.eventID == id) & (Booking.orderReference == "Spectator"))) 
 
@@ -144,6 +146,24 @@ class Event(db.Model):
     def isSoldOut(self):
         return self.playerSpotsLeft() == 0 and self.spectatorSpotsLeft() == 0
     
+=======
+            db.select(func.coalesce(func.sum(Booking.quantity), 0))
+            .where((Booking.eventID == id) & (Booking.orderReference == "Spectator"))
+        )
+
+    def playerSpotsLeft(self):
+        return max(self.participantCapacity - self.participantsBooked(self.eventID), 0)
+
+    def spectatorSpotsLeft(self):
+        return max(self.spectatorCapacity - self.spectatorsBooked(self.eventID), 0)
+
+    def isSoldOut(self):
+        return (
+            self.participantsBooked(self.eventID) >= self.participantCapacity
+            and self.spectatorsBooked(self.eventID) >= self.spectatorCapacity
+        )
+ 
+>>>>>>> 160f1832243044d902e2a9345bef2ab4d9509eea
     def updateStatus(self):
         if self.status == self.STATUS_CANCELLED:
             return self.status

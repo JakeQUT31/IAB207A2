@@ -38,6 +38,15 @@
                                 <div class="mt-auto borderTop pt-3">
                                     <span class="small text-muted-soft">Players: {{ event.participantCapacity }} · Spectator seats: {{ event.spectatorCapacity }}</span>
                                 </div>
+                                {% if event.status != 'Cancelled' %}
+                                    <div class="eventActions d-flex gap-2 mt-3">
+                                        <a class="btn buttonQuiet btn-sm" href="{{ url_for('event.edit', id=event.eventID) }}">Edit</a>
+                                        <form action="{{ url_for('event.cancel', id=event.eventID) }}" method="post" onsubmit="return confirm('Cancel this event? This cannot be undone.');">
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                            <button class="btn btn-outline-danger btn-sm" type="submit">Cancel Event</button>
+                                        </form>
+                                    </div>
+                                {% endif %}
                             </div>
                         </article>
                     </div>
