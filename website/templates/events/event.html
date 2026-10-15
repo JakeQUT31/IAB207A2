@@ -87,12 +87,12 @@
                     <p class="fw-bold mb-1">{{venue.venueName}}</p>
                     <p class="mb-3 text-muted-soft">{{venue.address}}, {{venue.suburb}}</p>
                     <p class="small mb-0 borderTop pt-3">
-                        {% if event.acknowledgementType == 'None' %}
-                            No Acknowledgement of Country has been selected for this event.
-                        {% elif event.acknowledgementType == 'Enhanced' %}
-                            This match is played on the lands of {{ venue.traditionalCustodians }}. SportTix pays respect to the Elders past, present, and emerging.
-                        {% else %}
+                        {% if event.acknowledgementType == 'Generic' %}
                             SportTix acknowledges the Traditional Custodians of the lands on which we play and pays respect to the Elders past, present, and emerging.
+                        {% elif event.acknowledgementType == '' %}
+                            No acknowledgement of country has been selected for this event.
+                        {% else %}
+                            {{ event.acknowledgementType }}
                         {% endif %}
                     </p>
                 </div>
