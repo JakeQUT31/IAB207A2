@@ -231,6 +231,7 @@
                         </p>
                         {% if event.status == 'Open' and (playerAvailable >0 or spectatorAvailable > 0) %}
                         <form action = "{{url_for('booking.book', id=event.eventID)}}" method = "post">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                             <div class = "mb-3">
                                 <label for = "ticketType" class  = "form-label" style = "color:#F4F1EAB2;">Ticket Type</label>
                                 <select class = "form-select" id = "ticketType" name = "ticketType">
