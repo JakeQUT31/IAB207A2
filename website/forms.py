@@ -24,6 +24,9 @@ from wtforms.validators import (
   ValidationError,
 )
 
+class EnhancedAcknowledgementForm(FlaskForm):
+  enhancedMessage = TextAreaField('Custom Acknowledgement')
+
 class CustodianForm(FlaskForm):
   custodianSearch = StringField('Search for known Custodians by entering Suburb (e.g. Corinda)')
   submit = SubmitField('Search Custodians')
