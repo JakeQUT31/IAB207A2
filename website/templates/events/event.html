@@ -162,31 +162,25 @@
                 <section aria-labelledby="commentsHeading-cricket">
                     <div class="headSection">
                         <h2 class="h4 mb-0" id="commentsHeading-cricket">Questions and Discussion</h2>
-                        <span class="data text-muted-soft">3 Comments</span>
+                        <span class="data text-muted-soft">{{commentCount}} Comments</span>
                     </div>
 
-                    <div class="mb-4">
-                        <div class="comment">
-                            <p class="mb-1"><span class="author">Mark Malik</span>
-                                <span class="data text-muted-soft ms-2">2 Sep 2026, 14:00</span>
-                            </p>
-                            <p class="mb-0">Is there any way we can have a net session before the toss?
-                                Happy to get there earlier and set everything up.</p>
-                        </div>
-                        <div class="comment">
-                            <p class="mb-1"><span class="author">Eric Baldish</span>
-                                <span class="data text-muted-soft ms-2">29 Aug 2026, 10:00</span>
-                            </p>
-                            <p class="mb-0">Is there a canteen or something where we can buy something
-                                or do we need to bring our own food?</p>
-                        </div>
-                        <div class="comment">
-                            <p class="mb-1"><span class="author">Steve Smith</span>
-                                <span class="data text-muted-soft ms-2">27 Aug 2026, 20:00</span>
-                            </p>
-                            <p class="mb-0">Excited for this, Can't wait till the match! Who's ready?</p>
-                        </div>
+                    <div class="mb-4"></div>
+                    {% if commentCount == 0 %}
+                    <div class="comment">
+                        <p class="mb-0">There are no comments yet. Be the first to post something :D</p>
                     </div>
+                    {% else %}
+
+                    {% for comment in event.comments %}
+                    <div class="comment">
+                        <p class="mb-1"><span class="author">{{comment.user.firstName}} {{comment.user.lastName}}</span>
+                            <span class="data text-muted-soft ms-2">{{comment.postedDateTime}}</span>
+                        </p>
+                        <p class="mb-0">{{comment.content}}</p>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
 
                     {% if current_user.is_authenticated %}
                     <div class="panel p-4">
@@ -211,10 +205,10 @@
                 </section>
             </div>
 
-            <div class="col-lg-5 col-xl-4">
-                <div class="stickySide">
-                    <div class="panel panelBlack p-4">
-                        <p class="eyebrow mb-4">Book a Spot</p>
+        <div class="col-lg-5 col-xl-4">
+            <div class="stickySide">
+                <div class="panel panelBlack p-4">
+                    <p class="eyebrow mb-4">Book a Spot</p>
 
                         <div class="row g-4 mb-4 pb-4 borderBottom">
                             <div class="col-6">
@@ -245,10 +239,11 @@
                             made.
                         </p>
                         {% if event.status == 'Open' and (playerAvailable >0 or spectatorAvailable > 0) %}
-                        <form action="{{url_for('booking.book', id=event.eventID)}}" method="post">
-                            <div class="mb-3">
-                                <label for="ticketType" class="form-label" style="color:#F4F1EAB2;">Ticket Type</label>
-                                <select class="form-select" id="ticketType" name="ticketType">
+                        <form action = "{{url_for('booking.book', id=event.eventID)}}" method = "post">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <div class = "mb-3">
+                                <label for = "ticketType" class  = "form-label" style = "color:#F4F1EAB2;">Ticket Type</label>
+                                <select class = "form-select" id = "ticketType" name = "ticketType">
                                     {% if playerAvailable > 0 %}
                                     <option value="Player" data-price="{{event.participantPrice}}"
                                         data-left="{{playerAvailable}}">
@@ -311,14 +306,15 @@
                         {% endif %}
                         <p class="small mb-0" style="color:#F4F1EA99;">
                             You need to be logged in to book. Cancellations are free up to 24 hours before the toss.
-                        </p>
-                    </div>
-                    <div class="panel p-4 mt-3">
-                        <p class="eyebrow mb-2">Hosted By</p>
-                        <p class="fw-bold mb-1">{{user.firstName}}</p>
-                    </div>
+                    </p>
+                </div>
+                <div class="panel p-4 mt-3">
+                    <p class="eyebrow mb-2">Hosted By</p>
+                    <p class="fw-bold mb-1">{{user.firstName}}</p>
                 </div>
             </div>
         </div>
+    </div>
+    </div>
 </main>
 {% endblock %}
