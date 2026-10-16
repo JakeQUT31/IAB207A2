@@ -410,6 +410,10 @@ h1, .displayType {
 .eventTitle a:hover {
     color: var(--pink);
 }
+.eventActions {
+    position: relative;
+    z-index: 2;
+}
 .eventCard .eventTitle a::after {
     content: "";
     position: absolute;

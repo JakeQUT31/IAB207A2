@@ -3,7 +3,7 @@
     <head>
         <meta charset = "UTF-8">
         <meta name = "viewport" content = "width=device-width, initial-scale=1">
-        <title> Host a Game - SportTix</title>
+        <title>{% if is_edit %}Edit Event{% else %}Host a Game{% endif %} - SportTix</title>
         <meta name = "description" content = "Post a community sports event.">
 
         <link rel = "preconnect" href = "https://fonts.googleapis.com">
@@ -52,8 +52,8 @@
 
                 <div class = "row g-4 align-items-end borderBottom pb-4 mb-5" style = "border-bottom-width:2px;border-bottom-color:var(--black);">
                     <div class = "col-lg-7">
-                        <p class = "eyebrow mb-3">New Event</p>
-                        <h1 class = "pageTitle mb-0">Host a Game</h1>
+                        <p class = "eyebrow mb-3">{% if is_edit %}Update Event{% else %}New Event{% endif %}</p>
+                        <h1 class = "pageTitle mb-0">{% if is_edit %}Edit Event{% else %}Host a Game{% endif %}</h1>
                     </div>
                     <div class = "col-lg-5">
                         <p class = "mb-0 text-muted-soft" style = "max-width:32rem;">
@@ -72,7 +72,8 @@
                                 <ul class="mb-0">{% for error in errors %}<li>{{ error }}</li>{% endfor %}</ul>
                             </div>
                         {% endif %}
-                        <form action="{{ url_for('event.create') }}" method="post">
+                        <form action="{% if is_edit %}{{ url_for('event.edit', id=event.eventID) }}{% else %}{{ url_for('event.create') }}{% endif %}" method="post" enctype="multipart/form-data">
+                            {{ form.hidden_tag() }}
                             <section class = "formSection">
                                 <div class = "stepHead">
                                     <span class = "stepNum">01</span>
@@ -94,7 +95,7 @@
                                     <div class = "col-md-4">
                                         <label for = "sportType" class = "form-label">Type of Sport</label>
                                         <select class = "form-select" id = "sportType" name="sport" required>
-                                            <option value = "" selected disabled>Choose a Sport</option>
+                                            <option value = "" {% if not form_data.get('sport') %}selected{% endif %} disabled>Choose a Sport</option>
                                             {% for sport in sports %}
                                                 <option value="{{ sport }}" {% if form_data.get('sport') == sport %}selected{% endif %}>{{ sport }}</option>
                                             {% endfor %}
@@ -105,10 +106,10 @@
                                     <div class = "col-md-6">
                                         <label for = "skillLevel" class = "form-label">Skill Level</label>
                                         <select class = "form-select" id = "skillLevel" name="skillLevel" required>
-                                            <option value = "" selected disabled>Choose a Skill Level</option>
-                                            <option {% if form_data.get('skillLevel') == 'Amateur' %}selected{% endif %}>Amateur</option>
-                                            <option {% if form_data.get('skillLevel') == 'Social' %}selected{% endif %}>Social</option>
-                                            <option {% if form_data.get('skillLevel') == 'Semi-Pro' %}selected{% endif %}>Semi-Pro</option>
+                                            <option value = "" {% if not form_data.get('skillLevel') %}selected{% endif %} disabled>Choose a Skill Level</option>
+                                            <option value="Amateur" {% if form_data.get('skillLevel') == 'Amateur' %}selected{% endif %}>Amateur</option>
+                                            <option value="Social" {% if form_data.get('skillLevel') == 'Social' %}selected{% endif %}>Social</option>
+                                            <option value="Semi-Pro" {% if form_data.get('skillLevel') == 'Semi-Pro' %}selected{% endif %}>Semi-Pro</option>
                                         </select>
                                         <div class = "invalid-feedback">Choose a level so players can play within their own skill level</div>
                                     </div>
@@ -116,11 +117,11 @@
                                     <div class = "col-md-6">
                                         <label for = "surfaceType" class = "form-label">Surface Type</label>
                                         <select class = "form-select" id = "surfaceType" name="surfaceType" required>
-                                            <option value = "" selected disabled>Choose a Surface Type</option>
-                                            <option {% if form_data.get('surfaceType') == 'Grass' %}selected{% endif %}>Grass</option>
-                                            <option {% if form_data.get('surfaceType') == 'Turf' %}selected{% endif %}>Turf</option>
-                                            <option {% if form_data.get('surfaceType') == 'Artificial Grass' %}selected{% endif %}>Artificial Grass</option>
-                                            <option {% if form_data.get('surfaceType') == 'Indoor Court' %}selected{% endif %}>Indoor Court</option>
+                                            <option value = "" {% if not form_data.get('surfaceType') %}selected{% endif %} disabled>Choose a Surface Type</option>
+                                            <option value="Grass" {% if form_data.get('surfaceType') == 'Grass' %}selected{% endif %}>Grass</option>
+                                            <option value="Turf" {% if form_data.get('surfaceType') == 'Turf' %}selected{% endif %}>Turf</option>
+                                            <option value="Artificial Grass" {% if form_data.get('surfaceType') == 'Artificial Grass' %}selected{% endif %}>Artificial Grass</option>
+                                            <option value="Indoor Court" {% if form_data.get('surfaceType') == 'Indoor Court' %}selected{% endif %}>Indoor Court</option>
                                         </select>
                                         <div class = "invalid-feedback">Choose the type of surface the playing field is.</div>
                                     </div>
@@ -237,8 +238,9 @@
                                     </div>
                                     <div class="col-12">
                                         <label for="eventImage" class="form-label">Event image</label>
-                                        <input type="file" class="form-control" id="eventImage" accept="image/*">
-                                        <div class="form-text">Landscape works best. If you skip this, we use the standard plan for your sport.</div>
+                                        <input type="file" class="form-control" id="eventImage" name="eventImage" accept=".jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp">
+                                        <div class="form-text">Optional. JPG, PNG, GIF, or WebP; maximum 5 MB. Landscape works best.{% if is_edit and event.imageURL %} Leave blank to keep the current image.{% endif %}</div>
+                                        {% if is_edit and event.imageURL %}<img src="{{ event.imageURL }}" class="img-fluid mt-2" alt="Current event image" style="max-height:12rem">{% endif %}
                                     </div>
                                 </div>
                             </section>
@@ -288,7 +290,7 @@
 
                             <div class = "d-flex flex-wrap gap-3 justify-content-end align-items-center borderTop pt-4 pb-2">
                                 <a href = "{{ url_for('main.index') }}" class = "btn buttonQuiet">Discard</a>
-                                <button type = "submit" class = "btn buttonPink">Publish Event</button>
+                                <button type = "submit" class = "btn buttonPink">{% if is_edit %}Save Changes{% else %}Publish Event{% endif %}</button>
                             </div>
                         </form>
                     </div>

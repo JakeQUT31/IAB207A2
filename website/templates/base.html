@@ -60,10 +60,10 @@
                         </a>
                     </li>
                     {% endif %}
-
                     <!-- My Bookings -->
                     <li class="nav-item">
-                        <a class="nav-link" href="bookings.html">
+                        <a class="nav-link {% if request.endpoint in ['booking.history', 'booking.confirmation'] %}active{% endif %}"
+                            href="{{ url_for('booking.history') }}">
                             My Bookings
                         </a>
                     </li>
@@ -126,26 +126,34 @@
                         and SportTix pays respect to the Elders past, present and emerging.
                     </p>
                 </div>
-                <div class="col-6 col-lg-2">
+                <<<<<<< HEAD <div class="col-6 col-lg-2">
                     <h6 class="mb-3">Play</h6>
                     <ul class="list-unstyled small mb-0 d-flex flex-column gap-2">
                         <li><a href="/">Browse Events</a></li>
                         <li><a href="bookings.html">My Bookings</a></li>
                         <li><a href="event.html">Events</a></li>
-                    </ul>
-                </div>
-                <div class="col-6 col-lg-2">
-                    <h6 class="mb-3">Host</h6>
-                    <ul class="list-unstyled small mb-0 d-flex flex-column gap-2">
-                        <li><a href="{{ url_for('event.create') }}">Host Events</a></li>
+                        =======
+                        <div class="col-6 col-lg-2">
+                            <h6 class="mb-3">Play</h6>
+                            <ul class="list-unstyled small mb-0 d-flex flex-column gap-2">
+                                <li><a href="/">Browse Events</a></li>
+                                <li><a href="{{ url_for('booking.history') }}">My Bookings</a></li>
+                                <li><a href="event.html">Events</a></li>
+                                >>>>>>> dev
+                            </ul>
+                        </div>
+                        <div class="col-6 col-lg-2">
+                            <h6 class="mb-3">Host</h6>
+                            <ul class="list-unstyled small mb-0 d-flex flex-column gap-2">
+                                <li><a href="{{ url_for('event.create') }}">Host Events</a></li>
 
-                    </ul>
-                </div>
-                <div class="col-lg-3">
-                    <h6 class="mb-3">Contact</h6>
-                    <p class="small mb-1">hello@sporttix.com.au</p>
-                    <p class="small mb-0">Brisbane, QLD</p>
-                </div>
+                            </ul>
+                        </div>
+                        <div class="col-lg-3">
+                            <h6 class="mb-3">Contact</h6>
+                            <p class="small mb-1">hello@sporttix.com.au</p>
+                            <p class="small mb-0">Brisbane, QLD</p>
+                        </div>
             </div>
         </div>
     </footer>
