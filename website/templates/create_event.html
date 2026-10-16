@@ -31,6 +31,7 @@
                             <li class = "nav-item"><a class = "nav-link" href = "{{ url_for('event.my_events') }}">My Events</a></li>
                         {% endif %}
                         <li class = "nav-item"><a class = "nav-link" href = "bookings.html">My Bookings</a></li>
+                        <li class = "nav-item"><a class = "nav-link" href = "{{ url_for('main.acknowledgement') }}">Acknowledgement</a></li>
                         {% if current_user.is_authenticated %}
                             <li class="nav-item ms-lg-4 mt-2 mt-lg-0"><a class="btn buttonBlack btn-sm" href="{{ url_for('auth.logout') }}">Log out</a></li>
                         {% else %}
@@ -253,15 +254,15 @@
                                     <div>
                                         <h2 class = "h5 mb-1">Acknowledgement of Country</h2>
                                         <p class = "small text-muted-soft mb-0">
-                                            Choose the way you want to recognise the Traditional Custodians of the land in which you play in.
+                                            Choose the way you want to recognise the Traditional Custodians of the land in which you play in. Checkout the Acknowledgement tab to learn more!
                                         </p>
                                     </div>
                                 </div>
 
                                 <!--Radio Buttons-->
-                                <input type = "radio" class = "filterInput" name = "acknowledgementType" id = "None" value = "None" {% if form_data.get('acknowledgementType', 'Generic') == 'None' %}checked{% endif %}>
-                                <input type = "radio" class = "filterInput" name = "acknowledgementType" id = "Generic" value = "Generic" {% if form_data.get('acknowledgementType', 'Generic') == 'Generic' %}checked{% endif %}>
-                                <input type = "radio" class = "filterInput" name = "acknowledgementType" id = "Enhanced" value = "Enhanced" {% if form_data.get('acknowledgementType') == 'Enhanced' %}checked{% endif %}>
+                                <input type = "radio" class = "filterInput" name = "acknowledgementType" id = "None" onclick="ShowHideDiv()" value = "None" {% if form_data.get('acknowledgementType', 'Generic') == 'None' %}checked{% endif %}>
+                                <input type = "radio" class = "filterInput" name = "acknowledgementType" id = "Generic" onclick="ShowHideDiv()" value = "Generic" {% if form_data.get('acknowledgementType', 'Generic') == 'Generic' %}checked{% endif %}>
+                                <input type = "radio" class = "filterInput" name = "acknowledgementType" id = "Enhanced" onclick="ShowHideDiv()" value = "Enhanced" {% if form_data.get('acknowledgementType') == 'Enhanced' %}checked{% endif %}>
 
                                 <div class = "ackScope">
                                     <div class = "row g-3 mb-3">
@@ -280,12 +281,20 @@
                                         <div class = "col-md-4">
                                             <label class = "ackOption" for = "Enhanced">
                                                 <span class = "fw-bold d-block mb-1">Enhanced Acknowledgement</span>
-                                                <span class = "small text-muted-soft">Names of the Custodians of the selected venue are acknowledged 
-                                                    along with the standard acknowledgement.</span>
+                                                <span class = "small text-muted-soft">Customise your own acknowledgement of country,
+                                                    read our helpful guide <a href="{{ url_for('main.acknowledgement') }}">here</a>
+                                                </span>
                                             </label>
                                         </div>
                                     </div>
                                 </div>
+
+                                <div id="dvtext" class = "col-md-6">
+                                    <label for = "venueSuburb" class = "aform-label">Custom Acknowledgement</label>
+                                    <input type = "text" class = "aform-control" id = "enhancedMessage" name="enhancedMessage" value="{{ aform_data.get('enhancedMessage', '') }}" placeholder = "Type your Custom Acknowledgement">
+                                    <div class = "invalid-feedback">Add the Enhanced Message.</div>
+                                </div>
+
                             </section>
 
                             <div class = "d-flex flex-wrap gap-3 justify-content-end align-items-center borderTop pt-4 pb-2">
@@ -336,5 +345,13 @@
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function ShowHideDiv() {
+            var Enhanced = document.getElementById("Enhanced");
+            var dvtext = document.getElementById("dvtext");
+            dvtext.style.display = Enhanced.checked ? "block" : "none";
+        }
+        window.onload = ShowHideDiv;
+    </script>
     </body>
 </html>

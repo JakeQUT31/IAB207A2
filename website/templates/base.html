@@ -67,6 +67,16 @@
         </a>
     </li>
 
+    <!-- Acknowledgement Information -->
+    <li class="nav-item">
+                <a
+            class="nav-link {% if request.endpoint in ['main.acknowledgement', 'event.show'] %}active{% endif %}"
+            {% if request.endpoint in ['main.index', 'main.acknowledgement', 'event.show'] %}aria-current="page"{% endif %}
+            href="{{ url_for('main.acknowledgement') }}">
+            Acknowledgement
+        </a>
+    </li>
+
     <!-- Login / Logout -->
     {% if current_user.is_authenticated %}
     <li class="nav-item ms-lg-4 mt-2 mt-lg-0">

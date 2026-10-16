@@ -7,7 +7,7 @@ from flask_login import current_user, login_required
 from werkzeug.utils import secure_filename
 from .models import Event, Comment, Venue, User, Category
 from . import db
-from .forms import CommentForm, CreateEventForm
+from .forms import CommentForm, CreateEventForm, EnhancedAcknowledgementForm
 from sqlalchemy import func
 from sqlalchemy.orm import joinedload
 
@@ -76,6 +76,7 @@ def _refresh_event_statuses(events):
 @login_required
 def create():
    form = CreateEventForm()
+   aform = EnhancedAcknowledgementForm()
    if form.validate_on_submit():
       sport = form.sport.data
       category = db.session.scalar(
@@ -87,12 +88,35 @@ def create():
 
       player_capacity = form.playerCapacity.data or 0
       spectator_capacity = form.spectatorCapacity.data
+
+      checkKnown = db.session.scalar(db.select(func.count(Venue.venueID)).select_from(Venue).where((Venue.suburb==form.venueSuburb.data.strip()), (Venue.address==form.venueAddress.data.strip()), (Venue.traditionalCustodians != "Not Specified")))
+
+      if (checkKnown != 0):
+         print("Check: " + str(checkKnown))
+         known = db.session.scalar(db.select(Venue.traditionalCustodians).where((Venue.suburb==form.venueSuburb.data.strip()), (Venue.address==form.venueAddress.data.strip()), (Venue.traditionalCustodians != "Not Specified")))
+         print("Found: " + known)
+      else:
+         print("Here")
+         known = (form.traditionalCustodians.data or '').strip() or 'Not Specified'
+         print("here2")
+
+      respects = (form.acknowledgementType.data or '').strip() or 'None'
+
+      if (respects == "Enhanced"):
+         respects = aform.enhancedMessage.data
+      elif (respects == "Generic"):
+         respects = "I would like to begin by acknowledging the Traditional Owners of the land on which we meet today. I would also like to pay my respects to Elders past and present."
+      else:
+         respects = ''
+      
+      print("Going In: " + known)
+
       venue = Venue(
          venueName=form.venueName.data.strip(),
          address=form.venueAddress.data.strip(),
          suburb=form.venueSuburb.data.strip(),
          capacity=max(spectator_capacity + player_capacity, 1),
-         traditionalCustodians=(form.traditionalCustodians.data or '').strip() or 'Not specified',
+         traditionalCustodians=known,
       )
       event = Event(
          creator=current_user,
@@ -112,7 +136,7 @@ def create():
          participantPrice=form.playerPrice.data or Decimal('0'),
          spectatorPrice=form.seatPrice.data or Decimal('0'),
          status=Event.STATUS_OPEN,
-         acknowledgementType=form.acknowledgementType.data,
+         acknowledgementType=respects,
       )
       if form.eventImage.data:
          event.imageURL = _store_event_image(form.eventImage.data)
@@ -122,7 +146,7 @@ def create():
       return redirect(url_for('event.show', id=event.eventID))
 
    errors = [message for field_errors in form.errors.values() for message in field_errors]
-   return render_template('create_event.html', sports=SPORTS, errors=errors, form_data=request.form, form=form, is_edit=False)
+   return render_template('create_event.html', sports=SPORTS, errors=errors, form_data=request.form, form=form, aform=aform, aform_data=request.form, is_edit=False)
 
 
 @event_bp.route('/mine')
