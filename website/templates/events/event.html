@@ -13,7 +13,8 @@
         <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">Browse</a></li>
-                <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}#events">{{category.categoryName}}</a></li>
+                <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}#events">{{category.categoryName}}</a>
+                </li>
                 <li class="breadcrumb-item active" aria-current="page">{{event.title}}</li>
             </ol>
         </nav>
@@ -88,11 +89,13 @@
                     <p class="mb-3 text-muted-soft">{{venue.address}}, {{venue.suburb}}</p>
                     <p class="small mb-0 borderTop pt-3">
                         {% if event.acknowledgementType == 'None' %}
-                            No Acknowledgement of Country has been selected for this event.
+                        No Acknowledgement of Country has been selected for this event.
                         {% elif event.acknowledgementType == 'Enhanced' %}
-                            This match is played on the lands of {{ venue.traditionalCustodians }}. SportTix pays respect to the Elders past, present, and emerging.
+                        This match is played on the lands of {{ venue.traditionalCustodians }}. SportTix pays respect to
+                        the Elders past, present, and emerging.
                         {% else %}
-                            SportTix acknowledges the Traditional Custodians of the lands on which we play and pays respect to the Elders past, present, and emerging.
+                        SportTix acknowledges the Traditional Custodians of the lands on which we play and pays respect
+                        to the Elders past, present, and emerging.
                         {% endif %}
                     </p>
                 </div>
@@ -156,58 +159,53 @@
                 <section aria-labelledby="commentsHeading-cricket">
                     <div class="headSection">
                         <h2 class="h4 mb-0" id="commentsHeading-cricket">Questions and Discussion</h2>
-                        <span class="data text-muted-soft">3 Comments</span>
+                        <span class="data text-muted-soft">{{commentCount}} Comments</span>
                     </div>
 
-                    <div class="mb-4">
-                        <div class="comment">
-                            <p class="mb-1"><span class="author">Mark Malik</span>
-                                <span class="data text-muted-soft ms-2">2 Sep 2026, 14:00</span>
-                            </p>
-                            <p class="mb-0">Is there any way we can have a net session before the toss?
-                                Happy to get there earlier and set everything up.</p>
-                        </div>
-                        <div class="comment">
-                            <p class="mb-1"><span class="author">Eric Baldish</span>
-                                <span class="data text-muted-soft ms-2">29 Aug 2026, 10:00</span>
-                            </p>
-                            <p class="mb-0">Is there a canteen or something where we can buy something
-                                or do we need to bring our own food?</p>
-                        </div>
-                        <div class="comment">
-                            <p class="mb-1"><span class="author">Steve Smith</span>
-                                <span class="data text-muted-soft ms-2">27 Aug 2026, 20:00</span>
-                            </p>
-                            <p class="mb-0">Excited for this, Can't wait till the match! Who's ready?</p>
-                        </div>
+                    <div class="mb-4"></div>
+                    {% if commentCount == 0 %}
+                    <div class="comment">
+                        <p class="mb-0">There are no comments yet. Be the first to post something :D</p>
                     </div>
+                    {% else %}
+
+                    {% for comment in event.comments %}
+                    <div class="comment">
+                        <p class="mb-1"><span class="author">{{comment.user.firstName}} {{comment.user.lastName}}</span>
+                            <span class="data text-muted-soft ms-2">{{comment.postedDateTime}}</span>
+                        </p>
+                        <p class="mb-0">{{comment.content}}</p>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
 
                     {% if current_user.is_authenticated %}
-                        <div class="panel p-4">
-                            <p class="eyebrow mb-3">
-                                Add a Comment
-                            </p>
-                            {{ render_form(form,"/events/{0}/comment".format(event.eventID)) }}
-                            <form action="event.html#cricket" method="get">
-                                <div class="mb-3">
-                                    <div class="invalid-feedback">Write something before posting.</div>
-                                </div>
-                                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
-                                    <p class="small text-muted-soft mb-0">Posting as <span class="fw-bold">{{loggedUser.firstName}} {{loggedUser.lastName}}</span>
-                                        - Your name and the time you post will appear with your comment.</p>
-                                </div>
-                            </form>
-                        </div>
+                    <div class="panel p-4">
+                        <p class="eyebrow mb-3">
+                            Add a Comment
+                        </p>
+                        {{ render_form(form,"/events/{0}/comment".format(event.eventID)) }}
+                        <form action="event.html#cricket" method="get">
+                            <div class="mb-3">
+                                <div class="invalid-feedback">Write something before posting.</div>
+                            </div>
+                            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                                <p class="small text-muted-soft mb-0">Posting as <span class="fw-bold">{{loggedUser.firstName}}
+                                        {{loggedUser.lastName}}</span>
+                                    - Your name and the time you post will appear with your comment.</p>
+                            </div>
+                        </form>
+                    </div>
                     {% else %}
-                        <p>Please log in to post comments</p>
+                    <p>Please log in to post comments</p>
                     {% endif %}
                 </section>
             </div>
 
-            <div class="col-lg-5 col-xl-4">
-                <div class="stickySide">
-                    <div class="panel panelBlack p-4">
-                        <p class="eyebrow mb-4">Book a Spot</p>
+        <div class="col-lg-5 col-xl-4">
+            <div class="stickySide">
+                <div class="panel panelBlack p-4">
+                    <p class="eyebrow mb-4">Book a Spot</p>
 
                         <div class="row g-4 mb-4 pb-4 borderBottom">
                             <div class="col-6">
@@ -297,14 +295,15 @@
                         {% endif %}
                         <p class="small mb-0" style="color:#F4F1EA99;">
                             You need to be logged in to book. Cancellations are free up to 24 hours before the toss.
-                        </p>
-                    </div>
-                    <div class="panel p-4 mt-3">
-                        <p class="eyebrow mb-2">Hosted By</p>
-                        <p class="fw-bold mb-1">{{user.firstName}}</p>
-                    </div>
+                    </p>
+                </div>
+                <div class="panel p-4 mt-3">
+                    <p class="eyebrow mb-2">Hosted By</p>
+                    <p class="fw-bold mb-1">{{user.firstName}}</p>
                 </div>
             </div>
         </div>
+    </div>
+    </div>
 </main>
 {% endblock %}

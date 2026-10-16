@@ -233,6 +233,7 @@ def cancel(id):
 
 @event_bp.route('/<int:id>')
 def show(id):
+   # This code collects the various details about the event from the sql database
    event = db.session.scalar(db.select(Event).where(Event.eventID==id))
    if event is None:
       abort(404)
@@ -243,7 +244,7 @@ def show(id):
    category = db.session.scalar(db.select(Category).where(Category.categoryID==event.categoryID))
    venue = db.session.scalar(db.select(Venue).where(Venue.venueID==event.venueID))
    user = db.session.scalar(db.select(User).where(User.userID==event.creatorID))
-   comment = db.session.scalar(db.select(Comment).where(Comment.eventID==id))
+   commentCount = db.session.scalar(db.select(func.count(Comment.commentID)).select_from(Comment).where((Comment.eventID==id)))
    spectatorBooked = Event.spectatorsBooked(id)
    playerBooked = Event.participantsBooked(id)
    spectatorAvailable = event.spectatorCapacity - spectatorBooked
@@ -255,7 +256,7 @@ def show(id):
       loggedUser = db.session.scalar(db.select(User).where(User.userID==1))
 
    cform = CommentForm()  
-   return render_template('events/event.html', event=event, venue=venue, user=user, category=category, comment=comment, spectatorBooked=spectatorBooked, playerBooked=playerBooked, spectatorAvailable=spectatorAvailable, playerAvailable=playerAvailable, loggedUser=loggedUser, form=cform)
+   return render_template('events/event.html', event=event, venue=venue, user=user, category=category, comment=comment, commentCount=commentCount, spectatorBooked=spectatorBooked, playerBooked=playerBooked, spectatorAvailable=spectatorAvailable, playerAvailable=playerAvailable, loggedUser=loggedUser, form=cform)
 
 
 @event_bp.route('/<int:id>/comment', methods=['GET', 'POST'])
