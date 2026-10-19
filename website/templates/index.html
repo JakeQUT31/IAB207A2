@@ -179,6 +179,9 @@
             {% elif event.category.categoryName == 'Basketball' %}
                 <img src="{{ url_for('static', filename='img/basketball.jpeg') }}" alt="Basketball">
 
+            {% elif event.category.categoryName == 'Touch Football' %}
+                <img src="{{ url_for('static', filename='img/touch.jpg') }}" alt="Touch Football">
+
             {% else %}
                 <img src="{{ url_for('static', filename='img/football.jpeg') }}"
                      alt="{{ event.category.categoryName }}">

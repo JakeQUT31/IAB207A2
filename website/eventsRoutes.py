@@ -1,4 +1,5 @@
 import os
+from datetime import date
 from decimal import Decimal
 from uuid import uuid4
 
@@ -15,6 +16,19 @@ event_bp = Blueprint('event', __name__, url_prefix='/events')
 
 SPORTS = ('AFL', 'Basketball', 'Cricket', 'Football', 'Netball', 'Tennis', 'Touch Football')
 ALLOWED_IMAGE_EXTENSIONS = {'jpg', 'jpeg', 'png', 'gif', 'webp'}
+GENERIC_ACKNOWLEDGEMENT = (
+   'I would like to begin by acknowledging the Traditional Owners of the land '
+   'on which we meet today. I would also like to pay my respects to Elders '
+   'past and present.'
+)
+
+
+def _acknowledgement_text(acknowledgement_type, custom_text=''):
+   if acknowledgement_type == 'Generic':
+      return GENERIC_ACKNOWLEDGEMENT
+   if acknowledgement_type == 'Enhanced':
+      return (custom_text or '').strip()
+   return ''
 
 
 def _store_event_image(upload):
@@ -39,6 +53,13 @@ def _remove_event_image(image_url):
 
 
 def _event_form_data(event):
+   acknowledgement = event.acknowledgementType or ''
+   if acknowledgement in ('', 'None'):
+      acknowledgement_type = 'None'
+   elif acknowledgement in ('Generic', GENERIC_ACKNOWLEDGEMENT):
+      acknowledgement_type = 'Generic'
+   else:
+      acknowledgement_type = 'Enhanced'
    return {
       'title': event.title,
       'sport': event.category.categoryName,
@@ -58,7 +79,8 @@ def _event_form_data(event):
       'playerPrice': event.participantPrice,
       'spectatorCapacity': event.spectatorCapacity,
       'seatPrice': event.spectatorPrice,
-      'acknowledgementType': event.acknowledgementType,
+      'acknowledgementType': acknowledgement_type,
+      'enhancedMessage': acknowledgement if acknowledgement_type == 'Enhanced' else '',
    }
 
 
@@ -100,14 +122,10 @@ def create():
          known = (form.traditionalCustodians.data or '').strip() or 'Not Specified'
          print("here2")
 
-      respects = (form.acknowledgementType.data or '').strip() or 'None'
-
-      if (respects == "Enhanced"):
-         respects = aform.enhancedMessage.data
-      elif (respects == "Generic"):
-         respects = "I would like to begin by acknowledging the Traditional Owners of the land on which we meet today. I would also like to pay my respects to Elders past and present."
-      else:
-         respects = ''
+      respects = _acknowledgement_text(
+         form.acknowledgementType.data,
+         aform.enhancedMessage.data,
+      )
       
       print("Going In: " + known)
 
@@ -146,7 +164,7 @@ def create():
       return redirect(url_for('event.show', id=event.eventID))
 
    errors = [message for field_errors in form.errors.values() for message in field_errors]
-   return render_template('create_event.html', sports=SPORTS, errors=errors, form_data=request.form, form=form, aform=aform, aform_data=request.form, is_edit=False)
+   return render_template('create_event.html', sports=SPORTS, errors=errors, form_data=request.form, form=form, aform=aform, aform_data=request.form, is_edit=False, min_event_date=date.today().isoformat(), preview_player_booked=0, preview_spectator_booked=0, preview_status=Event.STATUS_OPEN)
 
 
 @event_bp.route('/mine')
@@ -168,14 +186,23 @@ def edit(id):
    event = db.session.get(Event, id)
    if event is None:
       abort(404)
+   previous_status = event.status
+   event.updateStatus()
+   if event.status != previous_status:
+      db.session.commit()
    if not event.canBeEditedBy(current_user):
       abort(403)
    if event.status == Event.STATUS_CANCELLED:
       flash('Cancelled events cannot be edited.', 'warning')
       return redirect(url_for('event.my_events'))
+   if event.status == Event.STATUS_INACTIVE:
+      flash('Past events cannot be edited.', 'warning')
+      return redirect(url_for('event.my_events'))
 
    form = CreateEventForm()
+   aform = EnhancedAcknowledgementForm()
    if request.method == 'GET':
+      initial_data = _event_form_data(event)
       form.title.data = event.title
       form.sport.data = event.category.categoryName
       form.skillLevel.data = event.skillLevel
@@ -194,7 +221,8 @@ def edit(id):
       form.playerPrice.data = event.participantPrice
       form.spectatorCapacity.data = event.spectatorCapacity
       form.seatPrice.data = event.spectatorPrice
-      form.acknowledgementType.data = event.acknowledgementType
+      form.acknowledgementType.data = initial_data['acknowledgementType']
+      aform.enhancedMessage.data = initial_data['enhancedMessage']
 
    if form.validate_on_submit():
       category = db.session.scalar(
@@ -218,24 +246,36 @@ def edit(id):
       event.spectatorCapacity = form.spectatorCapacity.data
       event.participantPrice = form.playerPrice.data or Decimal('0')
       event.spectatorPrice = form.seatPrice.data or Decimal('0')
-      event.acknowledgementType = form.acknowledgementType.data
+      event.acknowledgementType = _acknowledgement_text(
+         form.acknowledgementType.data,
+         aform.enhancedMessage.data,
+      )
       event.venue.venueName = form.venueName.data.strip()
       event.venue.address = form.venueAddress.data.strip()
       event.venue.suburb = form.venueSuburb.data.strip()
       event.venue.capacity = max(event.participantCapacity + event.spectatorCapacity, 1)
       event.venue.traditionalCustodians = (form.traditionalCustodians.data or '').strip() or 'Not specified'
+      old_image = event.imageURL
       if form.eventImage.data:
-         old_image = event.imageURL
          event.imageURL = _store_event_image(form.eventImage.data)
-         _remove_event_image(old_image)
       event.updateStatus()
       db.session.commit()
+      if form.eventImage.data:
+         _remove_event_image(old_image)
       flash(f'Event "{event.title}" has been updated.', 'success')
       return redirect(url_for('event.show', id=event.eventID))
 
    errors = [message for field_errors in form.errors.values() for message in field_errors]
    form_data = request.form if request.method == 'POST' else _event_form_data(event)
-   return render_template('create_event.html', sports=SPORTS, errors=errors, form_data=form_data, form=form, is_edit=True, event=event)
+   aform_data = request.form if request.method == 'POST' else _event_form_data(event)
+   return render_template(
+      'create_event.html', sports=SPORTS, errors=errors, form_data=form_data,
+      form=form, aform=aform, aform_data=aform_data, is_edit=True, event=event,
+      min_event_date=date.today().isoformat(),
+      preview_player_booked=Event.participantsBooked(event.eventID),
+      preview_spectator_booked=Event.spectatorsBooked(event.eventID),
+      preview_status=event.status,
+   )
 
 
 @event_bp.route('/<int:id>/cancel', methods=['POST'])

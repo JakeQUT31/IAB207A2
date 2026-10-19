@@ -30,7 +30,7 @@
                         {% if current_user.is_authenticated %}
                             <li class = "nav-item"><a class = "nav-link" href = "{{ url_for('event.my_events') }}">My Events</a></li>
                         {% endif %}
-                        <li class = "nav-item"><a class = "nav-link" href = "bookings.html">My Bookings</a></li>
+                        <li class = "nav-item"><a class = "nav-link" href = "{{ url_for('booking.history') }}">My Bookings</a></li>
                         <li class = "nav-item"><a class = "nav-link" href = "{{ url_for('main.acknowledgement') }}">Acknowledgement</a></li>
                         {% if current_user.is_authenticated %}
                             <li class="nav-item ms-lg-4 mt-2 mt-lg-0"><a class="btn buttonBlack btn-sm" href="{{ url_for('auth.logout') }}">Log out</a></li>
@@ -73,14 +73,13 @@
                                 <ul class="mb-0">{% for error in errors %}<li>{{ error }}</li>{% endfor %}</ul>
                             </div>
                         {% endif %}
-                        <form action="{% if is_edit %}{{ url_for('event.edit', id=event.eventID) }}{% else %}{{ url_for('event.create') }}{% endif %}" method="post" enctype="multipart/form-data">
+                        <form id="eventForm" action="{% if is_edit %}{{ url_for('event.edit', id=event.eventID) }}{% else %}{{ url_for('event.create') }}{% endif %}" method="post" enctype="multipart/form-data">
                             {{ form.hidden_tag() }}
                             <section class = "formSection">
                                 <div class = "stepHead">
                                     <span class = "stepNum">01</span>
                                     <div>
                                         <h2 class = "h5 mb-0">The Match</h2>
-                                    </div>
                                 </div>
 
                                 <div class = "row g-3">
@@ -152,7 +151,7 @@
                                 <div class = "row g-3">
                                     <div class = "col-md-4">
                                         <label for = "eventDate" class = "form-label">Date</label>
-                                        <input type = "date" class = "form-control" id = "eventDate" name="eventDate" value="{{ form_data.get('eventDate', '') }}" required>
+                                        <input type = "date" class = "form-control" id = "eventDate" name="eventDate" value="{{ form_data.get('eventDate', '') }}" min="{{ min_event_date }}" required>
                                         <div class = "invalid-feedback">
                                             What date is the match?
                                         </div>
@@ -160,12 +159,12 @@
 
                                     <div class = "col-6 col-md-4">
                                         <label for = "startTime" class = "form-label">Start Time</label>
-                                        <input type = "time" class = "form-control" id = "startTime" name="startTime" value="{{ form_data.get('startTime', '') }}" required>
+                                        <input type = "time" class = "form-control" id = "startTime" name="startTime" value="{{ form_data.get('startTime', '') }}" min="00:00" required>
                                         <div class = "invalid-feedback">Set a Starting Time</div>
                                     </div>
                                     <div class = "col-6 col-md-4">
                                         <label for = "endTime" class = "form-label">End Time</label>
-                                        <input type = "time" class = "form-control" id = "endTime" name="endTime" value="{{ form_data.get('endTime', '') }}" required>
+                                        <input type = "time" class = "form-control" id = "endTime" name="endTime" value="{{ form_data.get('endTime', '') }}" min="00:01" required>
                                         <div class = "invalid-feedback">Set an Ending Time, must be after the starting time.</div>
                                     </div>
 
@@ -241,7 +240,6 @@
                                         <label for="eventImage" class="form-label">Event image</label>
                                         <input type="file" class="form-control" id="eventImage" name="eventImage" accept=".jpg,.jpeg,.png,.gif,.webp,image/jpeg,image/png,image/gif,image/webp">
                                         <div class="form-text">Optional. JPG, PNG, GIF, or WebP; maximum 5 MB. Landscape works best.{% if is_edit and event.imageURL %} Leave blank to keep the current image.{% endif %}</div>
-                                        {% if is_edit and event.imageURL %}<img src="{{ event.imageURL }}" class="img-fluid mt-2" alt="Current event image" style="max-height:12rem">{% endif %}
                                     </div>
                                 </div>
                             </section>
@@ -291,7 +289,7 @@
 
                                 <div id="dvtext" class = "col-md-6">
                                     <label for = "venueSuburb" class = "aform-label">Custom Acknowledgement</label>
-                                    <input type = "text" class = "aform-control" id = "enhancedMessage" name="enhancedMessage" value="{{ aform_data.get('enhancedMessage', '') }}" placeholder = "Type your Custom Acknowledgement">
+                                    <textarea class="form-control" id="enhancedMessage" name="enhancedMessage" rows="3" maxlength="150" placeholder="Type your custom acknowledgement">{{ aform_data.get('enhancedMessage', '') }}</textarea>
                                     <div class = "invalid-feedback">Add the Enhanced Message.</div>
                                 </div>
 
@@ -303,6 +301,47 @@
                             </div>
                         </form>
                     </div>
+                    <aside class="col-lg-5" aria-labelledby="eventPreviewHeading">
+                        <div class="hostPreview stickySide" aria-live="polite">
+                            <p class="eyebrow mb-2">Live Preview</p>
+                            <h2 id="eventPreviewHeading" class="h5 mb-3">Browse events card</h2>
+                            {% set preview_sport = form_data.get('sport', '') %}
+                            {% if is_edit and event.imageURL %}
+                                {% set preview_image = event.imageURL %}
+                            {% elif preview_sport == 'Cricket' %}
+                                {% set preview_image = url_for('static', filename='img/cricket.jpeg') %}
+                            {% elif preview_sport == 'Netball' %}
+                                {% set preview_image = url_for('static', filename='img/netball.jpg') %}
+                            {% elif preview_sport == 'AFL' %}
+                                {% set preview_image = url_for('static', filename='img/afl.jpg') %}
+                            {% elif preview_sport == 'Tennis' %}
+                                {% set preview_image = url_for('static', filename='img/tennis.jpeg') %}
+                            {% elif preview_sport == 'Basketball' %}
+                                {% set preview_image = url_for('static', filename='img/basketball.jpeg') %}
+                            {% elif preview_sport == 'Touch Football' %}
+                                {% set preview_image = url_for('static', filename='img/touch.jpg') %}
+                            {% else %}
+                                {% set preview_image = url_for('static', filename='img/football.jpeg') %}
+                            {% endif %}
+                            <article class="eventCard previewEventCard">
+                                <div class="card-img-wrap">
+                                    <img id="previewImage" src="{{ preview_image }}" alt="Preview event image" data-has-saved-image="{{ 'true' if is_edit and event.imageURL else 'false' }}">
+                                    <span id="previewStatus" class="status {{ preview_status|lower|replace(' ', '-') }}">{{ preview_status }}</span>
+                                    <span id="previewSportTag" class="sportTag">{{ preview_sport or 'Sport' }}</span>
+                                </div>
+                                <div class="eventBody">
+                                    <p id="previewDateTime" class="data text-muted-soft mb-1">DATE · TIME</p>
+                                    <h3 id="previewTitle" class="h5 eventTitle mb-2">{{ form_data.get('title') or 'Your match title' }}</h3>
+                                    <p id="previewVenue" class="small text-muted-soft mb-4">{{ form_data.get('venueName') or 'Venue' }}, {{ form_data.get('venueSuburb') or 'Suburb' }} · {{ form_data.get('skillLevel') or 'Skill level' }} · {{ form_data.get('surfaceType') or 'Surface' }}</p>
+                                    <div class="row g-3 mt-auto borderTop pt-3">
+                                        <div class="col-6"><div class="countBlock"><span class="eyebrow">Players</span><span class="numbers numbers-med"><span id="previewPlayerBooked">{{ preview_player_booked }}</span><span class="of">/<span id="previewPlayerCapacity">{{ form_data.get('playerCapacity') or '0' }}</span></span></span></div></div>
+                                        <div class="col-6"><div class="countBlock"><span class="eyebrow">Spectators</span><span class="numbers numbers-med"><span id="previewSpectatorBooked">{{ preview_spectator_booked }}</span><span class="of">/<span id="previewSpectatorCapacity">{{ form_data.get('spectatorCapacity') or '0' }}</span></span></span></div></div>
+                                    </div>
+                                </div>
+                            </article>
+                            <p class="form-text mt-3 mb-0">This is an approximate preview. Booking counts start at zero and status updates automatically.</p>
+                        </div>
+                    </aside>
                 </div>
             </div>
         </main>
@@ -323,17 +362,17 @@
                 <div class = "col-6 col-lg-2">
                     <h6 class = "mb-3">Play</h6>
                     <ul class = "list-unstyled small mb-0 d-flex flex-column gap-2">
-                        <li><a href = "{{ url_for('main.index') }}">Browse Events</a></li>
-                        <li><a href = "bookings.html">My Bookings</a></li>
-                        <li><a href = "event.html">Events</a></li>
+                        <li><a href = "{{ url_for('booking.history') }}">My Bookings</a></li>
+                        <li><a href = "{{ url_for('main.index') }}#events">Browse Events</a></li>
                     </ul>
                 </div>
                 <div class = "col-6 col-lg-2">
                     <h6 class = "mb-3">Host</h6>
                     <ul class = "list-unstyled small mb-0 d-flex flex-column gap-2">
                         <li><a href = "{{ url_for('event.create') }}">Host Events</a></li>
-                        <li><a href = "#">Venue Guide</a></li>
-                        <li><a href = "#">Host Support</a></li>
+                        {% if current_user.is_authenticated %}
+                        <li><a href = "{{ url_for('event.my_events') }}">My Events</a></li>
+                        {% endif %}
                     </ul>
                 </div>
                 <div class = "col-lg-3">
@@ -346,12 +385,108 @@
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function ShowHideDiv() {
-            var Enhanced = document.getElementById("Enhanced");
-            var dvtext = document.getElementById("dvtext");
-            dvtext.style.display = Enhanced.checked ? "block" : "none";
+        const previewDefaults = {
+            AFL: "{{ url_for('static', filename='img/afl.jpg') }}",
+            Basketball: "{{ url_for('static', filename='img/basketball.jpeg') }}",
+            Cricket: "{{ url_for('static', filename='img/cricket.jpeg') }}",
+            Football: "{{ url_for('static', filename='img/football.jpeg') }}",
+            Netball: "{{ url_for('static', filename='img/netball.jpg') }}",
+            Tennis: "{{ url_for('static', filename='img/tennis.jpeg') }}",
+            "Touch Football": "{{ url_for('static', filename='img/touch.jpg') }}"
+        };
+        const previewHasSavedImage = document.getElementById("previewImage").dataset.hasSavedImage === "true";
+        let previewUploadUrl = null;
+
+        function updateHostPreview() {
+            const value = (name) => document.querySelector(`[name="${name}"]`)?.value?.trim() || "";
+            const byId = (id) => document.getElementById(id);
+            const title = value("title");
+            const sport = value("sport");
+            const skill = value("skillLevel");
+            const surface = value("surfaceType");
+            const venue = value("venueName");
+            const suburb = value("venueSuburb");
+            const dateValue = value("eventDate");
+            const start = value("startTime");
+            const end = value("endTime");
+            const playerCapacity = Number(value("playerCapacity") || 0);
+            const spectatorCapacity = Number(value("spectatorCapacity") || 0);
+            const playerBooked = Number(byId("previewPlayerBooked").textContent || 0);
+            const spectatorBooked = Number(byId("previewSpectatorBooked").textContent || 0);
+
+            byId("previewTitle").textContent = title || "Your match title";
+            byId("previewSportTag").textContent = sport || "Sport";
+            byId("previewVenue").textContent = `${venue || "Venue"}, ${suburb || "Suburb"} · ${skill || "Skill level"} · ${surface || "Surface"}`;
+            byId("previewPlayerCapacity").textContent = playerCapacity;
+            byId("previewSpectatorCapacity").textContent = spectatorCapacity;
+
+            if (dateValue) {
+                const date = new Date(`${dateValue}T00:00:00`);
+                const dateText = date.toLocaleDateString("en-AU", { weekday: "short", day: "2-digit", month: "short" }).toUpperCase();
+                byId("previewDateTime").textContent = `${dateText} · ${start || "--:--"}${end ? `–${end}` : ""}`;
+            } else {
+                byId("previewDateTime").textContent = "DATE · TIME";
+            }
+
+            const image = byId("previewImage");
+            if (previewUploadUrl) {
+                image.src = previewUploadUrl;
+            } else if (!previewHasSavedImage) {
+                image.src = previewDefaults[sport] || previewDefaults.Football;
+                image.alt = `${sport || "Sport"} event preview`;
+            }
+
+            const eventDate = dateValue ? new Date(`${dateValue}T${end || "23:59"}:00`) : null;
+            const eventHasEnded = eventDate && eventDate.getTime() <= Date.now();
+            const soldOut = playerBooked >= playerCapacity && spectatorBooked >= spectatorCapacity;
+            const status = eventHasEnded ? "Inactive" : (soldOut ? "Sold Out" : "Open");
+            const statusBadge = byId("previewStatus");
+            statusBadge.textContent = status;
+            statusBadge.className = `status ${status.toLowerCase().replaceAll(" ", "-")}`;
+            statusBadge.closest(".eventCard").classList.toggle("isOff", status !== "Open");
         }
-        window.onload = ShowHideDiv;
+
+        function updateAcknowledgementVisibility() {
+            const selected = document.querySelector('[name="acknowledgementType"]:checked');
+            document.getElementById("dvtext").style.display = selected?.value === "Enhanced" ? "block" : "none";
+        }
+
+        function updateTimeMinimums() {
+            const eventDate = document.getElementById("eventDate").value;
+            const startTime = document.getElementById("startTime");
+            const endTime = document.getElementById("endTime");
+            const today = new Date();
+            const localDate = [today.getFullYear(), String(today.getMonth() + 1).padStart(2, "0"), String(today.getDate()).padStart(2, "0")].join("-");
+            let earliestStart = "00:00";
+
+            if (eventDate === localDate) {
+                const nextMinute = new Date(today.getTime() + 60000);
+                earliestStart = `${String(nextMinute.getHours()).padStart(2, "0")}:${String(nextMinute.getMinutes()).padStart(2, "0")}`;
+            }
+            startTime.min = earliestStart;
+
+            const [startHour, startMinute] = (startTime.value || earliestStart).split(":").map(Number);
+            const endMinimum = new Date(2000, 0, 1, startHour, startMinute + 1);
+            endTime.min = `${String(endMinimum.getHours()).padStart(2, "0")}:${String(endMinimum.getMinutes()).padStart(2, "0")}`;
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll("#matchTitle, #sportType, #skillLevel, #surfaceType, #eventDate, #startTime, #endTime, #venueName, #venueSuburb, #playerCapacity, #seatCapacity").forEach((field) => {
+                field.addEventListener("input", updateHostPreview);
+                field.addEventListener("change", updateHostPreview);
+            });
+            document.querySelectorAll('[name="acknowledgementType"]').forEach((field) => field.addEventListener("change", updateAcknowledgementVisibility));
+            document.getElementById("eventDate").addEventListener("change", updateTimeMinimums);
+            document.getElementById("startTime").addEventListener("change", updateTimeMinimums);
+            document.getElementById("eventImage").addEventListener("change", (event) => {
+                if (previewUploadUrl) URL.revokeObjectURL(previewUploadUrl);
+                previewUploadUrl = event.target.files?.[0] ? URL.createObjectURL(event.target.files[0]) : null;
+                updateHostPreview();
+            });
+            updateHostPreview();
+            updateAcknowledgementVisibility();
+            updateTimeMinimums();
+        });
     </script>
     </body>
 </html>

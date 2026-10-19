@@ -358,15 +358,46 @@ h1, .displayType {
 }
 .eventCard .card-img-wrap {
     position: relative;
-    aspect-ratio: 16/9;
+    width: 100%;
+    aspect-ratio: 16 / 9;
     background: #1b1814;
+    overflow: hidden;
 }
 
 .eventCard .card-img-wrap img {
     width: 100%;
-    height:100%;
+    height: 100%;
     object-fit: cover;
-    display:block;
+    object-position: center;
+    display: block;
+}
+
+.hostPreview {
+    padding: 1.25rem;
+    background: var(--less-white);
+    border: 1px solid var(--off-white);
+}
+
+.previewEventCard {
+    max-width: 34rem;
+    margin-inline: auto;
+}
+
+.previewEventCard .card-img-wrap {
+    aspect-ratio: 16 / 9;
+}
+
+.previewEventCard.isOff .card-img-wrap img {
+    filter: grayscale(1) brightness(.7);
+}
+
+.eventDetailImage {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    object-position: center;
+    background: var(--less-white);
 }
 
 .eventCard .card-img-wrap .status {
@@ -849,6 +880,8 @@ fieldset {
 }
 .bookingRow .thumb {
     flex: 0 0 148px;
+    width: 148px;
+    aspect-ratio: 16 / 9;
     overflow: hidden;
     background: #1b1814;
 }
@@ -856,6 +889,7 @@ fieldset {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
 }
 
 @media (max-width: 575.98px) {
@@ -864,7 +898,7 @@ fieldset {
     }
     .bookingRow .thumb {
         width:100%;
-        height: 100%;
+        height: auto;
         margin-bottom: 1rem;
     }
 }

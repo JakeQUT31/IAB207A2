@@ -148,7 +148,11 @@ class Event(db.Model):
     def updateStatus(self):
         if self.status == self.STATUS_CANCELLED:
             return self.status
-        if self.eventDate < date.today():
+        event_has_ended = (
+            self.eventDate < date.today()
+            or (self.eventDate == date.today() and self.endTime <= datetime.now().time())
+        )
+        if event_has_ended:
             self.status = self.STATUS_INACTIVE
         elif self.isSoldOut():
             self.status = self.STATUS_SOLD_OUT

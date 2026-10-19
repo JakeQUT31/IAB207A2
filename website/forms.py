@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField
-from flask import request
+from datetime import datetime
 from wtforms.fields import (
   DateField,
   DecimalField,
@@ -122,10 +122,12 @@ class CreateEventForm(FlaskForm):
       raise ValidationError('End time must be after start time.')
 
   def validate_eventDate(self, field):
-    from datetime import date
+    if field.data is None or self.startTime.data is None:
+      return
 
-    if request.endpoint == 'event.create' and field.data is not None and field.data < date.today():
-      raise ValidationError('Event date cannot be in the past.')
+    event_start = datetime.combine(field.data, self.startTime.data)
+    if event_start <= datetime.now():
+      raise ValidationError('Event date and start time must be in the future.')
 
   def validate_eventImage(self, field):
     image = field.data

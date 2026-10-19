@@ -57,10 +57,21 @@
         <div class="row g-4 g-lg-5">
             <div class="col-lg-7 col-xl-8">
                 {% if event.imageURL %}
-                <img src="{{ event.imageURL }}" class="img-fluid mb-5 w-100" alt="{{ event.title }}">
+                <img src="{{ event.imageURL }}" class="eventDetailImage mb-5" alt="{{ event.title }}">
+                {% elif category.categoryName == 'Cricket' %}
+                <img src="{{ url_for('static', filename='img/cricket.jpeg') }}" class="eventDetailImage mb-5" alt="Cricket event">
+                {% elif category.categoryName == 'Netball' %}
+                <img src="{{ url_for('static', filename='img/netball.jpg') }}" class="eventDetailImage mb-5" alt="Netball event">
+                {% elif category.categoryName == 'AFL' %}
+                <img src="{{ url_for('static', filename='img/afl.jpg') }}" class="eventDetailImage mb-5" alt="AFL event">
+                {% elif category.categoryName == 'Tennis' %}
+                <img src="{{ url_for('static', filename='img/tennis.jpeg') }}" class="eventDetailImage mb-5" alt="Tennis event">
+                {% elif category.categoryName == 'Basketball' %}
+                <img src="{{ url_for('static', filename='img/basketball.jpeg') }}" class="eventDetailImage mb-5" alt="Basketball event">
+                {% elif category.categoryName == 'Touch Football' %}
+                <img src="{{ url_for('static', filename='img/touch.jpg') }}" class="eventDetailImage mb-5" alt="Touch Football event">
                 {% else %}
-                <img src="{{ url_for('static', filename='img/football.jpeg') }}" class="img-fluid mb-5 w-100"
-                    alt="{{ category.categoryName }} event">
+                <img src="{{ url_for('static', filename='img/football.jpeg') }}" class="eventDetailImage mb-5" alt="Football event">
                 {% endif %}
 
                 <h2 class="h4 mb-3">About this Match</h2>
@@ -92,10 +103,10 @@
                     <p class="fw-bold mb-1">{{venue.venueName}}</p>
                     <p class="mb-3 text-muted-soft">{{venue.address}}, {{venue.suburb}}</p>
                     <p class="small mb-0 borderTop pt-3">
-                        {% if event.acknowledgementType == 'Generic' %}
+                        {% if event.acknowledgementType in ['Generic', 'I would like to begin by acknowledging the Traditional Owners of the land on which we meet today. I would also like to pay my respects to Elders past and present.'] %}
                         SportTix acknowledges the Traditional Custodians of the lands on which we play and pays respect
                         to the Elders past, present, and emerging.
-                        {% elif event.acknowledgementType == '' %}
+                        {% elif event.acknowledgementType in ['', 'None'] %}
                         No acknowledgement of country has been selected for this event.
                         {% else %}
                         {{ event.acknowledgementType }}
