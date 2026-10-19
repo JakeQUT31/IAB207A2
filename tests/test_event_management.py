@@ -101,6 +101,48 @@ def test_event_edit_is_limited_to_creator(client, app):
         assert db.session.get(Event, event_id).title == 'Updated Community Game'
 
 
+def test_edit_form_renders_on_get_and_validation_errors(client, app):
+    event_id = create_event(client, app)
+    login(client, app.test_owner_id)
+
+    edit_page = client.get(f'/events/{event_id}/edit')
+    assert edit_page.status_code == 200
+    assert b'Browse events card' in edit_page.data
+    assert b'name="enhancedMessage"' in edit_page.data
+
+    invalid_update = client.post(
+        f'/events/{event_id}/edit',
+        data=event_data(title=''),
+    )
+    assert invalid_update.status_code == 200
+    assert b'Match title is required' in invalid_update.data
+
+
+def test_past_event_start_is_rejected_for_create_and_edit(client, app):
+    login(client, app.test_owner_id)
+    past_date_response = client.post(
+        '/events/create',
+        data=event_data(eventDate=(date.today() - timedelta(days=1)).isoformat()),
+    )
+    assert past_date_response.status_code == 200
+    assert b'Event date and start time must be in the future.' in past_date_response.data
+
+    past_time_response = client.post(
+        '/events/create',
+        data=event_data(eventDate=date.today().isoformat(), startTime='00:00', endTime='01:00'),
+    )
+    assert past_time_response.status_code == 200
+    assert b'Event date and start time must be in the future.' in past_time_response.data
+
+    event_id = create_event(client, app)
+    past_edit_response = client.post(
+        f'/events/{event_id}/edit',
+        data=event_data(eventDate=(date.today() - timedelta(days=1)).isoformat()),
+    )
+    assert past_edit_response.status_code == 200
+    assert b'Event date and start time must be in the future.' in past_edit_response.data
+
+
 def test_event_can_be_cancelled_and_cannot_be_edited_afterward(client, app):
     event_id = create_event(client, app)
     login(client, app.test_owner_id)
