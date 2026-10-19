@@ -70,8 +70,8 @@
     <!-- Acknowledgement Information -->
     <li class="nav-item">
                 <a
-            class="nav-link {% if request.endpoint in ['main.acknowledgement', 'event.show'] %}active{% endif %}"
-            {% if request.endpoint in ['main.index', 'main.acknowledgement', 'event.show'] %}aria-current="page"{% endif %}
+            class="nav-link {% if request.endpoint in ['main.acknowledgement'] %}active{% endif %}"
+            {% if request.endpoint in ['main.acknowledgement'] %}aria-current="page"{% endif %}
             href="{{ url_for('main.acknowledgement') }}">
             Acknowledgement
         </a>
