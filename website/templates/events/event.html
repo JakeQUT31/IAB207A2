@@ -186,7 +186,7 @@
                     {% for comment in event.comments %}
                     <div class="comment">
                         <p class="mb-1"><span class="author">{{comment.user.firstName}} {{comment.user.lastName}}</span>
-                            <span class="data text-muted-soft ms-2">{{comment.postedDateTime}}</span>
+                            <span class="data text-muted-soft ms-2">{{comment.postedDateTime.strftime("%Y-%m-%d %H:%M")}}</span>
                         </p>
                         <p class="mb-0">{{comment.content}}</p>
                     </div>
