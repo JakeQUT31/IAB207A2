@@ -275,13 +275,14 @@
                                     value="1" required>
                                 <div class="form-text" style="color: #F4F1EA99;">You can only book as many tickets as
                                     there are spots left.</div>
+                                <div id="qtyError" class="alert alert-danger py-2 px-3 mt-2 mb-0 small d-none" role="alert"></div>
                             </div>
                             <div class="d-flex justify-content-between align-items-center mb-4 pt-3 borderTop">
                                 <span class="eyebrow">Total</span>
                                 <span class="numbers numbers-med" id="totalPrice">${{event.participantPrice}}</span>
                             </div>
                             {% if current_user.is_authenticated %}
-                            <button type="submit" class="btn buttonPink w-100 mb-3">
+                            <button type="submit" id="bookBtn" class="btn buttonPink w-100 mb-3">
                                 BOOK TICKETS
                             </button>
                             {% else %}
@@ -292,20 +293,36 @@
                             {% endif %}
                         </form>
                         <script>
-                            (function () {
-                                var type = document.getElementById('ticketType');
-                                var qty = document.getElementById('ticketQty');
-                                var total = document.getElementById('totalPrice');
-                                function update() {
-                                    var opt = type.options[type.selectedIndex];
-                                    qty.max = opt.dataset.left;
-                                    if (+qty.value > +qty.max) qty.value = qty.max;
-                                    total.textContent = '$' + (opt.dataset.price * qty.value || 0).toFixed(2);
-                                }
-                                type.addEventListener('change', update);
-                                qty.addEventListener('input', update);
-                                update();
-                            })();
+                        (function () {
+                            var type = document.getElementById('ticketType');
+                            var qty = document.getElementById('ticketQty');
+                            var total = document.getElementById('totalPrice');
+                            var error = document.getElementById('qtyError');
+                            var btn = document.getElementById('bookBtn');
+
+                            function update() {
+                            var opt = type.options[type.selectedIndex];
+                            var left = parseInt(opt.dataset.left, 10);
+                            var wanted = parseInt(qty.value, 10) || 0;
+
+                            total.textContent = '$' + (opt.dataset.price * wanted).toFixed(2);
+
+                            var message = '';
+                            if (wanted > left) {
+                                message = 'Only ' + left + ' ' + opt.value.toLowerCase() + ' tickets are available. Please choose ' + left + ' or fewer.';
+                            } else if (wanted < 1) {
+                                message = 'Please choose at least 1 ticket.';
+                            }
+
+                            error.textContent = message;
+                            error.classList.toggle('d-none', message === '');
+                            if (btn) btn.disabled = message !== '';
+                            }
+
+                            type.addEventListener('change', update);
+                            qty.addEventListener('input', update);
+                            update();
+                        })();
                         </script>
                         {% else %}
                         <button type="button" class="btn btn-secondary w-100 mb-3" disabled>
