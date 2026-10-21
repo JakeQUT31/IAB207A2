@@ -1,1 +1,4 @@
-venv/ website/sporttix.db __pycache__/ __pycache__/
+venv/
+website/sporttix.db
+__pycache__/
+.DS_Store
