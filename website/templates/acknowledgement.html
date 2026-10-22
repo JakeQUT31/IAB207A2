@@ -55,14 +55,14 @@
                     This page is aimed at helping you learn or create your own Acknowledgement of Country. Some examples of groups include:
                 </p>
 
-                <li>1. Brisbane City: Yuggera</li>
-                <li>2. Sydney: Eora</li>
-                <li>3. Canberra: Ngunawal</li>
-                <li>4. Melbourne: Woiworung and Boonwurrung</li>
-                <li>5. Hobart: Nuenonne</li>
-                <li>6. Adelaide: Kaurna</li>
-                <li>7. Perth: Wajuk</li>
-                <li>8. Darwin: Larrakia</li>
+                <li>Brisbane City: Yuggera</li>
+                <li>Sydney: Eora</li>
+                <li>Canberra: Ngunawal</li>
+                <li>Melbourne: Woiworung and Boonwurrung</li>
+                <li>Hobart: Nuenonne</li>
+                <li>Adelaide: Kaurna</li>
+                <li>Perth: Wajuk</li>
+                <li>Darwin: Larrakia</li>
 
                 <p></p>
 
@@ -83,6 +83,19 @@
                 
 
             </div>
+
+            <aside class="col-lg-5" aria-labelledby="eventPreviewHeading">
+                <div class="hostPreview stickySide" aria-live="polite">
+                    <p class="eyebrow mb-2">Our Culutural History</p>
+                    <h2 id="eventPreviewHeading" class="h5 mb-3"></h2>
+                    {% set preview_image = url_for('static', filename='img/AboriginalFlag.webp') %}
+                    <article class="eventCard previewEventCard">
+                        <div class="card-img-wrap">
+                            <img id="previewImage" src="{{ preview_image }}" alt="Preview event image">
+                        </div>
+                    </article>
+                </div>
+            </aside>
         </div>
     </div>
 </main>
