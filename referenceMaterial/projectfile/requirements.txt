@@ -6,3 +6,4 @@ flask-login
 flask-sqlalchemy
 flask-wtf
 flask-bcrypt
+gunicorn==20.1.0
