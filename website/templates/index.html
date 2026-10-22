@@ -21,34 +21,103 @@
                 
 
                 <div class = "col-lg-5">
-                    <div class = "heroSlab">
-                        <div class = "d-flex justify-content-between align-items-start gap-3 mb-3">
-                            <div>
-                                <p class = "eyebrow mb-2"> Next Kick-Off</p>
-                                <h2 class = "h4 mb-1" style = "letter-spacing:-.03rem;"> Thursday Night Five-a-Side</h2>
-                                <p class = "data mb-0" style = "color: rgba(244,241,234,.7);">THU 10 SEP · 18:30&ndash;20:00 · Kedron Park</p>
-                            </div>
-                            <span class = "status open" style = "background:transparent;">Open</span>
-                        </div>
+                   <div class="heroSlab">
 
-                        <div class = "row g-4 borderTop pt-4 mb-4">
-                            <div class = "col-6">
-                                <div class = "countBlock">
-                                    <span class = "eyebrow">Player Spots</span>
-                                    <span class = "numbers numbers-big">08<span class = "of">/10</span></span>
-                                    <div class = "slots onDark slotsTall" style = "--n:10; --fill:80%;" role = "img" aria-label = "8 of 10 player spots taken"></div>
-                                </div>
-                            </div>
-                            <div class = "col-6">
-                                <div class = "countBlock">
-                                    <span class = "eyebrow">Spectator Seats</span>
-                                    <span class = "numbers numbers-big">12<span class = "of">/30</span></span>
-                                    <div class = "slots onDark slotsSpectator slotsTall" style = "--n:30; --fill:40%;" role = "img" aria-label = "12 of 30 spectator seats taken"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <a href = "events/1" class = "btn buttonPink w-100">Book a spot</a>
-                    </div>   
+    {% if featured_event %}
+
+        {% set player_fill =
+            (featured_event.playerBooked / featured_event.participantCapacity * 100)
+            if featured_event.participantCapacity else 0
+        %}
+
+        {% set spectator_fill =
+            (featured_event.spectatorBooked / featured_event.spectatorCapacity * 100)
+            if featured_event.spectatorCapacity else 0
+        %}
+
+        <div class="d-flex justify-content-between align-items-start gap-3 mb-3">
+            <div>
+                <p class="eyebrow mb-2">Next Kick-Off</p>
+
+                <h2 class="h4 mb-1" style="letter-spacing:-.03rem;">
+                    {{ featured_event.title }}
+                </h2>
+
+                <p class="data mb-0" style="color: rgba(244,241,234,.7);">
+                    {{ featured_event.eventDate.strftime('%a %d %b')|upper }}
+                    · {{ featured_event.startTime.strftime('%H:%M') }}
+                    – {{ featured_event.endTime.strftime('%H:%M') }}
+                    · {{ featured_event.venue.venueName }}
+                </p>
+            </div>
+
+            <span
+                class="status {{ featured_event.status|lower|replace(' ', '-') }}"
+                style="background:transparent;">
+                {{ featured_event.status }}
+            </span>
+        </div>
+
+
+        <div class="row g-4 borderTop pt-4 mb-4">
+
+            <div class="col-6">
+                <div class="countBlock">
+                    <span class="eyebrow">Player Spots</span>
+
+                    <span class="numbers numbers-big">
+                        {{ featured_event.playerBooked }}
+                        <span class="of">
+                            /{{ featured_event.participantCapacity }}
+                        </span>
+                    </span>
+
+                    <div
+                        class="slots onDark slotsTall"
+                        style="--n:{{ featured_event.participantCapacity }}; --fill:{{ player_fill }}%;"
+                        role="img"
+                        aria-label="{{ featured_event.playerBooked }} of {{ featured_event.participantCapacity }} player spots taken">
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-6">
+                <div class="countBlock">
+                    <span class="eyebrow">Spectator Seats</span>
+
+                    <span class="numbers numbers-big">
+                        {{ featured_event.spectatorBooked }}
+                        <span class="of">
+                            /{{ featured_event.spectatorCapacity }}
+                        </span>
+                    </span>
+
+                    <div
+                        class="slots onDark slotsSpectator slotsTall"
+                        style="--n:{{ featured_event.spectatorCapacity }}; --fill:{{ spectator_fill }}%;"
+                        role="img"
+                        aria-label="{{ featured_event.spectatorBooked }} of {{ featured_event.spectatorCapacity }} spectator seats taken">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <a
+            href="{{ url_for('event.show', id=featured_event.eventID) }}"
+            class="btn buttonPink w-100">
+            Book a spot
+        </a>
+
+    {% else %}
+
+        <p class="eyebrow mb-2">Next Kick-Off</p>
+        <h2 class="h4 mb-0">No upcoming games</h2>
+
+    {% endif %}
+
+</div> 
                 </div>
             </div>
         </div>
@@ -130,33 +199,7 @@
                                             <label for = "tennis">Tennis</label>
                                             <label for = "basketball">Basketball</label>
                                             <label for = "touch">Touch Football</label>
-                                        </div>
-                                        <p class = "eyebrow borderBottom pb-2 mb-3" style = "border-bottom-width:2px;border-bottom-color:var(--black);">Refine</p>
-                                        <div class = "mb-3">
-                                            <label for = "skillFilter" class = "form-label">Skill level</label>
-                                            <select class = "form-select form-select-sm" id = "skillFilter">
-                                                <option selected>Any Level</option>
-                                                <option>Amateur</option>
-                                                <option>Social</option>
-                                                <option>Semi-Pro</option>
-
-                                            </select>
-                                        </div>
-                                        <div class = "mb-3">
-                                            <label for = "surfaceFilter" class = "form-label">Surface</label>
-                                            <select class = "form-select form-select-sm" id = "surfaceFilter">
-                                                <option selected>Any Surface</option>
-                                                <option>Grass</option>
-                                                <option>Turf</option>
-                                                <option>Artificial Grass</option>
-                                                <option>Indoor Court</option>
-                                                <option>Artificial Turf</option>
-                                            </select>
-                                        </div>
-                                        <div class = "form-check">
-                                            <input class = "form-check-input" type = "checkbox" id = "sportsFilter" checked>
-                                            <label class = "form-check-label" for = "sportsFilter">Only games with spots left</label>
-
+                                        
                                         </div>
                                     </div>
                                 </div>
@@ -204,6 +247,9 @@
 
             {% elif event.category.categoryName == 'Basketball' %}
                 <img src="{{ url_for('static', filename='img/basketball.jpeg') }}" alt="Basketball">
+
+            {% elif event.category.categoryName == 'Touch Football' %}
+                <img src="{{ url_for('static', filename='img/touch.jpg') }}" alt="Touch Football">
 
             {% else %}
                 <img src="{{ url_for('static', filename='img/football.jpeg') }}"

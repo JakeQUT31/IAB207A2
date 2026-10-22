@@ -62,8 +62,18 @@
 
     <!-- My Bookings -->
     <li class="nav-item">
-        <a class="nav-link" href="bookings.html">
+                <a class="nav-link {% if request.endpoint in ['booking.history', 'booking.confirmation'] %}active{% endif %}" href="{{ url_for('booking.history') }}">
             My Bookings
+        </a>
+    </li>
+
+    <!-- Acknowledgement Information -->
+    <li class="nav-item">
+                <a
+            class="nav-link {% if request.endpoint in ['main.acknowledgement'] %}active{% endif %}"
+            {% if request.endpoint in ['main.acknowledgement'] %}aria-current="page"{% endif %}
+            href="{{ url_for('main.acknowledgement') }}">
+            Acknowledgement
         </a>
     </li>
 
@@ -127,7 +137,7 @@
                     <h6 class = "mb-3">Play</h6>
                     <ul class = "list-unstyled small mb-0 d-flex flex-column gap-2">
                         <li><a href = "/">Browse Events</a></li>
-                        <li><a href = "bookings.html">My Bookings</a></li>
+                        <li><a href="{{ url_for('booking.history') }}">My Bookings</a></li>
                         <li><a href = "event.html">Events</a></li>
                     </ul>
                 </div>

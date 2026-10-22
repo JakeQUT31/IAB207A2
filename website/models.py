@@ -125,20 +125,34 @@ class Event(db.Model):
 
     @staticmethod
     def participantsBooked(id):
-        return db.session.scalar(db.select(func.count(Booking.bookingID)).select_from(Booking).where((Booking.eventID==id) & (Booking.orderReference == "Player")))
+        return db.session.scalar(
+            db.select(func.coalesce(func.sum(Booking.quantity), 0))
+            .where((Booking.eventID == id) & (Booking.orderReference == "Player"))
+        )
 
- 
     @staticmethod
     def spectatorsBooked(id):
-        return db.session.scalar(db.select(func.count(Booking.bookingID)).select_from(Booking).where((Booking.eventID==id) & (Booking.orderReference == "Spectator")))
- 
-    # def isSoldOut(self):
-    #     return self.remainingSlots(Ticket.TYPE_PARTICIPANT) == 0 and self.remainingSlots(Ticket.TYPE_SPECTATOR) == 0
- 
+        return db.session.scalar(
+            db.select(func.coalesce(func.sum(Booking.quantity),0))
+            .where((Booking.eventID == id) & (Booking.orderReference == "Spectator"))) 
+
+    def playerSpotsLeft(self):
+        return max(self.participantCapacity - Event.participantsBooked(self.eventID), 0)
+
+    def spectatorSpotsLeft(self):
+        return max(self.spectatorCapacity - Event.spectatorsBooked(self.eventID), 0)
+
+    def isSoldOut(self):
+        return self.playerSpotsLeft() == 0 and self.spectatorSpotsLeft() == 0
+    
     def updateStatus(self):
         if self.status == self.STATUS_CANCELLED:
             return self.status
-        if self.eventDate < date.today():
+        event_has_ended = (
+            self.eventDate < date.today()
+            or (self.eventDate == date.today() and self.endTime <= datetime.now().time())
+        )
+        if event_has_ended:
             self.status = self.STATUS_INACTIVE
         elif self.isSoldOut():
             self.status = self.STATUS_SOLD_OUT
@@ -165,13 +179,19 @@ class Booking(db.Model):
  
     orderReference = db.Column(db.String(150), nullable=True)
     bookingDateTime = db.Column(db.DateTime, default=datetime.now)
- 
+    quantity = db.Column(db.Integer, nullable=False, default=1)
     user = db.relationship("User", back_populates="bookings")
     event = db.relationship("Event", back_populates="bookings")
  
     def generateOrderID(self):
         return f"SPTX-{self.bookingID:06d}"
- 
+
+    def ticketPrice(self):
+        if self.orderReference == "Player":
+            return self.event.participantPrice
+        return self.event.spectatorPrice
+    def totalPrice(self):
+        return self.ticketPrice() * self.quantity
     # --------Commenting out legacy code in case it needs to be used (will need to be modified to work)--------
     # def calculateTotal(self):
     #     return sum(ticket.price for ticket in self.tickets)

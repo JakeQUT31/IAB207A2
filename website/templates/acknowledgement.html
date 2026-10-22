@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% block header %}
+
+{% endblock %}
+
+{% block content %}
+<main id="main" class="py-4 py-lg-5">
+    <div class="container">
+
+        <nav aria-label="Breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">Browse</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Acknowledgement</li>
+            </ol>
+        </nav>
+
+        <div class="row g-4 align-items-end borderBottom pb-4 mb-5" style="border-bottom-width:2px;border-bottom-color:var(--black);">
+            <div class="col-lg-7">
+                <p class="eyebrow mb-3">Browse</p>
+                <h1 class="pageTitle mb-0">Acknowledgement</h1>
+            </div>
+            <div class="col-lg-5">
+                <p class="mb-0 text-muted-soft" style="max-width:32rem;">
+                    Read about Australia's Traditional Custodians and how you can include a tribute to them on your events page
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-lg-5">
+
+                {% if error %}
+                    <div class="alert alert-danger" role="alert">{{ error }}</div>
+                {% endif %}
+
+                <form method="post" novalidate>
+                    {{ form.hidden_tag() }}
+
+                    <section class="formSection">
+                        <div class="mb-3">
+                            {{ form.custodianSearch.label(class="form-label") }}
+                            {{ form.custodianSearch(class="form-control", type="custodianSearch", autocomplete="custodianSearch", placeholder="Corinda") }}
+                            {{ form.submit(class="btn buttonBlack w-100") }}
+                        </div>
+                    </section>
+                </form>
+
+                <p>A Acknowledgement of country is a formal way of paying respects to the indigenous people of Australia.
+                    It is different from a welcome to country where the Traditional Owners deliver a welcome to the land.
+                    Acknowledgement of Country can be offered by anyone to show their respect. </p>
+
+                <p>
+                    There are a vast number of Aboriginal groups across Australia and it can be confusing to know what ground you stand on.
+                    This page is aimed at helping you learn or create your own Acknowledgement of Country. Some examples of groups include:
+                </p>
+
+                <li>Brisbane City: Yuggera</li>
+                <li>Sydney: Eora</li>
+                <li>Canberra: Ngunawal</li>
+                <li>Melbourne: Woiworung and Boonwurrung</li>
+                <li>Hobart: Nuenonne</li>
+                <li>Adelaide: Kaurna</li>
+                <li>Perth: Wajuk</li>
+                <li>Darwin: Larrakia</li>
+
+                <p></p>
+
+                <p>While no offical format exists, a traditional message to custodians is typically formatted as:</p>
+                <p><em>I would like to begin by acknowledging the Traditional Owners of the land on which we meet today,
+                    the (people) of the (nation) and pay my respects to Elders past and present.</em>
+                </p>
+
+                <p>Can't find what your looking for? Try look at these sources to learn more:</p>
+
+                <li><a href="https://www.reconciliation.org.au/reconciliation/acknowledgement-of-country-and-welcome-to-country/">Reconciliation Australia - Acknowledgement of Country and Welcome to Country</a></li>
+                <li><a href="https://aiatsis.gov.au/whose-country">AIATSIS - Whose Country am I on?</a></li>
+                <li><a href="https://aiatsis.gov.au/explore/map-indigenous-australia">AIATSIS - Map of Indigenous Australia</a></li>
+                <li><a href="https://knowyourcountry.org.au/how-to-know-your-country">Know Your Country - Help to find out the First Nations Country you are on</a></li>
+                
+                
+                
+                
+
+            </div>
+
+            <aside class="col-lg-5" aria-labelledby="eventPreviewHeading">
+                <div class="hostPreview stickySide" aria-live="polite">
+                    <p class="eyebrow mb-2">Our Culutural History</p>
+                    <h2 id="eventPreviewHeading" class="h5 mb-3"></h2>
+                    {% set preview_image = url_for('static', filename='img/AboriginalFlag.webp') %}
+                    <article class="eventCard previewEventCard">
+                        <div class="card-img-wrap">
+                            <img id="previewImage" src="{{ preview_image }}" alt="Preview event image">
+                        </div>
+                    </article>
+                </div>
+            </aside>
+        </div>
+    </div>
+</main>
+{% endblock %}

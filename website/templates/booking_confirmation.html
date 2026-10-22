@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<main id="main" class="py-4 py-lg-5">
+  <div class="container" style="max-width: 720px;">
+    <p class="eyebrow mb-2">Booking confirmed</p>
+    <h1 class="pageTitle mb-4">You're in!</h1>
+
+    <article class="panel p-4">
+      <p class="eyebrow mb-1">Order ID</p>
+      <p class="numbers numbers-med mb-4">{{ booking.generateOrderID() }}</p>
+
+      <h2 class="h5 mb-1">
+        <a href="{{ url_for('event.show', id=booking.eventID) }}">{{ booking.event.title }}</a>
+      </h2>
+      <p class="data text-muted-soft mb-0">
+        {{ booking.event.eventDate.strftime('%a %d %b %Y')|upper }} ·
+        {{ booking.event.startTime.strftime('%H:%M') }}&ndash;{{ booking.event.endTime.strftime('%H:%M') }} ·
+        {{ booking.event.venue.venueName }}, {{ booking.event.venue.suburb }}
+      </p>
+
+      <dl class="row g-3 specGrid mb-0 borderTop mt-3 pt-3">
+        <div class="col-sm-4"><dt>Tickets</dt>
+          <dd class="data">{{ booking.quantity }} x {{ booking.orderReference }}</dd></div>
+        <div class="col-sm-4"><dt>Total</dt>
+          <dd class="data">${{ '%.2f'|format(booking.totalPrice()) }}</dd></div>
+        <div class="col-sm-4"><dt>Booked On</dt>
+          <dd class="data">{{ booking.bookingDateTime.strftime('%d %b %Y, %H:%M')|upper }}</dd></div>
+      </dl>
+    </article>
+
+    <div class="d-flex flex-wrap gap-2 mt-4">
+      <a href="{{ url_for('booking.history') }}" class="btn buttonBlack">View my bookings</a>
+      <a href="{{ url_for('main.index') }}" class="btn btn-outline-dark">Browse more events</a>
+    </div>
+  </div>
+</main>
+{% endblock %}
