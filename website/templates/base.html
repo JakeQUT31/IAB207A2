@@ -26,19 +26,72 @@
                     <span class = "navbar-toggler-icon"></span>
                 </button>
                 <div class = "collapse navbar-collapse" id = "mainNav">
-                    <ul class = "navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
-                        <li class = "nav-item"><a class = "nav-link active" aria-current = "page" href = "/">Browse</a></li>
-                        <li class = "nav-item"><a class = "nav-link" href = "{{ url_for('event.create') }}">Host a Game</a></li>
-                        {% if current_user.is_authenticated %}
-                        <li class = "nav-item"><a class = "nav-link" href = "{{ url_for('event.my_events') }}">My Events</a></li>
-                        {% endif %}
-                        <li class = "nav-item"><a class = "nav-link" href = "bookings.html">My Bookings</a></li>
-                        {% if current_user.is_authenticated %}
-                        <li class="nav-item ms-lg-4 mt-2 mt-lg-0"><a class="btn buttonBlack btn-sm" href="{{ url_for('auth.logout') }}">Log out</a></li>
-                        {% else %}
-                        <li class="nav-item ms-lg-4 mt-2 mt-lg-0"><a class="btn buttonBlack btn-sm" href="{{ url_for('auth.login') }}">Log in</a></li>
-                        {% endif %}
-                    </ul>
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+
+    <!-- Browse -->
+    <li class="nav-item">
+        <a
+            class="nav-link {% if request.endpoint in ['main.index', 'event.show'] %}active{% endif %}"
+            {% if request.endpoint in ['main.index', 'event.show'] %}aria-current="page"{% endif %}
+            href="{{ url_for('main.index') }}">
+            Browse
+        </a>
+    </li>
+
+    <!-- Host a Game -->
+    <li class="nav-item">
+        <a
+            class="nav-link {% if request.endpoint == 'event.create' %}active{% endif %}"
+            {% if request.endpoint == 'event.create' %}aria-current="page"{% endif %}
+            href="{{ url_for('event.create') }}">
+            Host a Game
+        </a>
+    </li>
+
+    <!-- My Events -->
+    {% if current_user.is_authenticated %}
+    <li class="nav-item">
+        <a
+            class="nav-link {% if request.endpoint == 'event.my_events' %}active{% endif %}"
+            {% if request.endpoint == 'event.my_events' %}aria-current="page"{% endif %}
+            href="{{ url_for('event.my_events') }}">
+            My Events
+        </a>
+    </li>
+    {% endif %}
+
+    <!-- My Bookings -->
+    <li class="nav-item">
+                <a class="nav-link {% if request.endpoint in ['booking.history', 'booking.confirmation'] %}active{% endif %}" href="{{ url_for('booking.history') }}">
+            My Bookings
+        </a>
+    </li>
+
+    <!-- Acknowledgement Information -->
+    <li class="nav-item">
+                <a
+            class="nav-link {% if request.endpoint in ['main.acknowledgement'] %}active{% endif %}"
+            {% if request.endpoint in ['main.acknowledgement'] %}aria-current="page"{% endif %}
+            href="{{ url_for('main.acknowledgement') }}">
+            Acknowledgement
+        </a>
+    </li>
+
+    <!-- Login / Logout -->
+    {% if current_user.is_authenticated %}
+    <li class="nav-item ms-lg-4 mt-2 mt-lg-0">
+        <a class="btn buttonBlack btn-sm" href="{{ url_for('auth.logout') }}">
+            Log out
+        </a>
+    </li>
+    {% else %}
+    <li class="nav-item ms-lg-4 mt-2 mt-lg-0">
+        <a class="btn buttonBlack btn-sm" href="{{ url_for('auth.login') }}">
+            Log in
+        </a>
+    </li>
+    {% endif %}
+</ul> 
                 </div>
             </div>
          </nav>
@@ -84,7 +137,7 @@
                     <h6 class = "mb-3">Play</h6>
                     <ul class = "list-unstyled small mb-0 d-flex flex-column gap-2">
                         <li><a href = "/">Browse Events</a></li>
-                        <li><a href = "bookings.html">My Bookings</a></li>
+                        <li><a href="{{ url_for('booking.history') }}">My Bookings</a></li>
                         <li><a href = "event.html">Events</a></li>
                     </ul>
                 </div>

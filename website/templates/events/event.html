@@ -13,7 +13,8 @@
         <nav aria-label="Breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">Browse</a></li>
-                <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}#events">{{category.categoryName}}</a></li>
+                <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}#events">{{category.categoryName}}</a>
+                </li>
                 <li class="breadcrumb-item active" aria-current="page">{{event.title}}</li>
             </ol>
         </nav>
@@ -22,12 +23,18 @@
                 border-bottom-color: var(--black);">
             <div class="col-lg-8">
                 <div class="d-flex flex-wrap align-items-center gap-3 mb-3">
-                    <span class="status open">{{event.status}}</span>
-                    <span class="eyebrow">{{category.categoryName}} · {{event.skillLevel}} · {{event.duration}} min</span>
+                    <span class="status {{ event.status|lower|replace(' ', '-') }}">{{event.status}}</span>
+                    <span class="eyebrow">{{category.categoryName}} · {{event.skillLevel}} · {{event.duration}}
+                        min</span>
                 </div>
                 <h1 class="pageTitle mb-3">{{event.title}}</h1>
                 <p class="data text-muted-soft mb-0">{{event.eventDate}} · {{event.startTime}}&ndash;{{event.endTime}} ·
                     {{venue.venueName}}, {{venue.suburb}}</p>
+                {% if current_user.is_authenticated and current_user.userID == event.creatorID and event.status !=
+                'Cancelled' %}
+                <a class="btn buttonPink mt-3 fw-bold" href="{{ url_for('event.edit', id=event.eventID) }}">Edit this
+                    event</a>
+                {% endif %}
             </div>
             <div class="col-lg-4">
                 <div class="row g-3 align-items-end">
@@ -49,7 +56,23 @@
 
         <div class="row g-4 g-lg-5">
             <div class="col-lg-7 col-xl-8">
-                <img src="{{event.imageURL}}" class="img-fluid mb-5 w-100" alt="Cricket Oval">
+                {% if event.imageURL %}
+                <img src="{{ event.imageURL }}" class="eventDetailImage mb-5" alt="{{ event.title }}">
+                {% elif category.categoryName == 'Cricket' %}
+                <img src="{{ url_for('static', filename='img/cricket.jpeg') }}" class="eventDetailImage mb-5" alt="Cricket event">
+                {% elif category.categoryName == 'Netball' %}
+                <img src="{{ url_for('static', filename='img/netball.jpg') }}" class="eventDetailImage mb-5" alt="Netball event">
+                {% elif category.categoryName == 'AFL' %}
+                <img src="{{ url_for('static', filename='img/afl.jpg') }}" class="eventDetailImage mb-5" alt="AFL event">
+                {% elif category.categoryName == 'Tennis' %}
+                <img src="{{ url_for('static', filename='img/tennis.jpeg') }}" class="eventDetailImage mb-5" alt="Tennis event">
+                {% elif category.categoryName == 'Basketball' %}
+                <img src="{{ url_for('static', filename='img/basketball.jpeg') }}" class="eventDetailImage mb-5" alt="Basketball event">
+                {% elif category.categoryName == 'Touch Football' %}
+                <img src="{{ url_for('static', filename='img/touch.jpg') }}" class="eventDetailImage mb-5" alt="Touch Football event">
+                {% else %}
+                <img src="{{ url_for('static', filename='img/football.jpeg') }}" class="eventDetailImage mb-5" alt="Football event">
+                {% endif %}
 
                 <h2 class="h4 mb-3">About this Match</h2>
                 <p>
@@ -80,12 +103,13 @@
                     <p class="fw-bold mb-1">{{venue.venueName}}</p>
                     <p class="mb-3 text-muted-soft">{{venue.address}}, {{venue.suburb}}</p>
                     <p class="small mb-0 borderTop pt-3">
-                        {% if event.acknowledgementType == 'None' %}
-                            No Acknowledgement of Country has been selected for this event.
-                        {% elif event.acknowledgementType == 'Enhanced' %}
-                            This match is played on the lands of {{ venue.traditionalCustodians }}. SportTix pays respect to the Elders past, present, and emerging.
+                        {% if event.acknowledgementType in ['Generic', 'I would like to begin by acknowledging the Traditional Owners of the land on which we meet today. I would also like to pay my respects to Elders past and present.'] %}
+                        SportTix acknowledges the Traditional Custodians of the lands on which we play and pays respect
+                        to the Elders past, present, and emerging.
+                        {% elif event.acknowledgementType in ['', 'None'] %}
+                        No acknowledgement of country has been selected for this event.
                         {% else %}
-                            SportTix acknowledges the Traditional Custodians of the lands on which we play and pays respect to the Elders past, present, and emerging.
+                        {{ event.acknowledgementType }}
                         {% endif %}
                     </p>
                 </div>
@@ -149,58 +173,53 @@
                 <section aria-labelledby="commentsHeading-cricket">
                     <div class="headSection">
                         <h2 class="h4 mb-0" id="commentsHeading-cricket">Questions and Discussion</h2>
-                        <span class="data text-muted-soft">3 Comments</span>
+                        <span class="data text-muted-soft">{{commentCount}} Comments</span>
                     </div>
 
-                    <div class="mb-4">
-                        <div class="comment">
-                            <p class="mb-1"><span class="author">Mark Malik</span>
-                                <span class="data text-muted-soft ms-2">2 Sep 2026, 14:00</span>
-                            </p>
-                            <p class="mb-0">Is there any way we can have a net session before the toss?
-                                Happy to get there earlier and set everything up.</p>
-                        </div>
-                        <div class="comment">
-                            <p class="mb-1"><span class="author">Eric Baldish</span>
-                                <span class="data text-muted-soft ms-2">29 Aug 2026, 10:00</span>
-                            </p>
-                            <p class="mb-0">Is there a canteen or something where we can buy something
-                                or do we need to bring our own food?</p>
-                        </div>
-                        <div class="comment">
-                            <p class="mb-1"><span class="author">Steve Smith</span>
-                                <span class="data text-muted-soft ms-2">27 Aug 2026, 20:00</span>
-                            </p>
-                            <p class="mb-0">Excited for this, Can't wait till the match! Who's ready?</p>
-                        </div>
+                    <div class="mb-4"></div>
+                    {% if commentCount == 0 %}
+                    <div class="comment">
+                        <p class="mb-0">There are no comments yet. Be the first to post something :D</p>
                     </div>
+                    {% else %}
+
+                    {% for comment in event.comments %}
+                    <div class="comment">
+                        <p class="mb-1"><span class="author">{{comment.user.firstName}} {{comment.user.lastName}}</span>
+                            <span class="data text-muted-soft ms-2">{{comment.postedDateTime.strftime("%Y-%m-%d %H:%M")}}</span>
+                        </p>
+                        <p class="mb-0">{{comment.content}}</p>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
 
                     {% if current_user.is_authenticated %}
-                        <div class="panel p-4">
-                            <p class="eyebrow mb-3">
-                                Add a Comment
-                            </p>
-                            {{ render_form(form,"/events/{0}/comment".format(event.eventID)) }}
-                            <form action="event.html#cricket" method="get">
-                                <div class="mb-3">
-                                    <div class="invalid-feedback">Write something before posting.</div>
-                                </div>
-                                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
-                                    <p class="small text-muted-soft mb-0">Posting as <span class="fw-bold">{{loggedUser.firstName}} {{loggedUser.lastName}}</span>
-                                        - Your name and the time you post will appear with your comment.</p>
-                                </div>
-                            </form>
-                        </div>
+                    <div class="panel p-4">
+                        <p class="eyebrow mb-3">
+                            Add a Comment
+                        </p>
+                        {{ render_form(form,"/events/{0}/comment".format(event.eventID)) }}
+                        <form action="event.html#cricket" method="get">
+                            <div class="mb-3">
+                                <div class="invalid-feedback">Write something before posting.</div>
+                            </div>
+                            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                                <p class="small text-muted-soft mb-0">Posting as <span
+                                        class="fw-bold">{{loggedUser.firstName}} {{loggedUser.lastName}}</span>
+                                    - Your name and the time you post will appear with your comment.</p>
+                            </div>
+                        </form>
+                    </div>
                     {% else %}
-                        <p>Please log in to post comments</p>
+                    <p>Please log in to post comments</p>
                     {% endif %}
                 </section>
             </div>
 
-            <div class="col-lg-5 col-xl-4">
-                <div class="stickySide">
-                    <div class="panel panelBlack p-4">
-                        <p class="eyebrow mb-4">Book a Spot</p>
+        <div class="col-lg-5 col-xl-4">
+            <div class="stickySide">
+                <div class="panel panelBlack p-4">
+                    <p class="eyebrow mb-4">Book a Spot</p>
 
                         <div class="row g-4 mb-4 pb-4 borderBottom">
                             <div class="col-6">
@@ -225,59 +244,105 @@
                             </div>
                         </div>
                         <p class="small mb-4" style="color:#F4F1EAD1;">
-                            Only <span class="fw-bold" style="color:#fffdf8;">{{playerAvailable}} Player Spots</span> left.
+                            Only <span class="fw-bold" style="color:#fffdf8;">{{playerAvailable}} Player Spots</span>
+                            left.
                             Once both rosters are filled, this match will be Sold Out and no further bookings can be
                             made.
                         </p>
-
-                        <form action="event.html#cricket" method="get">
-                            <div class="mb-3">
-                                <label for="ticketType-cricket" class="form-label" style="color:#F4F1EAB2;">Ticket
-                                    Type</label>
-                                <select class="form-select" id="ticketType-cricket">
-                                    <option selected>Player - ${{event.participantPrice}} each · {{playerAvailable}} left</option>
-                                    <option>Spectator - ${{event.spectatorPrice}} each · {{spectatorAvailable}} left</option>
+                        {% if event.status == 'Open' and (playerAvailable >0 or spectatorAvailable > 0) %}
+                        <form action = "{{url_for('booking.book', id=event.eventID)}}" method = "post">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <div class = "mb-3">
+                                <label for = "ticketType" class  = "form-label" style = "color:#F4F1EAB2;">Ticket Type</label>
+                                <select class = "form-select" id = "ticketType" name = "ticketType">
+                                    {% if playerAvailable > 0 %}
+                                    <option value="Player" data-price="{{event.participantPrice}}"
+                                        data-left="{{playerAvailable}}">
+                                        Player - ${{event.participantPrice}} each · {{playerAvailable}} left</option>
+                                    {% endif %}
+                                    {% if spectatorAvailable > 0 %}
+                                    <option value="Spectator" data-price="{{event.spectatorPrice}}"
+                                        data-left="{{spectatorAvailable}}">
+                                        Spectator - ${{event.spectatorPrice}} each · {{spectatorAvailable}} left
+                                    </option>
+                                    {% endif %}
                                 </select>
                             </div>
                             <div class="mb-4">
-                                <label for="ticketQty-cricket" class="form-label" style="color:#F4F1EAB2;">Number of
+                                <label for="ticketQty" class="form-label" style="color: #F4F1EAB2;">Number of
                                     Tickets</label>
-                                <select class="form-select" id="ticketQty-cricket">
-                                    <option selected>1 ticket</option>
-                                    <option>2 tickets</option>
-                                </select>
-                                <div class="form-text" style="color:#F4F1EA99;">You can only book as many tickets as
+                                <input type="number" class="form-control" id="ticketQty" name="quantity" min="1"
+                                    value="1" required>
+                                <div class="form-text" style="color: #F4F1EA99;">You can only book as many tickets as
                                     there are spots left.</div>
+                                <div id="qtyError" class="alert alert-danger py-2 px-3 mt-2 mb-0 small d-none" role="alert"></div>
                             </div>
-
                             <div class="d-flex justify-content-between align-items-center mb-4 pt-3 borderTop">
                                 <span class="eyebrow">Total</span>
-                                <span class="numbers numbers-med">${{event.participantPrice}}</span>
+                                <span class="numbers numbers-med" id="totalPrice">${{event.participantPrice}}</span>
                             </div>
-                            
                             {% if current_user.is_authenticated %}
-                                <button type="button" class="btn buttonPink w-100 mb-3" data-bs-toggle="modal"
-                                    data-bs-target="#bookingModal-cricket">
-                                    BOOK TICKETS
-                                </button>
+                            <button type="submit" id="bookBtn" class="btn buttonPink w-100 mb-3">
+                                BOOK TICKETS
+                            </button>
                             {% else %}
-                                <button type="button" class="btn btn-secondary disabled w-100 mb-3" data-bs-toggle="modal"
-                                    data-bs-target="#bookingModal-cricket">
-                                    BOOK TICKETS
-                                </button>
+                            <a href="{{url_for('auth.login', next = request.path)}}"
+                                class="btn btn-secondary w-100 mb-3">
+                                LOGIN TO BOOK
+                            </a>
                             {% endif %}
                         </form>
+                        <script>
+                        (function () {
+                            var type = document.getElementById('ticketType');
+                            var qty = document.getElementById('ticketQty');
+                            var total = document.getElementById('totalPrice');
+                            var error = document.getElementById('qtyError');
+                            var btn = document.getElementById('bookBtn');
 
+                            function update() {
+                            var opt = type.options[type.selectedIndex];
+                            var left = parseInt(opt.dataset.left, 10);
+                            var wanted = parseInt(qty.value, 10) || 0;
+
+                            total.textContent = '$' + (opt.dataset.price * wanted).toFixed(2);
+
+                            var message = '';
+                            if (wanted > left) {
+                                message = 'Only ' + left + ' ' + opt.value.toLowerCase() + ' tickets are available. Please choose ' + left + ' or fewer.';
+                            } else if (wanted < 1) {
+                                message = 'Please choose at least 1 ticket.';
+                            }
+
+                            error.textContent = message;
+                            error.classList.toggle('d-none', message === '');
+                            if (btn) btn.disabled = message !== '';
+                            }
+
+                            type.addEventListener('change', update);
+                            qty.addEventListener('input', update);
+                            update();
+                        })();
+                        </script>
+                        {% else %}
+                        <button type="button" class="btn btn-secondary w-100 mb-3" disabled>
+                            {{ 'SOLD OUT' if event.status in ['Open', 'Sold Out'] else event.status|upper }}
+                        </button>
+                        <p class="small mb-0" style="color:#F4F1EA99;">
+                            Booking is closed for this event.
+                        </p>
+                        {% endif %}
                         <p class="small mb-0" style="color:#F4F1EA99;">
                             You need to be logged in to book. Cancellations are free up to 24 hours before the toss.
-                        </p>
-                    </div>
-                    <div class="panel p-4 mt-3">
-                        <p class="eyebrow mb-2">Hosted By</p>
-                        <p class="fw-bold mb-1">{{user.firstName}}</p>
-                    </div>
+                    </p>
+                </div>
+                <div class="panel p-4 mt-3">
+                    <p class="eyebrow mb-2">Hosted By</p>
+                    <p class="fw-bold mb-1">{{user.firstName}}</p>
                 </div>
             </div>
         </div>
+    </div>
+    </div>
 </main>
 {% endblock %}
