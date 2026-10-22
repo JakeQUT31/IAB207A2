@@ -83,6 +83,19 @@
                 
 
             </div>
+
+            <aside class="col-lg-5" aria-labelledby="eventPreviewHeading">
+                <div class="hostPreview stickySide" aria-live="polite">
+                    <p class="eyebrow mb-2">Our Culutural History</p>
+                    <h2 id="eventPreviewHeading" class="h5 mb-3"></h2>
+                    {% set preview_image = url_for('static', filename='img/AboriginalFlag.webp') %}
+                    <article class="eventCard previewEventCard">
+                        <div class="card-img-wrap">
+                            <img id="previewImage" src="{{ preview_image }}" alt="Preview event image">
+                        </div>
+                    </article>
+                </div>
+            </aside>
         </div>
     </div>
 </main>
